@@ -12,6 +12,7 @@ import {
 	NavbarMenuItem,
 	NavbarMenuToggle,
 } from "@nextui-org/react";
+import Image from "next/image";
 
 export default function NavbarDesktop() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -32,10 +33,10 @@ export default function NavbarDesktop() {
 	const authMenuItems = [
 		{ pageName: "Search", location: "/search" },
 		{ pageName: "Dashboard", location: "/dashboard" },
-		{ pageName: "Group Events", location: "/events" },
-		{ pageName: "Itineraries", location: "/itineraries" },
-		{ pageName: "My Account", location: "/account" },
-		{ pageName: "Sign Out", location: "/signout" },
+		{ pageName: "Events", location: "/events" },
+		{ pageName: "Plans", location: "/itineraries" },
+		{ pageName: "Account", location: "/account" },
+		{ pageName: "Logout", location: "/signout" },
 	];
 
 	const menuItems = isAuthenticated ? authMenuItems : noAuthMenuItems;
@@ -48,7 +49,12 @@ export default function NavbarDesktop() {
 					className="sm:hidden"
 				/>
 				<NavbarBrand>
-					<p className="font-bold text-inherit">ACME</p>
+					<Image
+						src="/assets/mitm_logo.svg"
+						width={80}
+						height={80}
+						alt="Meet In The Middle Logo"
+					/>
 				</NavbarBrand>
 			</NavbarContent>
 
