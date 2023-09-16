@@ -14,14 +14,15 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 
+interface MenuItem {
+	pageName: string;
+	location: string;
+}
+
 export default function NavbarDesktop() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
 	const isAuthenticated = false;
-	interface MenuItem {
-		pageName: string;
-		location: string;
-	}
 
 	const noAuthMenuItems = [
 		{ pageName: "Home", location: "/#" },
@@ -30,7 +31,7 @@ export default function NavbarDesktop() {
 		{ pageName: "Sign Up", location: "/user" },
 	];
 
-	const authMenuItems = [
+	const authMenuItems: MenuItem[] = [
 		{ pageName: "Search", location: "/search" },
 		{ pageName: "Dashboard", location: "/dashboard" },
 		{ pageName: "Events", location: "/events" },
