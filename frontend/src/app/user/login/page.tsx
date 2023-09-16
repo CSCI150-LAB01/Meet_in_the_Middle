@@ -6,7 +6,7 @@ import { MdEmail, MdKey } from "react-icons/md";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 
-export default function Register() {
+export default function Login() {
 	const [isVisible, setIsVisible] = React.useState(false);
 
 	const toggleVisibility = () => setIsVisible(!isVisible);
@@ -14,12 +14,7 @@ export default function Register() {
 	return (
 		<div className="flex min-h-screen flex-col items-center justify-between p-24 w-full">
 			<div className="max-w-xs w-full h-lg flex items-center justify-between font-mono text-sm flex-col gap-4">
-				<p>Sign Up</p>
-
-				<div className="flex-row w-full flex gap-2">
-					<Input type="firstName" label="First Name" />
-					<Input type="lastName" label="Last Name" />
-				</div>
+				<p>Sign In</p>
 
 				<Input
 					type="email"
@@ -50,7 +45,7 @@ export default function Register() {
 				/>
 
 				<Button color="primary" variant="solid" fullWidth>
-					Sign Up
+					Sign In
 				</Button>
 				<Button
 					color="primary"
@@ -60,16 +55,16 @@ export default function Register() {
 						<FcGoogle className="text-default-400 pointer-events-none" />
 					}
 				>
-					Sign Up With Google
+					Sign In With Google
 				</Button>
 
 				<Link
 					color="primary"
 					className="w-full text-center"
-					href="/user/login"
+					href="/user"
 					size="sm"
 				>
-					Already have an account?
+					Don't have an account?
 				</Link>
 			</div>
 		</div>
