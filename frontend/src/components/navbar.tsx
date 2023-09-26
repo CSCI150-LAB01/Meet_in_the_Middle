@@ -43,7 +43,7 @@ export default function NavbarDesktop() {
 	const menuItems = isAuthenticated ? authMenuItems : noAuthMenuItems;
 
 	return (
-		<Navbar onMenuOpenChange={setIsMenuOpen}>
+		<Navbar onMenuOpenChange={setIsMenuOpen} isBordered className="rounded-b-3xl">
 			<NavbarContent>
 				<NavbarMenuToggle
 					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -63,7 +63,7 @@ export default function NavbarDesktop() {
 				{menuItems.map((item: MenuItem) => (
 					<NavbarMenuItem key={`${item}`}>
 						<Link
-							color="primary"
+							color="secondary"
 							className="w-full"
 							href={item.location}
 							size="lg"
@@ -74,11 +74,11 @@ export default function NavbarDesktop() {
 				))}
 			</NavbarContent>
 
-			<NavbarMenu>
+			<NavbarMenu className="rounded-lg">
 				{menuItems.map((item: MenuItem) => (
 					<NavbarMenuItem key={`${item}`}>
 						<Link
-							color="primary"
+							color="secondary"
 							className="w-full"
 							href={item.location}
 							size="lg"
