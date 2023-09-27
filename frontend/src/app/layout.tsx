@@ -3,8 +3,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import NavbarDesktop from "../components/navbar";
+import localFont from 'next/font/local'
 
 const inter = Inter({ subsets: ["latin"] });
+const primaryFont = localFont({
+	src: "./fonts/Berlin Sans FB Demi Bold.ttf",
+	display: 'swap',
+  })
+ 
 
 export const metadata: Metadata = {
 	title: "Meet In The Middle",
@@ -40,7 +46,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className="light">
+		<html lang="en" className={primaryFont.className + ' light'}>
 			<body>
 				{/* add navbar */}
 				<NavbarDesktop />

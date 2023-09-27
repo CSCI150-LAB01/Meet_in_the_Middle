@@ -21,9 +21,9 @@ const config: Config = {
 						foreground: "#fff",
 					},
 					secondary: {
-						foreground: "#9C76AC4"
+						foreground: "#9C76AC"
 					},
-				focus: "#9C76AC4",
+				focus: "#9C76AC",
 				},
 			},
 		}
