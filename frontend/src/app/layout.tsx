@@ -1,21 +1,17 @@
 import "../styles/globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import NavbarDesktop from "../components/navbar";
-import localFont from 'next/font/local'
+import { roboto } from "@/styles/fonts";
+import { AppConfig } from "@/utils/AppConfig";
 
-const inter = Inter({ subsets: ["latin"] });
-const primaryFont = localFont({
-	src: "./fonts/Berlin Sans FB Demi Bold.ttf",
-	display: 'swap',
-  })
- 
-
+// Metadata
 export const metadata: Metadata = {
-	title: "Meet In The Middle",
-	description:
-		"Find the best places for your group - restaurants, bars, cafes, arcades, and more. Get the best routes. Create a comprehensive plan. ",
+	title: {
+		template: `${AppConfig.short_name} - %s`,
+		default: AppConfig.title,
+	},
+	description: AppConfig.description,
 	icons: [
 		{
 			rel: "apple-touch-icon",
@@ -40,13 +36,14 @@ export const metadata: Metadata = {
 	],
 };
 
+// Default Page Layout
 export default function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className={primaryFont.className + ' light'}>
+		<html lang="en" className={roboto.className + " light"}>
 			<body>
 				{/* add navbar */}
 				<NavbarDesktop />
