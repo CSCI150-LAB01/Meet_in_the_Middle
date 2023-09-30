@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Home() {
 	return (
 		<div className="flex min-h-screen w-full flex-col items-center px-12 lg:px-24 py-12">
-			<main className="flex flex-col">
+			<main className="flex flex-col max-w-[1000px]">
 				<div className="hero">
 					<h1>{AppConfig.title}</h1>
 					<p>{AppConfig.description}</p>
