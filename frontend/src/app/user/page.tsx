@@ -7,7 +7,6 @@ import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 import { berlin } from "@/styles/fonts";
 import { Metadata } from "next";
-import Image from "next/image";
 export const metadata: Metadata = {
 	title: "Sign Up",
 };
@@ -84,7 +83,7 @@ export default function Register() {
 			</div>
 
 			<Link
-				className="text-secondary text-center hidden sm:block"
+				className="text-secondary text-center hidden md:block"
 				href="/user/login"
 				size="sm"
 			>
