@@ -10,9 +10,21 @@ export default function UserLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="flex min-h-screen flex-col items-center lg:px-24 py-24 w-full">
-			<div className="max-w-xs w-full h-lg flex items-center justify-between text-sm flex-col gap-4 ">
-				{children}
+		<div className="h-[90vh] flex">
+			<div className="flex flex-col items-center justify-between px-0 md:px-24 w-full flex-1 md:py-4 md:flex-row md:justify-around">
+				<Image
+					src="/assets/mitm_logo.svg"
+					width={250}
+					height={250}
+					alt="Meet In The Middle Logo"
+					className="md:hidden"
+				/>
+				<p className="hidden md:block">
+					@TODO: Maybe put something on this side on desktop, wait for UI/UX
+				</p>
+				<div className="w-full flex items-center item-end text-sm flex-col gap-4 grow md:max-w-sm">
+					{children}
+				</div>
 			</div>
 		</div>
 	);

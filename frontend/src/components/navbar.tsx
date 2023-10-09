@@ -12,7 +12,7 @@ import {
 	NavbarMenuToggle,
 } from "@nextui-org/react";
 import Image from "next/image";
-import { MdOutlineSearch } from "react-icons/md";
+import { MdMenu, MdMenuOpen, MdOutlineSearch } from "react-icons/md";
 
 interface MenuItem {
 	pageName: string;
@@ -22,7 +22,7 @@ interface MenuItem {
 export default function NavbarDesktop() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-	const isAuthenticated = true;
+	const isAuthenticated = false;
 
 	const noAuthMenuItems = [
 		{ pageName: "Home", location: "/#" },
@@ -45,21 +45,25 @@ export default function NavbarDesktop() {
 		<Navbar
 			onMenuOpenChange={setIsMenuOpen}
 			isBordered
-			className={isMenuOpen ? "" : "rounded-b-3xl"}
+			height="3rem"
+			className={
+				isMenuOpen
+					? "bg-white transition-colors"
+					: "bg-primary rounded-b-3xl transition-colors"
+			}
 		>
 			<NavbarContent className="md:max-w-max">
 				<NavbarMenuToggle
 					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
 					className="sm:hidden"
+					icon={
+						isMenuOpen ? (
+							<MdMenuOpen size="50px" className="text-secondary" />
+						) : (
+							<MdMenu size="50px" className="text-white" />
+						)
+					}
 				/>
-				<NavbarBrand className="hidden md:block" href="/">
-					<Image
-						src="/assets/mitm_logo.svg"
-						width={80}
-						height={80}
-						alt="Meet In The Middle Logo"
-					/>
-				</NavbarBrand>
 			</NavbarContent>
 			<NavbarContent
 				as="div"
@@ -70,9 +74,9 @@ export default function NavbarDesktop() {
 					classNames={{
 						base: "md:max-w-full sm:max-w-[10rem] h-10",
 						mainWrapper: "w-full h-full",
-						input: "text-small",
+						input: "text-small placeholder:text-default-300/70",
 						inputWrapper:
-							"h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
+							"h-full font-normal text-white bg-default-300/20 dark:bg-default-500/20",
 					}}
 					placeholder="Search events, groups, etc..."
 					size="sm"
@@ -85,8 +89,7 @@ export default function NavbarDesktop() {
 				{menuItems.map((item: MenuItem) => (
 					<NavbarMenuItem key={`${item}`}>
 						<Link
-							color="secondary"
-							className="w-full"
+							className="w-full text-white"
 							href={item.location}
 							isBlock
 							size="sm"
