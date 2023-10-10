@@ -51,6 +51,7 @@ export default function NavbarDesktop() {
 					? "bg-white transition-colors"
 					: "bg-primary rounded-b-3xl transition-colors"
 			}
+			position="static"
 		>
 			<NavbarContent className="md:max-w-max">
 				<NavbarMenuToggle
@@ -100,7 +101,7 @@ export default function NavbarDesktop() {
 				))}
 			</NavbarContent>
 
-			<NavbarMenu className="rounded-b-lg">
+			<NavbarMenu className="rounded-b-lg" position="static">
 				<Input
 					classNames={{
 						base: "sm:max-w-[10rem] h-10 sm:hidden",

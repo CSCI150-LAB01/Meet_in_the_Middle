@@ -5,4 +5,5 @@ export const AppConfig = {
 		"Find the best places for your group - restaurants, bars, cafes, arcades, and more. Get the best routes. Create a comprehensive plan. ",
 	locale: "en",
 	short_name: "MITM",
+	short_description: "Streamline your group meetups.",
 };

@@ -4,6 +4,7 @@ import { Providers } from "./providers";
 import NavbarDesktop from "../components/navbar";
 import { roboto } from "@/styles/fonts";
 import { AppConfig } from "@/utils/AppConfig";
+import Footer from "@/components/footer";
 
 // Metadata
 export const metadata: Metadata = {
@@ -48,6 +49,7 @@ export default function RootLayout({
 				{/* add navbar */}
 				<NavbarDesktop />
 				<Providers>{children}</Providers>
+				<Footer />
 			</body>
 		</html>
 	);
