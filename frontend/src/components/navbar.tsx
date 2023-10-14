@@ -22,7 +22,7 @@ interface MenuItem {
 export default function NavbarDesktop() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-	const isAuthenticated = false;
+	const isAuthenticated = true;
 
 	const noAuthMenuItems = [
 		{ pageName: "Home", location: "/#" },
@@ -53,39 +53,56 @@ export default function NavbarDesktop() {
 			}
 			position="static"
 		>
-			<NavbarContent className="md:max-w-max">
-				<NavbarMenuToggle
-					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-					className="sm:hidden"
-					icon={
-						isMenuOpen ? (
-							<MdMenuOpen size="50px" className="text-secondary" />
-						) : (
-							<MdMenu size="50px" className="text-white" />
-						)
-					}
-				/>
-			</NavbarContent>
-			<NavbarContent
-				as="div"
-				className="items-center hidden md:flex"
-				justify="start"
-			>
-				<Input
-					classNames={{
-						base: "md:max-w-full sm:max-w-[10rem] h-10",
-						mainWrapper: "w-full h-full",
-						input: "text-small placeholder:text-default-300/70",
-						inputWrapper:
-							"h-full font-normal text-white bg-default-300/20 dark:bg-default-500/20",
-					}}
-					placeholder="Search events, groups, etc..."
-					size="sm"
-					startContent={<MdOutlineSearch />}
-					type="search"
-					variant="faded"
-				/>
-			</NavbarContent>
+			{/* If auth => show search bar else show hamburger manu*/}
+
+			{isAuthenticated ? (
+				<>
+					<NavbarBrand>
+						<Image
+							src="/assets/logo-condensed.svg"
+							width={25}
+							height={25}
+							alt="Meet In The Middle Logo"
+							className="md:hidden"
+						/>
+					</NavbarBrand>
+					<NavbarContent
+						as="div"
+						className="items-center hidden md:flex"
+						justify="start"
+					>
+						<Input
+							classNames={{
+								base: "md:max-w-full sm:max-w-[10rem] h-10",
+								mainWrapper: "w-full h-full",
+								input: "text-small placeholder:text-default-300/70",
+								inputWrapper:
+									"h-full font-normal text-white bg-default-300/20 dark:bg-default-500/20",
+							}}
+							placeholder="Search events, groups, etc..."
+							size="sm"
+							startContent={<MdOutlineSearch />}
+							type="search"
+							variant="faded"
+						/>
+					</NavbarContent>
+				</>
+			) : (
+				<NavbarContent className="md:max-w-max">
+					<NavbarMenuToggle
+						aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+						className="sm:hidden"
+						icon={
+							isMenuOpen ? (
+								<MdMenuOpen size="50px" className="text-secondary" />
+							) : (
+								<MdMenu size="50px" className="text-white" />
+							)
+						}
+					/>
+				</NavbarContent>
+			)}
+
 			<NavbarContent className="hidden sm:flex gap-2" justify="center">
 				{menuItems.map((item: MenuItem) => (
 					<NavbarMenuItem key={`${item}`}>
@@ -100,35 +117,6 @@ export default function NavbarDesktop() {
 					</NavbarMenuItem>
 				))}
 			</NavbarContent>
-
-			<NavbarMenu className="rounded-b-lg" position="static">
-				<Input
-					classNames={{
-						base: "sm:max-w-[10rem] h-10 sm:hidden",
-						mainWrapper: "w-full h-full",
-						input: "text-small",
-						inputWrapper:
-							"h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-					}}
-					placeholder="Search events, groups, etc..."
-					size="sm"
-					startContent={<MdOutlineSearch />}
-					type="search"
-					variant="faded"
-				/>
-				{menuItems.map((item: MenuItem) => (
-					<NavbarMenuItem key={`${item}`}>
-						<Link
-							color="secondary"
-							className="w-full"
-							href={item.location}
-							size="sm"
-						>
-							{item.pageName}
-						</Link>
-					</NavbarMenuItem>
-				))}
-			</NavbarMenu>
 		</Navbar>
 	);
 }
