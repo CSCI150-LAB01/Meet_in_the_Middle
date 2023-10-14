@@ -10,7 +10,7 @@ export default function AccountLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="flex min-h-screen flex-col items-center lg:px-24 py-24 w-full">
+		<div className="flex min-h-screen flex-col items-center lg:px-24 pt-12 w-full">
 			{children}
 		</div>
 	);
