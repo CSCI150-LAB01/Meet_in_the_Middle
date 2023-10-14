@@ -139,13 +139,12 @@ export default function NavbarDesktop() {
 						isBordered
 						height="3rem"
 						className="bg-white rounded-t-3xl transition-colors bottom-0 fixed top-[unset] h-[3rem] block md:hidden flex border-t-4 border-b-0 border-primary"
-						shouldHideOnScroll
 					>
 						<Tabs
 							aria-label="Drawer"
 							color="primary"
 							variant="solid"
-							classNames="grow flex-1 bg-transparent"
+							classNames="grow flex-1"
 							fullWidth
 						>
 							<Tab

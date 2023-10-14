@@ -1,7 +1,7 @@
-export default function Itineraries() {
+export default function Maps() {
 	return (
 		<>
-			<p>Itineraries</p>
+			<p>Maps</p>
 		</>
 	);
 }

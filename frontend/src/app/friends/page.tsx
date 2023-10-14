@@ -1,7 +1,7 @@
-export default function Account() {
+export default function Friends() {
 	return (
 		<>
-			<p>Account</p>
+			<p>Friends</p>
 		</>
 	);
 }
