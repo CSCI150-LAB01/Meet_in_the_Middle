@@ -2,17 +2,13 @@
 
 import React from "react";
 import { Input, Button, Link } from "@nextui-org/react";
-import { MdEmail } from "react-icons/md";
+import { MdEmail, MdKey } from "react-icons/md";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 import { berlin } from "@/styles/fonts";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
-	title: "Sign In",
-};
-
-export default function Login() {
+export default function Register() {
 	const [isVisible, setIsVisible] = React.useState(false);
 
 	const toggleVisibility = () => setIsVisible(!isVisible);
@@ -22,8 +18,13 @@ export default function Login() {
 			<div className="w-full text-sm bg-primary rounded-2xl flex flex-col flex-1 grow">
 				<div className="gap-4 p-5 flex items-center justify-stretch flex-col flex-1 grow">
 					<h1 className={`text-white text-4xl py-5 ${berlin.className}`}>
-						Sign In
+						Sign Up
 					</h1>
+
+					<div className="flex-row w-full flex gap-2">
+						<Input type="firstName" label="First Name" />
+						<Input type="lastName" label="Last Name" />
+					</div>
 
 					<Input
 						type="email"
@@ -53,7 +54,7 @@ export default function Login() {
 					/>
 
 					<Button color="secondary" variant="solid" fullWidth>
-						Sign In
+						Sign Up
 					</Button>
 					<Button
 						className="bg-white text-foreground"
@@ -63,27 +64,27 @@ export default function Login() {
 							<FcGoogle className="text-default-400 pointer-events-none" />
 						}
 					>
-						Sign In With Google
+						Sign Up With Google
 					</Button>
 				</div>
 				<Button
-					className="bg-white text-foreground md:hidden align-center py-5"
+					className="bg-white text-foreground md:hidden align-center py-5 "
 					variant="solid"
 					fullWidth
 				>
 					<p className="pt-5">
-						Don't have an account?{" "}
-						<span className="text-secondary">Sign Up</span>
+						Already have an account?{" "}
+						<span className="text-secondary">Sign In</span>
 					</p>
 				</Button>
 			</div>
 
 			<Link
 				className="text-secondary text-center hidden md:block"
-				href="/user/register"
+				href="/user/login"
 				size="sm"
 			>
-				Don't have an account? Sign Up
+				Already have an account? Sign In
 			</Link>
 		</>
 	);
