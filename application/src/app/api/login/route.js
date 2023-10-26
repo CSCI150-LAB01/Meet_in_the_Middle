@@ -43,9 +43,9 @@ export async function POST(req) {
                     }, { status: 200 });
                 }
                 // if result is false, then password does not match
-                res.status(401).json({
+                res.json({
                     message: "Auth failed",
-                });
+                }, { status: 401 });
             });
         })
         .catch(err => {
