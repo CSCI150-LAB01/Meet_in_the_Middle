@@ -1,9 +1,15 @@
+import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
-import { User } from '../../../models/user';
+import User from '../../../models/user';
+const mongoose = require("mongoose");
 
 export async function POST(req) {
+    await dbConnect();
+
     const res = Response;
-    //return NextResponse.json({ message: 'Hello world!' }, { status: 200 })
+    // return NextResponse.json({ message: 'Hello world!' }, { status: 200 })
+    // const response = await User.find()
+    // console.log(response)
     User.find({ email: req.body.email })
         .exec()
         // users is an array, but there is only ever one user with that email.
@@ -43,15 +49,15 @@ export async function POST(req) {
                     }, { status: 200 });
                 }
                 // if result is false, then password does not match
-                res.json({
+                return res.json({
                     message: "Auth failed",
                 }, { status: 401 });
             });
-        })
-        .catch(err => {
-            console.log(err);
-            res.json({
-                error: err
-            }, { status: 500 });
-        });
+    })
+            .catch (err => {
+        console.log(err);
+        return res.json({
+            error: err
+        }, { status: 500 });
+    });
 }
