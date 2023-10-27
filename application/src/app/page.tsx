@@ -10,7 +10,6 @@ import {
 	MdOutlineGroups2,
 	MdSocialDistance,
 } from "react-icons/md";
-import Footer from "@/components/footer";
 
 export default function Home() {
 	return (
