@@ -35,6 +35,8 @@ export async function POST(request: Request) {
             // defaultLocation.save();
             // console.log(defaultLocation);
             
+            
+
             // create user
             user = new User({
                 _id: new mongoose.Types.ObjectId(),
