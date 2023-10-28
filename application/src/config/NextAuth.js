@@ -18,13 +18,16 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 try {
-                    const response = await fetch("/api/auth/signin", {
+                    const response = await fetch("/api/user/login", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(credentials)
                     })
 
                     const user = await response.json()
+                    if (!user){
+                        return null;
+                    }
                     return user;
                 } catch (error) {
                     return null;
@@ -38,7 +41,8 @@ export const authOptions = {
                 token.id = user.id,
                     token.email = user.email,
                     token.name = user.name,
-                    token.image = user.image
+                    token.image = user.image,
+                    token.defaultLocation = user.defaultLocation
             }
             return token
         },
@@ -47,6 +51,7 @@ export const authOptions = {
             session.user.email = token.email
             session.user.name = token.name
             session.user.image = token.image
+            session.user.defaultLocation = token.defaultLocation
             return session
         }
     }

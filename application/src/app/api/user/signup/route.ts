@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import User from '../../../../models/user';
 import FriendList from '@/models/friend-list';
 import DefaultLocation from "@/models/default-location";
+import bcrypt from 'bcrypt';
 const mongoose = require("mongoose");
 
 //const {searchParams} = new URL(request.url)
@@ -50,11 +51,14 @@ export async function POST(request: Request) {
                 friends: [],
             });
             
+            // encrypt password
+            const encryptedPassword = await bcrypt.hash(password, 10);
+
             // create user
             user = new User({
                 _id: new mongoose.Types.ObjectId(),
                 email: email,
-                password: password,
+                password: encryptedPassword,
                 username: username,
                 friendList: friendList._id,
                 defaultLocation: defaultLocation._id

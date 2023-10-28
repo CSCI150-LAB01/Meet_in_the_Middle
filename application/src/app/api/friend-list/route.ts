@@ -59,6 +59,7 @@ export async function DELETE(request: Request){
 
         console.log("Deleting Friend List");
         const friendList = await FriendList.findByIdAndDelete(data._id);
+        // if (friendList == null){}
         console.log(friendList);
         return NextResponse.json({message: "Friend List Deleted"}, {status: 200});
 
