@@ -6,7 +6,8 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     username: { type: String, required: true },
     defaultLocation: { type: mongoose.Schema.Types.ObjectId, ref: "DefaultLocation" },
-    friendList: { type: mongoose.Schema.Types.ObjectId, ref: "FriendList" }
+    friendList: { type: mongoose.Schema.Types.ObjectId, ref: "FriendList" },
+    image: { type: String, required: false },
     // defaultLocations: required needs to be set to true!!!!
 });
 

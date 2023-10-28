@@ -2,11 +2,13 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@lib/db";
 
 export const authOptions = {
+    // may need to fix later
     adapter: MongoDBAdapter(clientPromise),
     session: {
         strategy: 'jwt',
     },
     pages: {
+        // may need adjustment based on login route
         signIn: "/signin"
     },
     providers: [
@@ -39,10 +41,12 @@ export const authOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id,
+                    // Assign default values if none are supplied
                     token.email = user.email,
                     token.name = user.name,
-                    token.image = user.image,
-                    token.defaultLocation = user.defaultLocation
+                    token.image = user.image ?? "",
+                    token.defaultLocation = user.defaultLocation ?? [0,0]
+                    // adjust default value structure
             }
             return token
         },
