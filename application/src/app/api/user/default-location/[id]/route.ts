@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
-import DefaultLocation from '../../../../../models/default-location';
-import User from '../../../../../models/user';
+import DefaultLocation from '@/models/default-location';
+import User from '@/models/user';
 const mongoose = require("mongoose");
 
 // Create new default location for a specific user
@@ -10,11 +10,11 @@ export async function POST(request: Request) {
   await dbConnect();
 
   try {
-    const id = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await User.findById(id);
-    
     const data = await request.json();
     const coordinates = data.coordinates;
+
+    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+    const user = await User.findById(userId);
     
     // Create a new default location object
     const defaultLocation = await new DefaultLocation({
@@ -37,6 +37,34 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Default location set successfully" }, { status: 201 });
 
   } catch (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+}
+
+export async function GET(request: Request) {
+  await dbConnect();
+  try{
+    // Get user ID from request
+    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+    const user = await User.findById(userId);
+    
+    console.log("HERE IS HOW FAR WE GET")
+    if (!userId) {
+      return NextResponse.json({ message: "Provide userId in GET request" }, { status: 400 });
+    }
+
+    // Find the user
+    console.log("User")
+    console.log(user)
+
+    // Find the user's default location
+    const defaultLocation = await DefaultLocation.findById(user.defaultLocation);
+    console.log("DefaultLocation")
+    console.log(defaultLocation)
+
+    return NextResponse.json(defaultLocation, { status: 200 });
+
+  }catch(error){
     return NextResponse.json(error, { status: 500 });
   }
 }

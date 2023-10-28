@@ -4,6 +4,20 @@ import FriendList from '@/models/friend-list';
 const mongoose = require("mongoose");
 import { NextResponse } from 'next/server'
 
+
+export async function GET(request: Request) {
+    try {
+        console.log("Fetching FRIEND LIST");
+        const friendList = await FriendList.find();
+        console.log(friendList);
+
+        return NextResponse.json(friendList, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ message: "No friend list found" }, { status: 404 });
+    }
+}
+
+
 // check valid id, check if it is user
 // WORKING
 // Post friend list to database 
@@ -33,18 +47,6 @@ export async function POST(request: Request) {
         } else{
         return NextResponse.json(error, { status: 500 });
         }
-    }
-}
-
-export async function GET(request: Request) {
-    try {
-        console.log("Fetching FRIEND LIST");
-        const friendList = await FriendList.find();
-        console.log(friendList);
-
-        return NextResponse.json(friendList, { status: 200 });
-    } catch (error) {
-        return NextResponse.json({ message: "No friend list found" }, { status: 404 });
     }
 }
 

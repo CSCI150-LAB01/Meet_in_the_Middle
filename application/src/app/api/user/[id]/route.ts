@@ -10,8 +10,8 @@ export async function GET(request: Request) {
   await dbConnect();
 
   try {
-    const id = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await User.findById(id);
+    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+    const user = await User.findById(userId);
 
     return NextResponse.json(user, { status: 200 });
 
@@ -28,23 +28,23 @@ export async function DELETE(request: Request) {
 
   try {
     // Find user
-    const id = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await User.findById(id);
-    
+    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+    const user = await User.findById(userId);
+
     // Find default-location 
     const defaultLocationId = await user.defaultLocation;
     const defaultLocation = await DefaultLocation.findById(defaultLocationId);
-    
+
     // Find friends list
     // insert code here
-    
+
     // Delete default-location associated with user
     if (defaultLocation) {
       await defaultLocation.deleteOne();
     }
-    
+
     // Delete friends list!!!!!!!!!!!!!!!!!!!!!!!!
-    
+
     // Delete user
     await user.deleteOne();
     return NextResponse.json({ message: "User deleted" }, { status: 200 });

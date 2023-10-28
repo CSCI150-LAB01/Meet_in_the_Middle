@@ -4,8 +4,7 @@ const friendListSchema = new Schema({
   // User ID who owns the friend list
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Reference to the User model
-    required: true,
+    ref: "User", unique : true// Reference to the User model
   },
   // List of friends (an array of User Ids)
   friends: [{
