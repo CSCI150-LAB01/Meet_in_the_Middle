@@ -1,14 +1,16 @@
 # User Routes
 
 ## Signup User
-- **Method**: POST
-- **Route**: /api/user/signup/
+- **Note**: <span style="color:red">Longitude range from -180 to 180, and Latitude must range from -90 to 90. Otherwise an error occurs</span>
+- **Method**: <span style="color:lightgreen">POST</span>
+- **Route**: <span style="color:lightgreen">/api/user/signup/</span>
 - **Body**:
     ```json
     {
-        "email": "dummy@gmail.com",
-        "password": "1234",
-        "username": "dummy45"
+        "email" : "eamil@gmail.com",
+        "password": "pass",
+        "username" : "joe",    
+        "location" : [12,52]
     }
     ```
 - **Response**:
@@ -26,8 +28,8 @@
       ```
 
 ## Login User
-- **Method**: POST
-- **Route**: /api/user/login/
+- **Method**: <span style="color:lightgreen">POST</span>
+- **Route**: <span style="color:lightgreen">/api/user/login/</span>
 - **Body**:
     ```json
     {
@@ -51,12 +53,11 @@
       ```
 
 ## Delete User
-- **Note**: Delete User Example -> /user/6526405977a7ac5811437f87
-- **Method**: DELETE
-- **Route**: /api/user/:userId
+- **Method**: <span style="color:lightgreen">DELETE</span>
+- **Route**: <span style="color:lightgreen">/api/user/:userId</span>
 - **Body**: None
 - **Response**:
-    - **Status 200**:
+    - **Status 200**: 
       ```json
       {
           "message": "User deleted"
@@ -69,9 +70,26 @@
       }
       ```
 
-## Get User List
-- **Method**: GET
-- **Route**: /api/user/user-list
+## Get User Info 
+- **Method**: <span style="color:lightgreen">GET</span>
+- **Route**: <span style="color:lightgreen">/api/user/:userId</span>
+- **Body**: None
+- **Response**:
+    - **Status 200**:
+      ```json
+        {
+            "id": "6526405977a7ac5811437f87",
+            "email": "dummy@gmail.com",
+            "name": "John Doe",
+            "password": "pass",
+            ...
+        }
+      ```
+    - **Status 500**:
+
+## Get User List 
+- **Method**: <span style="color:lightgreen">GET</span>
+- **Route**: <span style="color:lightgreen">/api/user-list</span>
 - **Body**: None
 - **Response**:
     - **Status 200**:
@@ -94,11 +112,11 @@
           ...
       ]
       ```
-    - **Status 500**
+    - **Status 500**:
 
-## Get Default User Location
-- **Method**: GET
-- **Route**: /user/default-location/:userId
+## Get User Default Location
+- **Method**: <span style="color:lightgreen">GET</span>
+- **Route**: <span style="color:lightgreen">/api/user/default-location/:userId</span>
 - **Response**:
     - **Status 200**:
       ```json
@@ -123,10 +141,10 @@
       }
       ```
 
-## Post/Update Default User Location
-- **Note**: Post method handles both posting AND updating location(old location will be overidden). Longitude must be between -180 and 180, and Latitude must be between -90 and 90.
-- **Method**: POST
-- **Route**: /user/default-location/:userId
+## Post/Update User Default Location
+- **Note**: <span style="color:red">Post method handles both posting AND updating location (old location will be overridden). Longitude must be between -180 and 180, and Latitude must be between -90 and 90.</span>
+- **Method**: <span style="color:lightgreen">POST</span>
+- **Route**: <span style="color:lightgreen">/user/default-location/:userId</span>
 - **Body**:
     ```json
     {
@@ -145,53 +163,5 @@
       {
           "error": "Error saving default location"
       }
-      ```
-
-## Delete Location (Debugging)
-
-- **Method**: DELETE
-- **Route**: /user/default-location/:locationId
-- **Body**: None
-
-**Response**:
-- **Status 404**:
-  ```json
-  {
-      "message": "Default location not found"
-  }
-  ```
-
-## Get All Locations (Debugging)
-
-- **Note**: Location is plural.
-- **Method**: GET
-- **Route**: /user/default-locations
-- **Body**: None
-- **Response**:
-  ```json
-  {
-    "locations": 
-    [
-        {
-            "_id": "653a29747bc9eb71e06320fa",
-            "coordinates": [
-                55.445,
-                67.891
-            ],
-            "__v": 0
-        },
-        {
-            "_id": "653a29747bc9eb71e06320fb",
-            "coordinates": [
-                65.445,
-                81.895
-            ],
-            "__v": 0
-        }
-    ]
-  }
-  ```
-
-
-
-
+      ``
+      

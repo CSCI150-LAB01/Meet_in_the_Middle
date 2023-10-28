@@ -1,5 +1,3 @@
-// NEED TO TEST FILE
-
 import mongoose, { Schema, models} from "mongoose";
 
 const defaultLocationSchema= Schema({

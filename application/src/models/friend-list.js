@@ -1,5 +1,3 @@
-// NEEDS TESTING
-
 import mongoose, { Schema, models } from "mongoose";
 
 const friendListSchema = new Schema({
@@ -9,8 +7,8 @@ const friendListSchema = new Schema({
     ref: "User", // Reference to the User model
     required: true,
   },
-  // List of friends (an array of User references)
-  friendList: [{
+  // List of friends (an array of User Ids)
+  friends: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User model
   }],
