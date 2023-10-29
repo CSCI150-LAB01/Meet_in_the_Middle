@@ -97,7 +97,7 @@ export default function NavbarDesktop() {
 					)}
 				</NavbarContent>
 
-				<NavbarContent className='hidden sm:flex gap-2' justify='start'>
+				<NavbarContent className='hidden sm:flex gap-2' justify='center'>
 					{menuItems.map((item: MenuItem) => (
 						<NavbarMenuItem key={`${item}`}>
 							<Link
