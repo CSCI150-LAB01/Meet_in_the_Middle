@@ -13,10 +13,9 @@ export async function GET(request: Request) {
 
         return NextResponse.json(friendList, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ message: "No friend list found" }, { status: 404 });
+        return NextResponse.json(error, { status: 500 });
     }
 }
-
 
 // check valid id, check if it is user
 // WORKING
@@ -59,7 +58,6 @@ export async function DELETE(request: Request){
 
         console.log("Deleting Friend List");
         const friendList = await FriendList.findByIdAndDelete(data._id);
-        // if (friendList == null){}
         console.log(friendList);
         return NextResponse.json({message: "Friend List Deleted"}, {status: 200});
 

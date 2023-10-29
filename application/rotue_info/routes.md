@@ -1,4 +1,5 @@
 # User Routes
+- Add, Remove, and Modify Users and User data. Signin and Login
 
 ## Signup User
   Creates a user based on information from body. Friends List is initialized to empty. Default-Location is set to coordinates or [0,0] if not provided. <span style="color:red">Longitude must range from -180 to 180, and Latitude must range from -90 to 90. Otherwise an error occurs</span>
@@ -27,7 +28,8 @@
       }
       ```
 
-## Login User (NOT WORKING)
+## Login User
+Accepts a username and email to login. <span style="color:red">Google Login Not Setup</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/api/user/login</span>
 - **Body**:
@@ -99,7 +101,7 @@ Returns the user that is provided in the URL.
       ```
     - **Status 500**:
 
-## Get User List
+## Get List of Users
 Provides a list of ALL USERS in the database. Can be used to search for friends. 
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/api/user-list</span>
@@ -180,7 +182,27 @@ UserId provided in URL has default location updated with the coordinates in the 
           "error": "Error saving default location"
       }
       ``
-      
+
+# Friend Routes
+- Add and Remove friends from friend list. Display friend list
+  
+## Return Friend List (NOT WORKING)
+Returns user's friend list.
+- **Method**: <span style="color:lightgreen">GET</span>
+- **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
+- **Body**:
+- **Response**:
+    - **Status 202**:
+      ```json
+        {
+        "_id": "653cbc1bb172a8cf95067f90",
+        "friends": [],
+        "userId": "653cbc1bb172a8cf95067f92",
+        "__v": 0
+        }
+      ```
+    - **Status 500**:
+  
 ## Add Friend (NOT WORKING)
   Adds one friend to the user's friend list. User is sent in URL, friend is sent in body.
 - **Method**: <span style="color:lightgreen">POST</span>
@@ -219,19 +241,3 @@ Removes one friend from the use's friend list. User is sent in URL, friend is se
       ```
     - **Status 500**:
 
-## Return Friend List (NOT WORKING)
-Returns user's friend list.
-- **Method**: <span style="color:lightgreen">GET</span>
-- **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
-- **Body**:
-- **Response**:
-    - **Status 202**:
-      ```json
-        {
-        "_id": "653cbc1bb172a8cf95067f90",
-        "friends": [],
-        "userId": "653cbc1bb172a8cf95067f92",
-        "__v": 0
-        }
-      ```
-    - **Status 500**:

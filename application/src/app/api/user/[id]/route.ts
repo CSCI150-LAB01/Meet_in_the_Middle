@@ -2,6 +2,7 @@ import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
 import User from '../../../../models/user';
 import DefaultLocation from "@/models/default-location";
+import FriendList from "@/models/friend-list";
 const mongoose = require("mongoose");
 
 // WORKING
@@ -28,22 +29,31 @@ export async function DELETE(request: Request) {
 
   try {
     // Find user
+    console.log("Fetching User");
     const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
     const user = await User.findById(userId);
+    console.log(user);
 
     // Find default-location 
+    console.log("Fetching Default Location")
     const defaultLocationId = await user.defaultLocation;
     const defaultLocation = await DefaultLocation.findById(defaultLocationId);
+    console.log(defaultLocation)
 
     // Find friends list
-    // insert code here
+    console.log("Fetching Friends List")
+    const friendListId = await user.friendsList;
+    const friendList = await FriendList.findById(friendListId);
 
     // Delete default-location associated with user
     if (defaultLocation) {
       await defaultLocation.deleteOne();
     }
 
-    // Delete friends list!!!!!!!!!!!!!!!!!!!!!!!!
+    // Delete friends list associated with user
+    if (friendList) {
+      await friendList.deleteOne();
+    }
 
     // Delete user
     await user.deleteOne();
