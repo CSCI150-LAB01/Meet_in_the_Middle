@@ -211,16 +211,18 @@ export default function Register() {
 						Sign Up With Google
 					</Button>
 				</form>
-				<Button
-					className='bg-white text-foreground md:hidden align-center py-5 '
-					variant='solid'
-					fullWidth
-				>
-					<p className='pt-5'>
-						Already have an account?{' '}
-						<span className='text-secondary'>Sign In</span>
-					</p>
-				</Button>
+				<Link href='/user/login'>
+					<Button
+						className='bg-white text-foreground md:hidden align-center py-5 '
+						variant='solid'
+						fullWidth
+					>
+						<p className='pt-5'>
+							Already have an account?{' '}
+							<span className='text-secondary'>Sign In</span>
+						</p>
+					</Button>
+				</Link>
 			</div>
 			<Link
 				className='text-secondary text-center hidden md:block'

@@ -6,9 +6,10 @@ import { Location } from '@/utils/types';
 interface MapProps {
 	height: string;
 	width: string;
+	options?: google.maps.MapOptions;
 }
 
-const Map: React.FC<MapProps> = ({ height, width }) => {
+const Map: React.FC<MapProps> = ({ height, width, options }) => {
 	const [currentLocation, setCurrentLocation] = useState<Location>({
 		lat: 0,
 		lng: 0,
@@ -45,6 +46,7 @@ const Map: React.FC<MapProps> = ({ height, width }) => {
 				center={currentLocation}
 				zoom={15}
 				onLoad={onLoad}
+				options={{ ...options }}
 				onUnmount={onUnmount}
 				mapContainerStyle={{ height, width }}
 			>

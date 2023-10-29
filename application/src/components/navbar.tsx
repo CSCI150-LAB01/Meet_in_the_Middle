@@ -60,8 +60,8 @@ export default function NavbarDesktop() {
 				height='3rem'
 				className={
 					isMenuOpen
-						? 'bg-white transition-colors'
-						: 'bg-primary rounded-b-3xl transition-colors'
+						? 'bg-white transition-colors z-[3]'
+						: 'bg-primary rounded-b-3xl transition-colors z-[3] fixed'
 				}
 				position='static'
 			>
@@ -159,7 +159,7 @@ export default function NavbarDesktop() {
 					<Navbar
 						isBordered
 						height='3rem'
-						className='bg-white rounded-t-3xl transition-colors bottom-0 fixed top-[unset] h-[3rem] block md:hidden flex border-t-4 border-b-0 border-primary px-5'
+						className='bg-white rounded-t-3xl transition-colors bottom-0 fixed top-[unset] h-[3rem] block md:hidden flex border-t-4 border-b-0 border-primary px-5 z-[3] fixed'
 					>
 						<Button isIconOnly color='transparent' aria-label='Dashboard'>
 							<Link href='/dashboard'>

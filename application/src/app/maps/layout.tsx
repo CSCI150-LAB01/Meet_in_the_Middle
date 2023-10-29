@@ -10,7 +10,7 @@ export default function ItinerariesLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className='flex min-h-screen flex-col items-center w-full'>
+		<div className='flex flex-col items-center justify-center  w-full min-h-screen relative bg-transparent'>
 			{children}
 		</div>
 	);
