@@ -1,32 +1,32 @@
-import type { Config } from "tailwindcss";
-import { nextui } from "@nextui-org/react";
+import type { Config } from 'tailwindcss';
+import { nextui } from '@nextui-org/react';
 
 const config: Config = {
 	content: [
-		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-		"./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+		'./src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/components/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/app/**/*.{js,ts,jsx,tsx,mdx}',
+		'./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
 	],
 	theme: {
 		extend: {},
 	},
-	darkMode: "class",
+	darkMode: 'class',
 	plugins: [
 		nextui({
 			themes: {
 				light: {
 					colors: {
 						primary: {
-							DEFAULT: "#5FA788",
-							foreground: "#fff",
+							DEFAULT: '#5FA788',
+							foreground: '#fff',
 						},
 						secondary: {
-							800: "#d6bef7",
-							DEFAULT: "#9C76AC",
-							foreground: "#fff",
+							800: '#d6bef7',
+							DEFAULT: '#9C76AC',
+							foreground: '#fff',
 						},
-						focus: "#9C76AC",
+						focus: '#9C76AC',
 					},
 				},
 			},
