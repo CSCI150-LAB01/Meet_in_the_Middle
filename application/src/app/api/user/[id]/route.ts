@@ -36,13 +36,13 @@ export async function DELETE(request: Request) {
 
     // Find default-location 
     console.log("Fetching Default Location")
-    const defaultLocationId = await user.defaultLocation;
+    const defaultLocationId = await user.defaultLocationId;
     const defaultLocation = await DefaultLocation.findById(defaultLocationId);
     console.log(defaultLocation)
 
     // Find friends list
     console.log("Fetching Friends List")
-    const friendListId = await user.friendsList;
+    const friendListId = await user.friendsListId;
     const friendList = await FriendList.findById(friendListId);
 
     // Delete default-location associated with user

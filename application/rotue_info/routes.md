@@ -18,7 +18,16 @@
     - **Status 200**: 
       ```json
       {
-          "message": "User Created"
+          "message": "User Created",
+          {
+            "_id": "653ddc431694115a0df725e3",
+            "email": "user@gmail.com",
+            "password": "$2b$10$...",
+            "username": "joe",
+            "defaultLocationId": "653ddc431694115a0df725e0",
+            "friendListId": "653ddc431694115a0df725e1",
+            "__v": 0
+          }
       }
       ```
     - **Status 409**:
@@ -44,10 +53,9 @@ Accepts a username and email to login. <span style="color:red">Google Login Not 
       ```json
       {
         "message": "Auth Successful",
-        "token": "yJhbGciOiJIUzI1N..."
       }
       ```
-    - **Status 401**:
+    - **Status 500**:
       ```json
       {
           "message": "Auth Failed"
@@ -115,8 +123,8 @@ Provides a list of ALL USERS in the database. Can be used to search for friends.
               "email": "dummy@gmail.com",
               "name": "John Doe",
               "password": "pass",
-              "default-location" : "653cbc1bb172a8cf95067f92",
-              "friendList" : "653cbc1bb172a8cf95067f90",
+              "defaultLocationId" : "653cbc1bb172a8cf95067f92",
+              "friendListId" : "653cbc1bb172a8cf95067f90",
           },
           {
               "id": "6526405977a7ac5811437f87",
@@ -186,8 +194,8 @@ UserId provided in URL has default location updated with the coordinates in the 
 # Friend Routes
 - Add and Remove friends from friend list. Display friend list
   
-## Return Friend List (NOT WORKING)
-Returns user's friend list.
+## Get Friend List 
+Returns user's friend list. User id is sent in URL.
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
 - **Body**:
@@ -204,7 +212,7 @@ Returns user's friend list.
     - **Status 500**:
   
 ## Add Friend (NOT WORKING)
-  Adds one friend to the user's friend list. User is sent in URL, friend is sent in body.
+  Adds one friend to the user's friend list. User id is sent in URL, friend is sent in body.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
 - **Body**:

@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 export async function POST(request: Request) {
   await dbConnect();
 
-
   try {
     const data = await request.json();
     const email = data.email;
@@ -26,7 +25,7 @@ export async function POST(request: Request) {
     return NextResponse.json(user, { status: 200 });
 
   } catch (error) {
-    return NextResponse.json(error, { status: 500 });
+    return NextResponse.json({message: "Auth Failed", error}, { status: 500 });
   }
 }
 

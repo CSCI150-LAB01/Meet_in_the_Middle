@@ -6,6 +6,8 @@ import { NextResponse } from 'next/server'
 
 
 export async function GET(request: Request) {
+    await dbConnect();
+    
     try {
         console.log("Fetching FRIEND LIST");
         const friendList = await FriendList.find();

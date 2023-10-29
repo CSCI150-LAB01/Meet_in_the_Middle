@@ -5,17 +5,37 @@ import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
 const mongoose = require("mongoose");
 
-// ERROR WITH THIS CODE!!!!!!!!
-// Posts a friend to user's friend list
+// Responds with user's friend list
+export async function GET(request: Request) {
+    await dbConnect();
+
+    try {
+        const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+
+        console.log("Fetching Friend List");
+        const friendList = await FriendList.findOne({userId});
+        console.log(friendList);
+
+        return NextResponse.json(friendList, { status: 200 });
+    } catch {
+        return NextResponse.json({message: "Error returning friends list", status : 500})
+    }
+}
+
 export async function POST(request: Request) {
     await dbConnect();
 
     try {
         // Find User
-        console.log("check")
-        const id = request.url.slice(request.url.lastIndexOf('/') + 1);
+        //console.log("check")
+
+        const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
         console.log("Validating User");
-        const user = await User.findById(id);
+        const user = await User.findById(userId);
+
+        NextResponse.json(user, { status: 200 });
+
+
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
@@ -57,6 +77,3 @@ export async function REMOVE(request: Request) {
     // code
 }
 
-export async function GET(request: Request) {
-    // code
-}

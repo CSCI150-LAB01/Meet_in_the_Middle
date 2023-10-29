@@ -24,13 +24,13 @@ export async function POST(request: Request) {
     defaultLocation.save();
 
     // Delete the old default location object
-    const oldDefaultLocation = user.defaultLocation;
-    if (oldDefaultLocation) {
-      await DefaultLocation.findByIdAndDelete(oldDefaultLocation);
+    const oldDefaultLocationId = user.defaultLocationId;
+    if (oldDefaultLocationId) {
+      await DefaultLocation.findByIdAndDelete(oldDefaultLocationId);
     }
 
     // Update the user's defaultLocation reference with the new location's ID
-    user.defaultLocation = defaultLocation._id;
+    user.defaultLocationId = defaultLocation._id;
     user.save();
     
     console.log({ message: "\ndefaultLocation" }, defaultLocation);
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
     console.log(user)
 
     // Find the user's default location
-    const defaultLocation = await DefaultLocation.findById(user.defaultLocation);
+    const defaultLocation = await DefaultLocation.findById(user.defaultLocationId);
     console.log("DefaultLocation")
     console.log(defaultLocation)
 

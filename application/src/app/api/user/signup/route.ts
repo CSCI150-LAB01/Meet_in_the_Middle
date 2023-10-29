@@ -50,7 +50,7 @@ export async function POST(request: Request) {
                 _id: new mongoose.Types.ObjectId(),
                 friends: [],
             });
-            
+
             // encrypt password
             const encryptedPassword = await bcrypt.hash(password, 10);
 
@@ -60,8 +60,8 @@ export async function POST(request: Request) {
                 email: email,
                 password: encryptedPassword,
                 username: username,
-                friendList: friendList._id,
-                defaultLocation: defaultLocation._id
+                friendListId: friendList._id,
+                defaultLocationId: defaultLocation._id
             });
 
             // Add userId to friend list and default location
@@ -77,10 +77,10 @@ export async function POST(request: Request) {
             console.log(defaultLocation)
 
             // Save user and friend list
-            user.save();
-            friendList.save();
-            defaultLocation.save();
-            return NextResponse.json({ message: "User created" }, { status: 201 });
+            await defaultLocation.save();
+            await friendList.save();
+            await user.save();
+            return NextResponse.json({ message: "User created", user }, { status: 201 });
         }
     } catch (error) {
         return NextResponse.json(error, { status: 500 });

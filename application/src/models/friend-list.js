@@ -11,6 +11,14 @@ const friendListSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User model
   }],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const FriendList = models.FriendList || mongoose.model("FriendList", friendListSchema);
