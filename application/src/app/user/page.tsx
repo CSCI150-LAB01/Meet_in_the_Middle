@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createUser } from '../../utils/apiCalls';
-import { Location } from '@/utils/types';
+import { Location } from '@/lib/types';
+import { useRouter } from 'next/navigation';
 
 import {
 	GoogleMap,
@@ -19,8 +20,9 @@ import { berlin } from '@/styles/fonts';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CardLoading from '@/components/loading';
+import { NextPage } from 'next';
 
-export default function Register() {
+export default function Register(): NextPage {
 	// Form States / Vars
 	const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
 
@@ -28,6 +30,7 @@ export default function Register() {
 	const usernameRef = useRef<HTMLInputElement | null>(null);
 	const emailRef = useRef<HTMLInputElement | null>(null);
 	const passwordRef = useRef<HTMLInputElement | null>(null);
+	const router = useRouter();
 
 	// Location is "currentLocation"
 
@@ -81,13 +84,14 @@ export default function Register() {
 			password: passwordRef.current?.value || '',
 		};
 		createUser(formData.email, formData.password, formData.username, [
-			currentLocation.lat,
 			currentLocation.lng,
+			currentLocation.lat,
 		])
 			.then(() => {
 				toast.success('User account created successfully!', {
 					position: toast.POSITION.BOTTOM_CENTER,
 				});
+				router.push('/user/login');
 			})
 			.catch(error => {
 				toast.error(`${error}`, {
@@ -179,13 +183,17 @@ export default function Register() {
 									</StandaloneSearchBox>
 								</div>
 								<br />
-								<div className='overflow-clip rounded-lg w-full'>
+								<div className='overflow-clip rounded-lg w-full pointer-events-none'>
 									<GoogleMap
 										center={currentLocation}
 										zoom={15}
 										onLoad={onLoad}
 										onUnmount={onUnmount}
 										mapContainerStyle={{ height: '150px', width: '350px' }}
+										options={{
+											gestureHandling: 'none',
+											disableDefaultUI: true,
+										}}
 									>
 										{markers.map((mark, index) => (
 											<Marker key={index} position={mark} />

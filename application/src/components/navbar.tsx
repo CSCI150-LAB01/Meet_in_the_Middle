@@ -30,6 +30,7 @@ interface MenuItem {
 	pageName: string;
 	location: string;
 }
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function NavbarDesktop() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -127,7 +128,13 @@ export default function NavbarDesktop() {
 									className='text-danger'
 									color='danger'
 								>
-									Logout
+									<div
+										onClick={() => {
+											signOut;
+										}}
+									>
+										Logout
+									</div>
 								</DropdownItem>
 							</DropdownMenu>
 						</Dropdown>

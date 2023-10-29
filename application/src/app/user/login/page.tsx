@@ -9,6 +9,7 @@ import { berlin } from '@/styles/fonts';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loginUser } from '@/utils/apiCalls';
+import { getSession, useSession, signIn, signOut } from 'next-auth/react';
 
 export default function Login() {
 	// password visibility
@@ -20,7 +21,7 @@ export default function Login() {
 	const passwordRef = useRef<HTMLInputElement | null>(null);
 
 	// Form Functions
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		const formData = {
@@ -28,10 +29,11 @@ export default function Login() {
 			password: passwordRef.current?.value || '',
 		};
 		loginUser(formData.email, formData.password)
-			.then(() => {
+			.then(async () => {
 				toast.success('User login successful!', {
 					position: toast.POSITION.BOTTOM_CENTER,
 				});
+				signIn();
 			})
 			.catch(error => {
 				toast.error(`${error}`, {

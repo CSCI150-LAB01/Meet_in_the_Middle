@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import CardLoading from './loading';
-import { Location } from '@/utils/types';
+import { Location } from '@/lib/types';
 
 interface MapProps {
 	height: string;

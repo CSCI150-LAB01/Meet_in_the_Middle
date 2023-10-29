@@ -5,7 +5,7 @@ export async function createUser(
 	coordinates: [number, number] = [0, 0],
 ): Promise<any> {
 	// Validate coordinates range
-	const [latitude, longitude] = coordinates;
+	const [longitude, latitude] = coordinates;
 	if (longitude < -180 || longitude > 180 || latitude < -90 || latitude > 90) {
 		throw new Error('Invalid coordinates range');
 	}
