@@ -38,7 +38,7 @@
       ```
 
 ## Login User
-Accepts a username and email to login. <span style="color:red">Google Login Not Setup</span>
+Requires a username, email, and password to login. <span style="color:red">Google Login Not Setup</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/api/user/login</span>
 - **Body**:
@@ -203,15 +203,22 @@ Returns user's friend list. User id is sent in URL.
     - **Status 202**:
       ```json
         {
-        "_id": "653cbc1bb172a8cf95067f90",
-        "friends": [],
-        "userId": "653cbc1bb172a8cf95067f92",
-        "__v": 0
+          "friendList": {
+          "_id": "653e15ef9459c162a1b39282",
+          "friends": [
+            "653ddc431694115a0df725e3",
+            "653e1ab29459c162a1b392a1"
+          ],
+          "createdAt": "2023-10-29T08:21:03.623Z",
+          "updatedAt": "2023-10-29T08:21:03.623Z",
+          "userId": "653e15ef9459c162a1b39284",
+          "__v": 2
+          }
         }
       ```
     - **Status 500**:
   
-## Add Friend (NOT WORKING)
+## Add Friend 
   Adds one friend to the user's friend list. User id is sent in URL, friend is sent in body.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
@@ -225,12 +232,28 @@ Returns user's friend list. User id is sent in URL.
     - **Status 201**:
       ```json
       {
-          "message": "Friend Added"
+          "message": "Friend Added",
+          "friendList": {
+          "_id": "653e15ef9459c162a1b39282",
+          "friends": [
+            "653ddc431694115a0df725e3",
+            "653e1ab29459c162a1b392a1"
+          ],
+          "createdAt": "2023-10-29T08:21:03.623Z",
+          "updatedAt": "2023-10-29T08:21:03.623Z",
+          "userId": "653e15ef9459c162a1b39284",
+          "__v": 2
+          }
       }
       ```
     - **Status 500**:
+      ```json
+      {
+          "message": "Error adding to friends list"
+      }
+      ```
 
-## Remove Friend (NOT WORKING)
+## Delete Friend (NOT WORKING)
 Removes one friend from the use's friend list. User is sent in URL, friend is sent in body.
 - **Method**: <span style="color:lightgreen">DELETE</span>
 - **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
@@ -248,4 +271,9 @@ Removes one friend from the use's friend list. User is sent in URL, friend is se
       }
       ```
     - **Status 500**:
+      ```json
+      {
+        "message" : "Error removing from friends list"
+      }
+      ```
 
