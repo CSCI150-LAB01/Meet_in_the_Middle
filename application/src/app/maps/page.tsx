@@ -1,11 +1,12 @@
-import Map from "@/components/map";
+'use client';
+import Map from '@/components/map';
 
 export default function Maps() {
 	return (
 		<>
 			<p>View Locations Suggestions</p>
 			<p>Maps</p>
-			<Map/>
+			<Map />
 		</>
 	);
 }

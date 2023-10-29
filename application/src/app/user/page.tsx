@@ -1,23 +1,24 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { createUser } from '../../utils/apiCalls';
+import { Location } from '@/utils/types';
 
-import { Input, Button, Link } from '@nextui-org/react';
-import { MdAccountCircle, MdEmail, MdPinDrop } from 'react-icons/md';
-import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
-import { FcGoogle } from 'react-icons/fc';
-import { berlin } from '@/styles/fonts';
 import {
 	GoogleMap,
 	StandaloneSearchBox,
 	Marker,
 	useJsApiLoader,
 } from '@react-google-maps/api';
-import { Location } from '@/utils/types';
-import CardLoading from '@/components/loading';
 import { fromLatLng, setKey } from 'react-geocode';
-import { createUser } from './services/apiCalls';
+
+import { Input, Button, Link } from '@nextui-org/react';
+import { MdAccountCircle, MdEmail, MdPinDrop } from 'react-icons/md';
+import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
+import { FcGoogle } from 'react-icons/fc';
+import { berlin } from '@/styles/fonts';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CardLoading from '@/components/loading';
 
 export default function Register() {
 	// Form States / Vars
@@ -89,7 +90,7 @@ export default function Register() {
 				});
 			})
 			.catch(error => {
-				toast.error(`Error creating user: ${error}`, {
+				toast.error(`${error}`, {
 					position: toast.POSITION.BOTTOM_CENTER,
 				});
 				console.log(error);
@@ -184,7 +185,7 @@ export default function Register() {
 										zoom={15}
 										onLoad={onLoad}
 										onUnmount={onUnmount}
-										mapContainerStyle={{ height: '150px', width: '350px' }}
+										mapContainerStyle={{ height: '150px', width: '100px' }}
 									>
 										{markers.map((mark, index) => (
 											<Marker key={index} position={mark} />

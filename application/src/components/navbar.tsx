@@ -34,7 +34,7 @@ interface MenuItem {
 export default function NavbarDesktop() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-	const isAuthenticated = false;
+	const isAuthenticated = true;
 
 	const noAuthMenuItems = [
 		{ pageName: 'Home', location: '/#' },
@@ -45,9 +45,9 @@ export default function NavbarDesktop() {
 
 	const authMenuItems: MenuItem[] = [
 		{ pageName: 'Dashboard', location: '/dashboard' },
-		{ pageName: 'Events', location: '/Maps' },
-		{ pageName: 'Plans', location: '/Friends' },
-		{ pageName: 'Account', location: '/Menu' },
+		{ pageName: 'Maps', location: '/maps' },
+		{ pageName: 'Friends', location: '/friends' },
+		{ pageName: 'Menu', location: '/menu' },
 	];
 
 	const menuItems = isAuthenticated ? authMenuItems : noAuthMenuItems;
