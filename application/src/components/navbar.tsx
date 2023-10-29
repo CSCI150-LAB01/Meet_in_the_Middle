@@ -66,7 +66,7 @@ export default function NavbarDesktop() {
 				position='static'
 			>
 				{/* Top Nav */}
-				{/* If auth => show icon else show hamburger manu*/}
+				{/* If auth => show icon else show hamburger menu*/}
 
 				<NavbarContent
 					as='div'
@@ -111,20 +111,30 @@ export default function NavbarDesktop() {
 						</NavbarMenuItem>
 					))}
 				</NavbarContent>
-				<NavbarContent className='gap-2' justify='end'>
-					<Dropdown placement='bottom-end'>
-						<DropdownTrigger>
-							<Avatar name='Joe Brandon' className='hover:cursor-pointer' />
-						</DropdownTrigger>
-						<DropdownMenu aria-label='Profile Action Menu'>
-							<DropdownItem key='dashboard'>Dashboard</DropdownItem>
-							<DropdownItem key='settings'>Account Settings</DropdownItem>
-							<DropdownItem key='logout' className='text-danger' color='danger'>
-								Logout
-							</DropdownItem>
-						</DropdownMenu>
-					</Dropdown>
-				</NavbarContent>
+
+				{/* Account Action Menu: Only available to authenticated users */}
+				{isAuthenticated ? (
+					<NavbarContent className='gap-2' justify='end'>
+						<Dropdown placement='bottom-end'>
+							<DropdownTrigger>
+								<Avatar name='Joe Brandon' className='hover:cursor-pointer' />
+							</DropdownTrigger>
+							<DropdownMenu aria-label='Profile Action Menu'>
+								<DropdownItem key='dashboard'>Dashboard</DropdownItem>
+								<DropdownItem key='settings'>Account Settings</DropdownItem>
+								<DropdownItem
+									key='logout'
+									className='text-danger'
+									color='danger'
+								>
+									Logout
+								</DropdownItem>
+							</DropdownMenu>
+						</Dropdown>
+					</NavbarContent>
+				) : (
+					''
+				)}
 
 				{/* Mobile Menu */}
 				<NavbarMenu className='rounded-b-lg' position='static'>
