@@ -9,7 +9,7 @@ export default function Dashboard() {
 		<>
 			<p>Location Data</p>
 			<div className='flex flex-col gap-3 w-full p-3'>
-				<Map />
+				<Map height='350px' width='900px' />
 			</div>
 			<p>Upcoming Events</p>
 			<div className='flex flex-col gap-3 w-full p-3'>

@@ -4,9 +4,9 @@ import Map from '@/components/map';
 export default function Maps() {
 	return (
 		<>
-			<p>View Locations Suggestions</p>
-			<p>Maps</p>
-			<Map />
+			<div className='absolute'>
+				<Map height='100vh' width='100vw' />
+			</div>
 		</>
 	);
 }

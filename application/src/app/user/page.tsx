@@ -185,7 +185,7 @@ export default function Register() {
 										zoom={15}
 										onLoad={onLoad}
 										onUnmount={onUnmount}
-										mapContainerStyle={{ height: '150px', width: '100px' }}
+										mapContainerStyle={{ height: '150px', width: '350px' }}
 									>
 										{markers.map((mark, index) => (
 											<Marker key={index} position={mark} />

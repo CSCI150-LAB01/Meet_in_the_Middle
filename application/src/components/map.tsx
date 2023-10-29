@@ -1,9 +1,14 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import CardLoading from './loading';
 import { Location } from '@/utils/types';
 
-const Map: NextPage = () => {
+interface MapProps {
+	height: string;
+	width: string;
+}
+
+const Map: React.FC<MapProps> = ({ height, width }) => {
 	const [currentLocation, setCurrentLocation] = useState<Location>({
 		lat: 0,
 		lng: 0,
@@ -33,6 +38,7 @@ const Map: NextPage = () => {
 			},
 		);
 	}, []);
+
 	return isLoaded ? (
 		<div className='flex rounded-lg overflow-clip w-full'>
 			<GoogleMap
@@ -40,7 +46,7 @@ const Map: NextPage = () => {
 				zoom={15}
 				onLoad={onLoad}
 				onUnmount={onUnmount}
-				mapContainerStyle={{ height: '350px', width: '900px' }}
+				mapContainerStyle={{ height, width }}
 			>
 				{markers.map((mark, index) => (
 					<Marker key={index} position={mark} />
