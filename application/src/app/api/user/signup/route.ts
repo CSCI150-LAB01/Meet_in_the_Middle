@@ -21,6 +21,10 @@ export async function POST(request: Request) {
         const password = data.password;
         const username = data.username;
         
+        if (data.coordinates[0] < -180 || data.coordinates[0] > 180 || data.coordinates[1] < -90 || data.coordinates[1] > 90) {
+            return NextResponse.json({ message: "Invalid coordinates" }, { status: 400 });
+        }
+        
         let coordinates = data.coordinates;
         if (!coordinates)
         {

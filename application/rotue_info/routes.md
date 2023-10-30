@@ -2,7 +2,7 @@
 - Add, Remove, and Modify Users and User data. Signin and Login
 
 ## Signup User
-  Creates a user based on information from body. Friends List is initialized to empty. Default-Location is set to coordinates or [0,0] if not provided. <span style="color:red">Longitude must range from -180 to 180, and Latitude must range from -90 to 90. Otherwise an error occurs</span>
+  Creates a user based on information from body. Friends List is initialized to empty. Default-Location is set to coordinates or [0,0] if not provided. <span style="color:red">Longitude must range from -180 to 180, and Latitude must range from -90 to 90. Coordinates has longitude first and then latitude</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/api/user/signup/</span>
 - **Body**: <span style="color:lightgreen">Coordinates default to [0,0] if not provided </span>
@@ -11,7 +11,7 @@
         "email" : "eamil@gmail.com",
         "password": "pass",
         "username" : "joe",    
-        "coordinates" : [12,52]
+        "coordinates" : [179,-89]
     }
     ```
 - **Response**:
@@ -168,13 +168,13 @@ Responds with the deafult location of the user provided in the URL
       ```
 
 ## Add or Update User Default Location
-UserId provided in URL has default location updated with the coordinates in the body. Note if a default location already exists it will be OVERIDEN. <span style="color:red">Longitude must be between -180 and 180, and Latitude must be between -90 and 90.</span>
+UserId provided in URL has default location updated with the coordinates in the body. Note if a default location already exists it will be OVERIDEN. <span style="color:red">Longitude must be between -180 and 180, and Latitude must be between -90 and 90. Coordinates has longitude first and then latitude</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/default-location/:userId</span>
 - **Body**:
     ```json
     {
-        "coordinates": [12.345, 67.891]
+        "coordinates": [179, 89]
     }
     ```
 - **Response**:

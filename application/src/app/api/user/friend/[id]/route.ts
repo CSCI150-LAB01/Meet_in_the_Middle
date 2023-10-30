@@ -34,10 +34,11 @@ export async function POST(request: Request) {
         console.log("Validating User");
         const user = await User.findById(userId);
 
-        NextResponse.json(user, { status: 200 });
+        // return NextResponse.json(user, { status: 200 });
 
 
         if (!user) {
+            console.log("User not found")
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
         console.log(user);
@@ -48,10 +49,17 @@ export async function POST(request: Request) {
         const friendId = data.friendId;
         console.log(data);
 
+        // Cannot add self as friend
+        if (friendId === userId) {
+            console.log("Cannot add self as friend")
+            return NextResponse.json({ message: "Cannot add self as friend" }, { status: 400 });
+        }
+
         // Validate Friend is a user
         console.log("Validating Friend");
         const friend = await User.findById(friendId);
         if (!friend) {
+            console.log("Friend not found")
             return NextResponse.json({ message: "Friend not found" }, { status: 404 });
         }
         console.log(friend);
@@ -65,6 +73,7 @@ export async function POST(request: Request) {
         console.log(friendId)
         // Check if already friends
         if (friendList.friends.includes(friendId)) {
+            console.log("Already friends")
             return NextResponse.json({ message: "Already friends" }, { status: 400 });
         }
 
@@ -74,12 +83,13 @@ export async function POST(request: Request) {
         console.log(friendList);
 
         friendList.updatedAt = new Date();
-        await friendList.save();
-        await user.save();
+        //await friendList.save();
+        //await user.save();
 
         return NextResponse.json({ message: "Friend Added", friendList }, { status: 200 });
 
     } catch (error) {
+        console.log("Error adding to friends list")
         return NextResponse.json({ message: "Error adding to friends list", error }, { status: 500 });
     }
 }
@@ -117,7 +127,7 @@ export async function DELETE(request: Request) {
         //friendList.save();
 
         return NextResponse.json({ message: "Friend Removed", friendList }, { status: 200 });
-        
+
     } catch {
         return NextResponse.json({ message: "Error removing from friends list" }, { status: 500 })
     }
