@@ -8,7 +8,7 @@
 - **Body**: <span style="color:lightgreen">Coordinates default to [0,0] if not provided </span>
     ```json
     {
-        "email" : "eamil@gmail.com",
+        "email" : "email@gmail.com",
         "password": "pass",
         "username" : "joe",    
         "coordinates" : [179,-89]
