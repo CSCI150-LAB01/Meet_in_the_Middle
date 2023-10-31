@@ -1,8 +1,7 @@
 # Friend List (For Debugging Only)
 - **NOTE**: <span style="color:red">These routes DO NOT link friends list to user.</span>
 
-## Get Friend List
-- **NOTE**: <span style="color:red">Does not link user to friend list.</span>
+## Get Global Friend List
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/api/friend-list</span>
 - **Body**: None
@@ -62,7 +61,7 @@ Deletes a single friend list from the database. <span style="color:red">Does not
 ## Get Default Location List
 - **NOTE**: <span style="color:red">Does not link location to any user.</span>
 - **Method**: <span style="color:lightgreen">GET</span>
-- **Route**: <span style="color:lightgreen">/api/default-location-list</span>
+- **Route**: <span style="color:lightgreen">/api/dev/default-location-list</span>
 - **Body**: None
 - **Response**:
     - **Status 201**:
@@ -80,7 +79,7 @@ Deletes a single friend list from the database. <span style="color:red">Does not
 ## Get Default Location
 - **NOTE**: <span style="color:red">Does not link location to any user.</span>
 - **Method**: <span style="color:lightgreen">GET</span>
-- **Route**: <span style="color:lightgreen">/api/default-location/:default-location-id</span>
+- **Route**: <span style="color:lightgreen">/api/dev/default-location/:default-location-id</span>
 - **Body**:
     ```json
     {
@@ -104,7 +103,7 @@ Deletes a single friend list from the database. <span style="color:red">Does not
 ## Delete Default Location
 - **NOTE**: <span style="color:red">Does not link location to any user.</span>
 - **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/default-location/:default-location-id</span>
+- **Route**: <span style="color:lightgreen">/api/dev/default-location/:default-location-id</span>
 - **Body**: None
 - **Response**:
     - **Status 201**:

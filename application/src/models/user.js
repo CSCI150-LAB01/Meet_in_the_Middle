@@ -7,8 +7,9 @@ const userSchema = new Schema({
     username: { type: String, required: true },
     defaultLocationId: { type: mongoose.Schema.Types.ObjectId, ref: "DefaultLocation" },
     friendListId: { type: mongoose.Schema.Types.ObjectId, ref: "FriendList" },
+    friendRequestsId: { type: mongoose.Schema.Types.ObjectId, ref: "FriendRequests" },
     image: { type: String, required: false },
-    meetings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Meeting" }],
+    meetingsId: { type: mongoose.Schema.Types.ObjectId, ref: "Meeting" },
     bio: { type: String, required: false, maxlength: 500 },
     // Created at timestamp
     createdAt: {

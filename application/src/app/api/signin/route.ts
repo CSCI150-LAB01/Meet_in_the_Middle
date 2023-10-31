@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
-import User from '../../../../models/user';
+import User from '../../../models/user';
 import bcrypt from 'bcrypt';
 const mongoose = require("mongoose");
 

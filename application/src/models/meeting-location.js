@@ -1,7 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, models }  from "mongoose";
 
-const meetingLocationSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+const meetingLocationSchema = new Schema({
   coordinates: { type: [Number], index: "2dsphere", required: true },
   createdAt: {
     type: Date,
@@ -13,6 +12,6 @@ const meetingLocationSchema = new mongoose.Schema({
   },
 });
 
-const MeetingLocation = mongoose.model("MeetingLocation", meetingLocationSchema);
+const MeetingLocation = models.MeetingLocation || mongoose.model("MeetingLocation", meetingLocationSchema);
 
 export default MeetingLocation;

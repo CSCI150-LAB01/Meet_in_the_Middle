@@ -19,9 +19,7 @@ export async function GET(request: Request) {
     }
 }
 
-// check valid id, check if it is user
-// WORKING
-// Post friend list to database 
+// CAUTION THIS IS FOR DEBUGGING ONLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 export async function POST(request: Request) {
     await dbConnect();
 
@@ -51,6 +49,7 @@ export async function POST(request: Request) {
     }
 }
 
+// CAUTION THIS IS FOR DEBUGGING ONLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 export async function DELETE(request: Request){
     await dbConnect();
     try{

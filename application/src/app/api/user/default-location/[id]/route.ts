@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     // Update the user's defaultLocation reference with the new location's ID
     user.defaultLocationId = defaultLocation._id;
-    user.save();
+    await user.save();
     
     console.log({ message: "\ndefaultLocation" }, defaultLocation);
     return NextResponse.json({ message: "Default location set successfully" }, { status: 201 });
