@@ -1,8 +1,8 @@
 import mongoose, { Schema, models} from "mongoose";
 
-const defaultLocationSchema= Schema({
+const defaultLocationSchema= new Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    coordinates: { type: [Number], index: "2dsphere", required: true },
+    coordinates: { type: [Number], index: "2dsphere", required: true, default : [0,0] },
     createdAt: {
         type: Date,
         default: Date.now,

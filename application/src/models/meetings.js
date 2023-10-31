@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, models } from "mongoose";
 
-const meetingsSchema = new mongoose.Schema({
+const meetingsSchema = new Schema({
   // Owner of the meeting
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
   // Array of meetings
@@ -45,6 +45,6 @@ const meetingsSchema = new mongoose.Schema({
   },
 });
 
-const Meetings = mongoose.model("Meetings", meetingsSchema);
+const Meetings = models.Meetings || mongoose.model("Meetings", meetingsSchema);;
 
 export default Meetings;

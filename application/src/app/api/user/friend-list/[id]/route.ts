@@ -7,7 +7,11 @@ const mongoose = require("mongoose");
 
 // Responds with user's friend list
 export async function GET(request: Request) {
-    await dbConnect();
+    try {
+        await dbConnect();
+    } catch {
+        return NextResponse.json({ message: "Error connecting to database", status: 500 })
+    }
 
     try {
         const userId = request.url.slice(request.url.lastIndexOf('/') + 1);

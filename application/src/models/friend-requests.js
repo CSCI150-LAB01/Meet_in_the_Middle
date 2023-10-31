@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, {Schema, models} from "mongoose";
 
-const friendRequestsSchema = new mongoose.Schema({
+const friendRequestsSchema = new Schema({
     // Owner of the requests
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
     // Array of requests
     requests: [
         {
@@ -33,6 +33,5 @@ const friendRequestsSchema = new mongoose.Schema({
       },
 });
 
-const FriendRequests = mongoose.model("FriendRequests", friendRequestsSchema);
-
+const FriendRequests = models.FriendRequests || mongoose.model("FriendRequests", friendRequestsSchema);
 export default FriendRequests;
