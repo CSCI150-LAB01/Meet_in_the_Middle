@@ -1,10 +1,10 @@
-# User Routes
-- Add, Remove, and Modify Users and User data. Signin and Login
+# Signin and Signup
+
 
 ## Signup User
   Creates a user based on information from body. Friends List is initialized to empty. Default-Location is set to coordinates or [0,0] if not provided. <span style="color:red">Longitude must range from -180 to 180, and Latitude must range from -90 to 90. Coordinates has longitude first and then latitude</span>
 - **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/api/user/signup/</span>
+- **Route**: <span style="color:lightgreen">/api/signup/</span>
 - **Body**: <span style="color:lightgreen">Coordinates default to [0,0] if not provided </span>
     ```json
     {
@@ -37,10 +37,10 @@
       }
       ```
 
-## Login User
-Requires a username, email, and password to login. <span style="color:red">Google Login Not Setup</span>
+## Signin User
+Requires a username, email, and password to signin. <span style="color:red">Google Signin Not Setup</span>
 - **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/api/user/login</span>
+- **Route**: <span style="color:lightgreen">/api/signin</span>
 - **Body**:
     ```json
     {
@@ -61,7 +61,9 @@ Requires a username, email, and password to login. <span style="color:red">Googl
           "message": "Auth Failed"
       }
       ```
-
+&nbsp;
+# User Routes
+  Add, Remove, and Modify Users and User data. Signin and Login
 ## Delete User
 Deletes the user that is provided in the URL. Friends List, Default-location, and all other objects related to user are also deleted.
 - **Method**: <span style="color:lightgreen">DELETE</span>
@@ -119,12 +121,16 @@ Provides a list of ALL USERS in the database. Can be used to search for friends.
       ```json
       [
           {
-              "id": "6526405977a7ac5811437f87",
-              "email": "dummy@gmail.com",
-              "name": "John Doe",
-              "password": "pass",
-              "defaultLocationId" : "653cbc1bb172a8cf95067f92",
-              "friendListId" : "653cbc1bb172a8cf95067f90",
+              "_id": "6540a5a90d8577911fe78fae",
+              "email": "eamil7@gmail.com",
+              "password": "$2b$10$h...",
+              "username": "joe5",
+              "defaultLocationId": "6540a5a90d8577911fe78fab",
+              "friendListId": "6540a5a90d8577911fe78fac",
+              "meetings": [],
+              "createdAt": "2023-10-31T06:58:49.564Z",
+              "updatedAt": "2023-10-31T06:58:49.564Z",
+              "__v": 0
           },
           {
               "id": "6526405977a7ac5811437f87",
@@ -190,14 +196,14 @@ UserId provided in URL has default location updated with the coordinates in the 
           "error": "Error saving default location"
       }
       ``
-
+&nbsp;
 # Friend Routes
-- Add and Remove friends from friend list. Display friend list
+Add and Remove friends from friend list. Display friend list
   
-## Get Friend List 
+## Get User's Friend List 
 Returns user's friend list. User id is sent in URL.
 - **Method**: <span style="color:lightgreen">GET</span>
-- **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
+- **Route**: <span style="color:lightgreen">/user/friend-list/:userId</span>
 - **Body**:
 - **Response**:
     - **Status 202**:
@@ -218,62 +224,114 @@ Returns user's friend list. User id is sent in URL.
       ```
     - **Status 500**:
   
-## Add Friend 
-  Adds one friend to the user's friend list. User id is sent in URL, friend is sent in body.
+
+## Add Friends 
+Add user A to user B's friend list. Then, add user B to user A's friend list. This makes user A and user B friends.
 - **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
+- **Route**: <span style="color:lightgreen">/add-friends</span>
+- **Body**:
+    ```json
+      {
+        "userIdA" : "653ddc431694115a0df725e3",
+        "userIdB" : "653e1ab29459c162a1b392a1"
+      }
+    ```
+- **Response**:
+    - **Status 202**:
+      ```json
+        {
+          "message": "Friends Added",
+          "friendListA": {
+            "_id": "6540a5be0d8577911fe78fb5",
+            "friends": [
+              "6540a5a90d8577911fe78fae"
+            ],
+            "createdAt": "2023-10-31T06:59:10.685Z",
+            "updatedAt": "2023-10-31T07:44:20.807Z",
+            "userId": "6540a5be0d8577911fe78fb7",
+            "__v": 5
+          },
+          "friendListB": {
+            "_id": "6540a5a90d8577911fe78fac",
+            "friends": [
+              "6540a5be0d8577911fe78fb7"
+            ],
+            "createdAt": "2023-10-31T06:58:49.502Z",
+            "updatedAt": "2023-10-31T07:44:20.808Z",
+            "userId": "6540a5a90d8577911fe78fae",
+            "__v": 5
+          }
+        }
+      ```
+    - **Status 500**:
+
+
+## Remove Friends
+  User A is removed from user B's friend list. Then user B is removed from user A's friend list. This unfriends user A and user B
+- **Method**: <span style="color:lightgreen">POST</span>
+- **Route**: <span style="color:lightgreen">/remove-friends</span>
 - **Body**:
     ```json
     {
-        "friendId" : "653cb96bb172a8cf95067f6e"
+      "userIdA" : "6540a5be0d8577911fe78fb7",
+      "userIdB" : "6540a5a90d8577911fe78fae"
     }
     ```
 - **Response**:
     - **Status 201**:
       ```json
       {
-          "message": "Friend Added",
-          "friendList": {
-          "_id": "653e15ef9459c162a1b39282",
-          "friends": [
-            "653ddc431694115a0df725e3",
-            "653e1ab29459c162a1b392a1"
-          ],
-          "createdAt": "2023-10-29T08:21:03.623Z",
-          "updatedAt": "2023-10-29T08:21:03.623Z",
-          "userId": "653e15ef9459c162a1b39284",
-          "__v": 2
-          }
+        "message": "Friends Removed",
+        "friendListA": {
+          "_id": "6540a5be0d8577911fe78fb5",
+          "friends": [],
+          "createdAt": "2023-10-31T06:59:10.685Z",
+          "updatedAt": "2023-10-31T07:38:21.506Z",
+          "userId": "6540a5be0d8577911fe78fb7",
+          "__v": 4
+        },
+        "friendListB": {
+          "_id": "6540a5a90d8577911fe78fac",
+          "friends": [],
+          "createdAt": "2023-10-31T06:58:49.502Z",
+          "updatedAt": "2023-10-31T07:38:21.506Z",
+          "userId": "6540a5a90d8577911fe78fae",
+          "__v": 4
+        }
       }
       ```
     - **Status 500**:
-      ```json
-      {
-          "message": "Error adding to friends list"
-      }
-      ```
 
-## Delete Friend (NOT WORKING)
-Removes one friend from the use's friend list. User is sent in URL, friend is sent in body.
-- **Method**: <span style="color:lightgreen">DELETE</span>
-- **Route**: <span style="color:lightgreen">/user/friend/:userId</span>
-- **Body**:
-    ```json
-    {
-        "friendId" : "653cb96bb172a8cf95067f6e"
-    }
-    ```
+## Get Global Friend List (DEV ROUTE)
+Intended as a DEV ROUTE. Returns all friend lists in the database. Route does not always return results, have not yet found the bug that is causing this. 
+- **Method**: <span style="color:lightgreen">GET</span>
+- **Route**: <span style="color:lightgreen">/api/friend-list</span>
+- **Body**: None
 - **Response**:
-    - **Status 202**:
+    - **Status 201**:
       ```json
-      {
-          "message": "Friend Deleted"
-      }
+      [
+        {
+          "_id": "653cb96bb172a8cf95067f6c",
+          "friends": [
+              "6540a5a90d8577911fe78fae"
+            ],
+          "userId": "653cb96bb172a8cf95067f6e",
+          "__v": 0,
+          "createdAt": "2023-10-31T07:49:34.318Z",
+          "updatedAt": "2023-10-31T07:49:34.318Z"
+        },
+        {
+          "_id": "653cbc1bb172a8cf95067f90",
+          "friends": [
+              "6540a5a90d8577911fe78fae"
+            ],
+          "userId": "653cbc1bb172a8cf95067f92",
+          "__v": 0,
+          "createdAt": "2023-10-31T07:49:34.318Z",
+          "updatedAt": "2023-10-31T07:49:34.318Z"
+        }
       ```
     - **Status 500**:
-      ```json
-      {
-        "message" : "Error removing from friends list"
-      }
-      ```
+
 

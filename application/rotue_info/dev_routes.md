@@ -1,8 +1,7 @@
 # Friend List (For Debugging Only)
 - **NOTE**: <span style="color:red">These routes DO NOT link friends list to user.</span>
 
-## Get Friend List
-- **NOTE**: <span style="color:red">Does not link user to friend list.</span>
+## Get Global Friend List
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/api/friend-list</span>
 - **Body**: None

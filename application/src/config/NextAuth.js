@@ -20,7 +20,7 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 try {
-                    const response = await fetch("/api/user/login", {
+                    const response = await fetch("/api/signin", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(credentials)

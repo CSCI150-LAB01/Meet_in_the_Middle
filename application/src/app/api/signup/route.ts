@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
-import User from '../../../../models/user';
+import User from '../../../models/user';
 import FriendList from '@/models/friend-list';
 import DefaultLocation from "@/models/default-location";
 import bcrypt from 'bcrypt';
@@ -21,6 +21,7 @@ export async function POST(request: Request) {
         const password = data.password;
         const username = data.username;
         
+        // check for valid coordinates
         if (data.coordinates[0] < -180 || data.coordinates[0] > 180 || data.coordinates[1] < -90 || data.coordinates[1] > 90) {
             return NextResponse.json({ message: "Invalid coordinates" }, { status: 400 });
         }
@@ -40,7 +41,7 @@ export async function POST(request: Request) {
         let user = await User.findOne({ email: email });
 
         if (user) {
-            return NextResponse.json({ message: "Email already exists" }, { status: 409 });
+            return NextResponse.json({ message: "Account with Email already exists" }, { status: 409 });
         } else {
 
             // create default location
