@@ -4,6 +4,8 @@ import User from '../../../models/user';
 import FriendList from '@/models/friend-list';
 import DefaultLocation from "@/models/default-location";
 import bcrypt from 'bcrypt';
+import FriendRequests from "@/models/friend-requests";
+import Meetings from "@/models/meetings";
 const mongoose = require("mongoose");
 
 //const {searchParams} = new URL(request.url)
@@ -16,19 +18,18 @@ export async function POST(request: Request) {
         console.log("Fetching Data")
         const data = await request.json();
         console.log(data);
-        
+
         const email = data.email;
         const password = data.password;
         const username = data.username;
-        
+
         // check for valid coordinates
         if (data.coordinates[0] < -180 || data.coordinates[0] > 180 || data.coordinates[1] < -90 || data.coordinates[1] > 90) {
             return NextResponse.json({ message: "Invalid coordinates" }, { status: 400 });
         }
-        
+
         let coordinates = data.coordinates;
-        if (!coordinates)
-        {
+        if (!coordinates) {
             coordinates = [0.0, 0.0];
         }
 
@@ -56,6 +57,18 @@ export async function POST(request: Request) {
                 friends: [],
             });
 
+            // create meetings
+            const meetings = await new Meetings({
+                id: new mongoose.Types.ObjectId(),
+                meetings: [],
+            });
+
+            // create friend-requsts
+            const friendRequests = await new FriendRequests({
+                id: new mongoose.Types.ObjectId(),
+                friendRequests: [],
+            })
+
             // encrypt password
             const encryptedPassword = await bcrypt.hash(password, 10);
 
@@ -66,12 +79,15 @@ export async function POST(request: Request) {
                 password: encryptedPassword,
                 username: username,
                 friendListId: friendList._id,
-                defaultLocationId: defaultLocation._id
+                defaultLocationId: defaultLocation._id,
+                meetingsId: meetings._id,
+                friendRequestsId: friendRequests._id
             });
 
             // Add userId to friend list and default location
             friendList.userId = user._id;
             defaultLocation.userId = user._id;
+            meetings.userId = user._id;
 
             // Log friend list, user, default location
             console.log("Friend List")
@@ -82,8 +98,10 @@ export async function POST(request: Request) {
             console.log(defaultLocation)
 
             // Save user and friend list
+            await meetings.save();
             await defaultLocation.save();
             await friendList.save();
+            await friendRequests.save();
             await user.save();
             return NextResponse.json({ message: "User created", user }, { status: 201 });
         }

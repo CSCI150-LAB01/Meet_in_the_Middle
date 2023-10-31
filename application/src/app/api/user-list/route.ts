@@ -4,11 +4,16 @@ import User from '../../../models/user';
 const mongoose = require("mongoose");
 
 export async function GET() {
-    await dbConnect();
+    try {
+        await dbConnect();
+    }
+    catch (error) {
+        return NextResponse.json({ message: "error connecting to database" }, { status: 500 });
+    }
 
     try {
-        const res = await User.find();
-        return NextResponse.json(res, { status: 200 });
+        const users = await User.find({}, '-__v');
+        return NextResponse.json(users, { status: 200 });
     } catch (error) {
         return NextResponse.json(error, { status: 500 });
     }
