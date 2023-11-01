@@ -1,18 +1,47 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Input, Button, Link } from "@nextui-org/react";
-import { MdEmail } from "react-icons/md";
-import { IoMdEyeOff, IoMdEye } from "react-icons/io";
-import { FcGoogle } from "react-icons/fc";
-import { berlin } from "@/styles/fonts";
-import { Metadata } from "next";
+import { useState, useRef } from 'react';
+import { Input, Button, Link } from '@nextui-org/react';
+import { MdEmail } from 'react-icons/md';
+import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
+import { FcGoogle } from 'react-icons/fc';
+import { berlin } from '@/styles/fonts';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { loginUser } from '@/utils/apiCalls';
+import { getSession, useSession, signIn, signOut } from 'next-auth/react';
 
 export default function Login() {
-	const [isVisible, setIsVisible] = React.useState(false);
-
+// password visibility
+	const [isVisible, setIsVisible] = useState(false);
 	const toggleVisibility = () => setIsVisible(!isVisible);
 
+	// form refs
+	const emailRef = useRef<HTMLInputElement | null>(null);
+	const passwordRef = useRef<HTMLInputElement | null>(null);
+
+// Form Functions
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		const formData = {
+			email: emailRef.current?.value || '',
+			password: passwordRef.current?.value || '',
+		};
+		loginUser(formData.email, formData.password)
+			.then(async () => {
+				toast.success('User login successful!', {
+					position: toast.POSITION.BOTTOM_CENTER,
+				});
+				await signIn('credentials', formData.email, formData.password);
+			})
+			.catch(error => {
+				toast.error(`${error}`, {
+					position: toast.POSITION.BOTTOM_CENTER,
+				});
+				console.log(error);
+			});
+	};
 	return (
 		<>
 			<div className="w-full text-sm bg-primary rounded-2xl flex flex-col flex-1 grow">
@@ -28,6 +57,8 @@ export default function Login() {
 						endContent={
 							<MdEmail className="text-default-400 pointer-events-none" />
 						}
+						required
+						ref={emailRef}
 					/>
 					<Input
 						label="Password"
@@ -46,6 +77,8 @@ export default function Login() {
 							</button>
 						}
 						type={isVisible ? "text" : "password"}
+						required
+						ref = {passwordRef}
 					/>
 
 					<Button color="secondary" variant="solid" fullWidth>

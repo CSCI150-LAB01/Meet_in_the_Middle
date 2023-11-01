@@ -30,11 +30,12 @@ interface MenuItem {
 	pageName: string;
 	location: string;
 }
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function NavbarDesktop() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-	const isAuthenticated = false;
+	const isAuthenticated = true;
 
 	const noAuthMenuItems = [
 		{ pageName: 'Home', location: '/#' },
@@ -45,9 +46,9 @@ export default function NavbarDesktop() {
 
 	const authMenuItems: MenuItem[] = [
 		{ pageName: 'Dashboard', location: '/dashboard' },
-		{ pageName: 'Events', location: '/Maps' },
-		{ pageName: 'Plans', location: '/Friends' },
-		{ pageName: 'Account', location: '/Menu' },
+		{ pageName: 'Maps', location: '/maps' },
+		{ pageName: 'Friends', location: '/friends' },
+		{ pageName: 'Menu', location: '/menu' },
 	];
 
 	const menuItems = isAuthenticated ? authMenuItems : noAuthMenuItems;
@@ -60,8 +61,8 @@ export default function NavbarDesktop() {
 				height='3rem'
 				className={
 					isMenuOpen
-						? 'bg-white transition-colors'
-						: 'bg-primary rounded-b-3xl transition-colors'
+						? 'bg-white transition-colors z-[3]'
+						: 'bg-primary rounded-b-3xl transition-colors z-[3] fixed'
 				}
 				position='static'
 			>
@@ -97,7 +98,7 @@ export default function NavbarDesktop() {
 					)}
 				</NavbarContent>
 
-				<NavbarContent className='hidden sm:flex gap-2' justify='start'>
+				<NavbarContent className='hidden sm:flex gap-2' justify='center'>
 					{menuItems.map((item: MenuItem) => (
 						<NavbarMenuItem key={`${item}`}>
 							<Link
@@ -127,7 +128,13 @@ export default function NavbarDesktop() {
 									className='text-danger'
 									color='danger'
 								>
-									Logout
+									<div
+										onClick={() => {
+											signOut;
+										}}
+									>
+										Logout
+									</div>
 								</DropdownItem>
 							</DropdownMenu>
 						</Dropdown>
@@ -159,7 +166,7 @@ export default function NavbarDesktop() {
 					<Navbar
 						isBordered
 						height='3rem'
-						className='bg-white rounded-t-3xl transition-colors bottom-0 fixed top-[unset] h-[3rem] block md:hidden flex border-t-4 border-b-0 border-primary px-5'
+						className='bg-white rounded-t-3xl transition-colors bottom-0 fixed top-[unset] h-[3rem] block md:hidden flex border-t-4 border-b-0 border-primary px-5 z-[3] fixed'
 					>
 						<Button isIconOnly color='transparent' aria-label='Dashboard'>
 							<Link href='/dashboard'>
