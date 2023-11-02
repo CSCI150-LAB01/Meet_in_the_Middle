@@ -4,8 +4,19 @@ import User from '@/models/user';
 import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
 import FriendRequest from "@/models/friend-requests";
+import { get } from "http";
 
 const mongoose = require("mongoose");
+
+export async function getData(request: Request) {
+    try {
+        const res = await request.json();
+        return res;
+    } catch (error: any) {
+        console.log(error.stack)
+        return NextResponse.json({ message: "Internal Error, request.json()" }, { status: 500 });
+    }
+}
 
 export async function getUserById(userId: string) {
     let user;
@@ -22,15 +33,7 @@ export async function getUserById(userId: string) {
     return user;
 }
 
-export async function getData(request: Request) {
-    try {
-        const res = await request.json();
-        return res;
-    } catch (error: any) {
-        console.log(error.stack)
-        return NextResponse.json({ message: "Internal Error, request.json()" }, { status: 500 });
-    }
-}
+
 
 export async function getFriendListById(friendListId: string) {
     let friendList;
@@ -65,3 +68,18 @@ export async function getFriendRequestById(friendRequestId: string)
     return friendRequest;
 }
 
+export async function getDefaultLocationById(defaultLocationId: string) {
+    let defaultLocation;
+    try {
+        defaultLocation = await DefaultLocation.findById(defaultLocationId);
+    } catch (error: any) {
+        if (error instanceof mongoose.Error.CastError) {
+            console.log("Default Location Not Found")
+            return NextResponse.json({ message: "Default Location Not Found", error }, { status: 404 });
+        }
+        console.log(error.stack)
+        return NextResponse.json({ message: "Error retrieving default location by Id" }, { status: 500 });
+    }
+
+    return defaultLocation;
+}

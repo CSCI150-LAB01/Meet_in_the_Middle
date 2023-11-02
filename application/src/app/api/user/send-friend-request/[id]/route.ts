@@ -11,98 +11,89 @@ export async function POST(request: Request) {
     } catch {
         return NextResponse.json({ message: "Error connecting to database", status: 500 })
     }
-    // return NextResponse.json({ message: "Friend Requests POST" }, { status: 200 })
 
-    // Get data from body and check for errors
+    // Get data from body and url
     const data = await utils.getData(request)
     if (data instanceof NextResponse) {
         return data;
     }
-
-    const userId = request.url
-        .slice(request.url.lastIndexOf('/') + 1);
-    const proposedFriendId = data.friendId;
+    const proposedFriendId = data.recipientId;
     const message = data.message;
+    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
 
-    // check that all fields are present in body`
+    // check that all fields are present in body
     if (!proposedFriendId) {
         return NextResponse.json({ message: "FriendId required" }, { status: 400 });
     }
 
-    // check for self
+    // check if friend is self
     if (proposedFriendId === userId) {
         return NextResponse.json({ message: "Cannot send friend request to self" }, { status: 400 })
     }
 
-    // get friend
+    // get proposed-friend 
     const proposedFriend = await utils.getUserById(proposedFriendId);
     if (proposedFriend instanceof NextResponse) {
         return proposedFriend;
     }
 
-
-    // USER CHECKS
-
-    // get user
+    // get user and friend list
     const user = await utils.getUserById(userId);
     if (user instanceof NextResponse) {
         return user;
     }
-
-    // get user friend list
     const friendList = await utils.getFriendListById(user.friendListId);
+    if (friendList instanceof NextResponse) {
+        return friendList;
+    }
 
-    // NEED TO TEST IF following check works!!!!!!!!!!!
     // check if user and friend are already friends
-    friendList.friends.forEach((someUser: any) => {
-        if (someUser.userId === proposedFriendId) {
+    for (const someFriend of friendList.friends) {
+        if (someFriend.userId === proposedFriendId) {
             return NextResponse.json({ message: "Friend already exists" }, { status: 400 })
         }
-    })
+    }
 
-    // get user friend requests
+    // get user friend requests, proposed-friend friend requests
     let userFriendRequests = await utils.getFriendRequestById(user.friendRequestsId)
     if (userFriendRequests instanceof NextResponse) {
         return userFriendRequests;
     }
-
-    // NEED TO TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // check if friend request already exists for user
-    userFriendRequests.outgoingRequests.forEach((someRequest: any) => {
-        if (someRequest.recepientId === proposedFriendId) {
-            return NextResponse.json({ message: "Friend request already exists" }, { status: 400 })
-        }
-    })
-
-    // get proposed friend friend requests
     let proposedFriendRequests = await utils.getFriendRequestById(proposedFriend.friendRequestsId)
     if (proposedFriendRequests instanceof NextResponse) {
         return proposedFriendRequests;
     }
 
-    // POTENTIALLY MISSING LOGIC
+    // check if a request already exists
+    for (const request of userFriendRequests.outgoingRequests) {
+        if (request.recipientId == proposedFriendId) {
+            return NextResponse.json({ message: "Friend request already exists" }, { status: 400 })
+        }
+    }
+    for (const request of proposedFriendRequests.incomingRequests) {
+        if (request.senderId == userId) {
+            return NextResponse.json({ message: "ERROR in send-friend-request: Should never send and not receive request" }, { status: 400 })
+        }
+    }
+
     // Update user's friend requests
-    console.log({message: "proposed", proposedFriendId})
-    userFriendRequests.outgoingRequests.push({ recipientId: proposedFriendId, message });
+    await userFriendRequests.outgoingRequests.push({ recipientId: proposedFriendId, message });
     userFriendRequests.isFresh = true;
     userFriendRequests.updatedAt = Date.now();
 
     // Update proposed-friend's friend requests
-    proposedFriendRequests.incomingRequests.push({ senderId: userId, message });
-    proposedFriendRequests.isFresh=true;
-    proposedFriendRequests.updatedAt=Date.now();
+    await proposedFriendRequests.incomingRequests.push({ senderId: userId, message });
+    proposedFriendRequests.isFresh = true;
+    proposedFriendRequests.updatedAt = Date.now();
 
+    try {
+        await userFriendRequests.save()
+        await proposedFriendRequests.save()
+    } catch {
+        return NextResponse.json({ message: "Error saving user request or proposed friend request", status: 500 })
+    }
 
-
-    // save 
-    // try {
-    //     await userFriendRequests.save()
-    //     await proposedFriendRequests.save()
-    // } catch{
-    //     return NextResponse.json({ message: "Error saving user or proposed friend", status: 500 })
-    // }
-
-    return NextResponse.json({ message: "Friend Requests POST", userFriendRequests, proposedFriendRequests }, { status: 200 })
+    return NextResponse.json({ message: "Friend Request Sent", userId, userFriendRequests, proposedFriendRequests }, { status: 200 })
 }
 
 

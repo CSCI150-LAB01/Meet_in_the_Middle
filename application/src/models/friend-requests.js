@@ -11,8 +11,6 @@ const friendRequestsSchema = new Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User", // Reference to the User model,
                 required: true,
-                _id: false, // prevent mongoose from creating a new id for this subdocument
-
             },
             message: {
                 type: String,
@@ -33,7 +31,6 @@ const friendRequestsSchema = new Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User", // Reference to the User model
                 required: true,
-                _id: false, // prevent mongoose from creating a new id for this subdocument
 
             },
             message: {

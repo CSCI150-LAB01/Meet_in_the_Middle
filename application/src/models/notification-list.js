@@ -18,7 +18,7 @@ const notificationListSchema = new Schema({
             maxLength: 500,
         },
     }],
-    isNew: {
+    isFresh: {
         type: Boolean,
         default: false,
     },

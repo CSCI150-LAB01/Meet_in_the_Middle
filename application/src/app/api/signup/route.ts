@@ -72,6 +72,7 @@ export async function POST(request: Request) {
         friendList = await new FriendList({
             _id: new mongoose.Types.ObjectId(),
             friends: [],
+            isFresh: false,
         });
     } catch (error) {
         return NextResponse.json({ message: "Error creating friend list", error }, { status: 500 });
@@ -132,6 +133,7 @@ export async function POST(request: Request) {
     meetings.userId = user._id;
     friendRequests.userId = user._id;
 
+
     // save friend list
     try {
         await friendList.save();
@@ -139,6 +141,7 @@ export async function POST(request: Request) {
     catch (error) {
         return NextResponse.json({ message: "Error saving friend list", error }, { status: 500 });
     }
+    console.log({message: "friendList" , friendList})
 
     // save meetings
     try {

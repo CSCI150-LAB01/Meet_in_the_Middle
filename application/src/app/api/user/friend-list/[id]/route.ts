@@ -1,7 +1,6 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
 import User from '@/models/user';
-import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
 const mongoose = require("mongoose");
 
