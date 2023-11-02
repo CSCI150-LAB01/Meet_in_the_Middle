@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import User from '@/models/user';
 import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
+import FriendRequest from "@/models/friend-requests";
 
 const mongoose = require("mongoose");
 
@@ -46,3 +47,21 @@ export async function getFriendListById(friendListId: string) {
 
     return friendList;
 }
+
+export async function getFriendRequestById(friendRequestId: string)
+{
+    let friendRequest;
+    try {
+        friendRequest = await FriendRequest.findById(friendRequestId);
+    } catch (error: any) {
+        if (error instanceof mongoose.Error.CastError) {
+            console.log("Friend Request Not Found")
+            return NextResponse.json({ message: "Friend Request Not Found", error }, { status: 404 });
+        }
+        console.log(error.stack)
+        return NextResponse.json({ message: "Error retrieving friend Request by Id" }, { status: 500 });
+    }
+
+    return friendRequest;
+}
+

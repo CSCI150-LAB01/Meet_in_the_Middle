@@ -215,6 +215,60 @@ Returns user's friend list. User id is sent in URL.
       ```
     - **Status 500**:
   
+## Get Friend Requests 
+Returns user's friend list. User id is sent in URL.
+- **Method**: <span style="color:lightgreen">GET</span>
+- **Route**: <span style="color:lightgreen">/user/friend-list/:userId</span>
+- **Body**:
+- **Response**:
+    - **Status 202**:
+      ```json
+        {
+          "friendList": {
+          "_id": "653e15ef9459c162a1b39282",
+          "friends": [
+            "653ddc431694115a0df725e3",
+            "653e1ab29459c162a1b392a1"
+          ],
+          "createdAt": "2023-10-29T08:21:03.623Z",
+          "updatedAt": "2023-10-29T08:21:03.623Z",
+          "userId": "653e15ef9459c162a1b39284",
+          "__v": 2
+          }
+        }
+      ```
+    - **Status 500**:
+
+## Send Friend Request 
+Send a friend request from a user to a friend. User id is sent in URL.Friend id is located in body. Message can be read by friend when friend request is recieved.
+- **Method**: <span style="color:lightgreen">GET</span>
+- **Route**: <span style="color:lightgreen">/user/friend-list/:userId</span>
+- **Body**:
+  ```json
+    {
+      "friendId" : "65431d26f82ab63467719b94",
+      "message" : "will you be my friend?"
+    }
+  ```
+- **Response**:
+    - **Status 202**:
+      ```json
+        {
+          "friendList": {
+          "_id": "653e15ef9459c162a1b39282",
+          "friends": [
+            "653ddc431694115a0df725e3",
+            "653e1ab29459c162a1b392a1"
+          ],
+          "createdAt": "2023-10-29T08:21:03.623Z",
+          "updatedAt": "2023-10-29T08:21:03.623Z",
+          "userId": "653e15ef9459c162a1b39284",
+          "__v": 2
+          }
+        }
+      ```
+    - **Status 500**:
+  
 
 ## Add Friends (Dev Route) 
 Add user A to user B's friend list. Then, add user B to user A's friend list. This makes user A and user B friends.

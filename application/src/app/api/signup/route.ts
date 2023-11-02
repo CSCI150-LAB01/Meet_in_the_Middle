@@ -93,7 +93,9 @@ export async function POST(request: Request) {
     try {
         friendRequests = await new FriendRequests({
             _id: new mongoose.Types.ObjectId(),
-            requests: [],
+            incomingRequests: [],
+            outgoingRequests: [],
+            isFresh: false,
         })
     } catch (error) {
         return NextResponse.json({ message: "Error creating friend requests", error }, { status: 500 });

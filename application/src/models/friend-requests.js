@@ -1,15 +1,18 @@
-import mongoose, {Schema, models} from "mongoose";
+import mongoose, { Schema, models } from "mongoose";
 
 const friendRequestsSchema = new Schema({
     // Owner of the requests
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     // Array of requests
-    incomingFriendRequests: [
+    incomingRequests: [
         {
             // Meeting location ID
-            senderUserId: {
+            senderId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "User", // Reference to the User model
+                ref: "User", // Reference to the User model,
+                required: true,
+                _id: false, // prevent mongoose from creating a new id for this subdocument
+
             },
             message: {
                 type: String,
@@ -23,12 +26,15 @@ const friendRequestsSchema = new Schema({
             },
         },
     ],
-    outgoingFriendRequests: [
+    outgoingRequests: [
         {
             // Meeting location ID
-            receiverUserId: {
+            recipientId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User", // Reference to the User model
+                required: true,
+                _id: false, // prevent mongoose from creating a new id for this subdocument
+
             },
             message: {
                 type: String,
@@ -42,14 +48,19 @@ const friendRequestsSchema = new Schema({
             },
         },
     ],
+    // Set if there is a new Incoming Request
+    isFresh: {
+        type: Boolean,
+        default: false,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
-      },
-      updatedAt: {
+    },
+    updatedAt: {
         type: Date,
         default: Date.now,
-      },
+    },
 });
 
 const FriendRequests = models.FriendRequests || mongoose.model("FriendRequests", friendRequestsSchema);
