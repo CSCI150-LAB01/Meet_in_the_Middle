@@ -1,8 +1,8 @@
 # Signin and Signup
 
 
-## Signup User
-  Creates a user based on information from body. Friends List is initialized to empty. Default-Location is set to coordinates or [0,0] if not provided. <span style="color:red">Longitude must range from -180 to 180, and Latitude must range from -90 to 90. Coordinates has longitude first and then latitude</span>
+## Signup User (Broken)
+  Creates a user based on information from body. Email is unique Friends List is initialized to empty. Default-Location is set to coordinates or [0,0] if not provided. <span style="color:red">Longitude must range from -180 to 180, and Latitude must range from -90 to 90. Coordinates has longitude first and then latitude</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/api/signup/</span>
 - **Body**: <span style="color:lightgreen">Coordinates default to [0,0] if not provided </span>
@@ -37,7 +37,7 @@
       }
       ```
 
-## Signin User
+## Signin User (Not working with Frontend)
 Requires a username, email, and password to signin. <span style="color:red">Google Signin Not Setup</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/api/signin</span>
@@ -69,11 +69,7 @@ Deletes the user that is provided in the URL. Friends List, Default-location, an
 - **Method**: <span style="color:lightgreen">DELETE</span>
 - **Route**: <span style="color:lightgreen">/api/user/:userId</span>
 - **Body**: 
-    ```json
-      {
-          "userId" : "653a14848e46a1fdc2caf8e2"
-      }
-    ```
+
 - **Response**:
     - **Status 200**: 
       ```json
@@ -93,11 +89,6 @@ Returns the user that is provided in the URL.
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/api/user/:userId</span>
 - **Body**: 
-    ```json
-      {
-          "userId" : "653a14848e46a1fdc2caf8e2"
-      }
-    ```
 - **Response**:
     - **Status 200**:
       ```json
@@ -225,7 +216,7 @@ Returns user's friend list. User id is sent in URL.
     - **Status 500**:
   
 
-## Add Friends 
+## Add Friends (Dev Route) 
 Add user A to user B's friend list. Then, add user B to user A's friend list. This makes user A and user B friends.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/add-friends</span>
@@ -266,7 +257,7 @@ Add user A to user B's friend list. Then, add user B to user A's friend list. Th
     - **Status 500**:
 
 
-## Remove Friends
+## Remove Friends (Dev Route)
   User A is removed from user B's friend list. Then user B is removed from user A's friend list. This unfriends user A and user B
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/remove-friends</span>
