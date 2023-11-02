@@ -13,6 +13,8 @@ import * as utils from "../utils"
 
 // SECURITY RISK - by returning "EMAIL ALREADY EXISTS"
 export async function POST(request: Request) {
+
+
     try {
         await dbConnect();
     } catch {
@@ -167,4 +169,5 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ message: "User created", user }, { status: 201 });
+
 }

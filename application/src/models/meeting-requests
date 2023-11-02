@@ -1,15 +1,19 @@
 import mongoose, {Schema, models} from "mongoose";
 
-const friendRequestsSchema = new Schema({
+const meetingRequestsSchema = new Schema({
     // Owner of the requests
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
     // Array of requests
-    incomingFriendRequests: [
+    incomingMeetingRequests: [
         {
             // Meeting location ID
             senderUserId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User", // Reference to the User model
+            },
+            meetingId:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Meeting", // Reference to the Meeting model
             },
             message: {
                 type: String,
@@ -26,9 +30,13 @@ const friendRequestsSchema = new Schema({
     outgoingFriendRequests: [
         {
             // Meeting location ID
-            receiverUserId: {
+            recieverUserId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User", // Reference to the User model
+            },
+            meetingId:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Meeting", // Reference to the Meeting model
             },
             message: {
                 type: String,
@@ -52,5 +60,5 @@ const friendRequestsSchema = new Schema({
       },
 });
 
-const FriendRequests = models.FriendRequests || mongoose.model("FriendRequests", friendRequestsSchema);
-export default FriendRequests;
+const MeetingRequests = models.MeetingRequests || mongoose.model("MeetingRequests", meetingRequestsSchema);
+export default MeetingRequests;
