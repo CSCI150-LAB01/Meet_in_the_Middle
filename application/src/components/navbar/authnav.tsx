@@ -31,7 +31,7 @@ interface MenuItem {
 	location: string;
 }
 
-export default function authNavbar() {
+export default function AuthNavbar() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 	const menuItems: MenuItem[] = [
 		{ pageName: 'Dashboard', location: '/dashboard' },
@@ -120,58 +120,7 @@ export default function authNavbar() {
 						</NavbarMenuItem>
 					))}
 				</NavbarMenu>
-				<NavbarContent className='hidden sm:flex gap-2' justify='center'>
-					{menuItems.map((item: MenuItem) => (
-						<NavbarMenuItem key={`${item}`}>
-							<Link
-								className='w-full text-white'
-								href={item.location}
-								isBlock
-								size='sm'
-							>
-								{item.pageName}
-							</Link>
-						</NavbarMenuItem>
-					))}
-				</NavbarContent>
-
-				<NavbarContent className='gap-2' justify='end'>
-					<Dropdown placement='bottom-end'>
-						<DropdownTrigger>
-							<Avatar name='Joe Brandon' className='hover:cursor-pointer' />
-						</DropdownTrigger>
-						<DropdownMenu aria-label='Profile Action Menu'>
-							<DropdownItem key='dashboard'>Dashboard</DropdownItem>
-							<DropdownItem key='settings'>Account Settings</DropdownItem>
-							<DropdownItem key='logout' className='text-danger' color='danger'>
-								<div
-									onClick={() =>
-										signOut({ redirect: false, callbackUrl: '/#' })
-									}
-								>
-									Logout
-								</div>
-							</DropdownItem>
-						</DropdownMenu>
-					</Dropdown>
-				</NavbarContent>
-				{/* Mobile Menu */}
-				<NavbarMenu className='rounded-b-lg' position='static'>
-					{menuItems.map((item: MenuItem) => (
-						<NavbarMenuItem key={`${item}`}>
-							<Link
-								color='secondary'
-								className='w-full'
-								href={item.location}
-								size='sm'
-							>
-								{item.pageName}
-							</Link>
-						</NavbarMenuItem>
-					))}
-				</NavbarMenu>
 			</Navbar>
-
 			{/* BTM Nav for Authenticated Mobile Users */}
 			<Navbar
 				isBordered

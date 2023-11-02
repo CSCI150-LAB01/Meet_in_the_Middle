@@ -12,20 +12,20 @@ import { loginUser } from '@/utils/apiCalls';
 import { getSession, useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-export default async function Login() {
+export default function Login() {
 	// password visibility
 	const [isVisible, setIsVisible] = useState(false);
 	const toggleVisibility = () => setIsVisible(!isVisible);
 	const router = useRouter();
 
-	const { data: session, status } = useSession();
-	const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-	setIsAuthenticated(status === 'authenticated');
+	// const { data: session, status } = useSession();
+	// const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+	// setIsAuthenticated(status === 'authenticated');
 
-	// if already logged in
-	if (isAuthenticated) {
-		useRouter().push('/dashboard');
-	}
+	// // if already logged in
+	// if (isAuthenticated) {
+	// 	useRouter().push('/dashboard');
+	// }
 
 	// form refs
 	const emailRef = useRef<HTMLInputElement | null>(null);

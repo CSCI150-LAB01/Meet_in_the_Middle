@@ -30,9 +30,8 @@ interface MenuItem {
 	pageName: string;
 	location: string;
 }
-import { useSession, signIn, signOut } from 'next-auth/react';
 
-export default function noAuthNavBar() {
+export default function NoAuthNavBar() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
 	const menuItems = [

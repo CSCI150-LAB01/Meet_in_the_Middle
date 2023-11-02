@@ -23,15 +23,15 @@ import CardLoading from '@/components/loading';
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 
-export default async function Register() {
-	const { data: session, status } = useSession();
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	setIsAuthenticated(status === 'authenticated');
+export default function Register() {
+	// const { data: session, status } = useSession();
+	// const [isAuthenticated, setIsAuthenticated] = useState(false);
+	// setIsAuthenticated(status === 'authenticated');
 
-	// if already logged in
-	if (isAuthenticated) {
-		useRouter().push('/dashboard');
-	}
+	// // if already logged in
+	// if (isAuthenticated) {
+	// 	useRouter().push('/dashboard');
+	// }
 
 	// Form States / Vars
 	const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility

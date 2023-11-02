@@ -30,28 +30,17 @@ interface MenuItem {
 	location: string;
 }
 import { useSession, signIn, signOut } from 'next-auth/react';
-import authNavbar from './navbar/authnav';
-import noAuthNavBar from './navbar/noauth-navbar';
+import AuthNavbar from './navbar/authnav';
+import NoAuthNavBar from './navbar/noauth-navbar';
 
 export default function NavbarDesktop() {
 	const { data: session, status } = useSession();
 
-	const noAuthMenuItems = [
-		{ pageName: 'Home', location: '/#' },
-		{ pageName: 'Features', location: '/#features' },
-		{ pageName: 'Contact', location: '/#contact' },
-		{ pageName: 'Sign Up', location: '/user' },
-	];
-
-	const authMenuItems: MenuItem[] = [
-		{ pageName: 'Dashboard', location: '/dashboard' },
-		{ pageName: 'Maps', location: '/maps' },
-		{ pageName: 'Friends', location: '/friends' },
-		{ pageName: 'Menu', location: '/menu' },
-	];
-	if (status === 'authenticated') {
-		return authNavbar;
+	console.log("session" + JSON.stringify(session));
+	console.log(status);
+	if (session?.user) {
+		return <AuthNavbar/>;
 	} else {
-		return noAuthNavBar;
+		return <NoAuthNavBar/>;
 	}
 }
