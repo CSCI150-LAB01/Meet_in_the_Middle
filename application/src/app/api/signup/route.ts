@@ -122,13 +122,13 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Error creating user", error }, { status: 500 });
     }
 
-    // Add userId to friend list and default location
+    // Set user id for friend list, friend requests, and default location
     friendList.userId = user._id;
     defaultLocation.userId = user._id;
     meetings.userId = user._id;
     friendRequests.userId = user._id;
 
-    // Save user, friend list, friend requests default location
+    // save friend list
     try {
         await friendList.save();
     }
@@ -136,18 +136,21 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Error saving friend list", error }, { status: 500 });
     }
 
+    // save meetings
     try {
         await meetings.save();
     } catch (error) {
         return NextResponse.json({ message: "Error saving meetings", error }, { status: 500 });
     }
 
+    // save friend requests
     try {
         await friendRequests.save();
     } catch (error) {
         return NextResponse.json({ message: "Error saving friend requests", error }, { status: 500 });
     }
 
+    // save default location
     try {
         await defaultLocation.save();
     }
@@ -155,6 +158,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Error saving default location", error }, { status: 500 });
     }
 
+    // save user
     try {
         await user.save();
     }

@@ -4,7 +4,26 @@ const friendRequestsSchema = new Schema({
     // Owner of the requests
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
     // Array of requests
-    requests: [
+    incomingFriendRequests: [
+        {
+            // Meeting location ID
+            requestId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User", // Reference to the User model
+            },
+            message: {
+                type: String,
+                default: "",
+                maxLength: 500,
+            },
+            // Created at timestamp
+            createdAt: {
+                type: Date,
+                default: Date.now,
+            },
+        },
+    ],
+    outgoingFriendRequests: [
         {
             // Meeting location ID
             requestId: {
