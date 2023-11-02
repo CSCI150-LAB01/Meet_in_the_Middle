@@ -1,16 +1,23 @@
-import mongoose, { Schema, models } from "mongoose";
+import mongoose, {Schema, models} from "mongoose";
 
-const friendRequestsSchema = new Schema({
+const meetingRequestsSchema = new Schema({
     // Owner of the requests
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
     // Array of requests
     incomingRequests: [
         {
             // Meeting location ID
             senderId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "User", // Reference to the User model,
-                required: true,
+                ref: "User", // Reference to the User model
+            id : false, // prevent mongoose from creating a sub id
+
+            },
+            meetingId:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Meeting", // Reference to the Meeting model
+            _id : false, // prevent mongoose from creating a sub id
+
             },
             message: {
                 type: String,
@@ -27,10 +34,16 @@ const friendRequestsSchema = new Schema({
     outgoingRequests: [
         {
             // Meeting location ID
-            recipientId: {
+            reciepientId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User", // Reference to the User model
-                required: true,
+            _id : false, // prevent mongoose from creating a sub id
+
+            },
+            meetingId:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Meeting", // Reference to the Meeting model
+            _id : false, // prevent mongoose from creating a sub id
 
             },
             message: {
@@ -45,20 +58,19 @@ const friendRequestsSchema = new Schema({
             },
         },
     ],
-    // Set if there is a new Incoming Request
-    isFresh: {
+    isFresh : {
         type: Boolean,
         default: false,
     },
     createdAt: {
         type: Date,
         default: Date.now,
-    },
-    updatedAt: {
+      },
+      updatedAt: {
         type: Date,
         default: Date.now,
-    },
+      },
 });
 
-const FriendRequests = models.FriendRequests || mongoose.model("FriendRequests", friendRequestsSchema);
-export default FriendRequests;
+const MeetingRequests = models.MeetingRequests || mongoose.model("MeetingRequests", meetingRequestsSchema);
+export default MeetingRequests;

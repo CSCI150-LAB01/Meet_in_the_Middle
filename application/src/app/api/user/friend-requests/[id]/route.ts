@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     } catch {
         return NextResponse.json({ message: "Error connecting to database", status: 500 })
     }
-
+    // return NextResponse.json({ message: "Friend Requests GET" }, { status: 200 })
     
     try {
         const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
@@ -24,4 +24,3 @@ export async function GET(request: Request) {
         return NextResponse.json({ message: "Error returning friends requests", status: 500 })
     }
 }
-
