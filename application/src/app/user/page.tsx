@@ -21,8 +21,18 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CardLoading from '@/components/loading';
 import { NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 
-export default function Register(): NextPage {
+export default async function Register() {
+	const { data: session, status } = useSession();
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	setIsAuthenticated(status === 'authenticated');
+
+	// if already logged in
+	if (isAuthenticated) {
+		useRouter().push('/dashboard');
+	}
+
 	// Form States / Vars
 	const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
 
@@ -33,7 +43,6 @@ export default function Register(): NextPage {
 	const router = useRouter();
 
 	// Location is "currentLocation"
-
 	// Map States / Vars
 	const [map, setMap] = useState(null);
 	const [placeholderText, setPlaceholderText] = useState<string>(

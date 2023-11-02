@@ -34,8 +34,9 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function NavbarDesktop() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-	const isAuthenticated = true;
+	const { data: session, status } = useSession();
+	const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+	setIsAuthenticated(status === 'authenticated');
 
 	const noAuthMenuItems = [
 		{ pageName: 'Home', location: '/#' },
@@ -129,9 +130,9 @@ export default function NavbarDesktop() {
 									color='danger'
 								>
 									<div
-										onClick={() => {
-											signOut;
-										}}
+										onClick={() =>
+											signOut({ redirect: false, callbackUrl: '/#' })
+										}
 									>
 										Logout
 									</div>
