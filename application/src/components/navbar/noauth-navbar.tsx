@@ -84,7 +84,7 @@ export default function NoAuthNavBar() {
 
 				<NavbarContent className='hidden sm:flex gap-2' justify='center'>
 					{menuItems.map((item: MenuItem) => (
-						<NavbarMenuItem key={`${item}`}>
+						<NavbarMenuItem key={`${item.pageName}`}>
 							<Link
 								className='w-full text-white'
 								href={item.location}
@@ -100,7 +100,7 @@ export default function NoAuthNavBar() {
 				{/* Mobile Menu */}
 				<NavbarMenu className='rounded-b-lg' position='static'>
 					{menuItems.map((item: MenuItem) => (
-						<NavbarMenuItem key={`${item}`}>
+						<NavbarMenuItem key={`${item.pageName}-mobile`}>
 							<Link
 								color='secondary'
 								className='w-full'

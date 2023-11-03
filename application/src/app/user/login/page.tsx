@@ -32,20 +32,20 @@ export default function Login() {
 	const passwordRef = useRef<HTMLInputElement | null>(null);
 
 	// Form Functions
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
 		const formData = {
 			email: emailRef.current?.value || '',
 			password: passwordRef.current?.value || '',
 		};
-		loginUser(formData.email, formData.password)
-			.then(async () => {
+		signIn('credentials',
+			formData.email,
+			formData.password,					
+		  ).then(async () => {
 				toast.success('User login successful!', {
 					position: toast.POSITION.BOTTOM_CENTER,
 				});
-				await signIn('credentials', formData.email, formData.password);
-				useRouter().push('/user/dashboard');
 			})
 			.catch(error => {
 				toast.error(`${error}`, {

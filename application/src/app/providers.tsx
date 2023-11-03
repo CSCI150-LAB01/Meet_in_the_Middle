@@ -4,11 +4,10 @@ import { SessionProvider } from 'next-auth/react';
 import { NextUIProvider } from '@nextui-org/react';
 
 export function Providers(
-	{ children }: { children: React.ReactNode },
-	session,
+	{ children }: { children: React.ReactNode }
 ) {
 	return (
-		<SessionProvider session={session}>
+		<SessionProvider>
 			<NextUIProvider>{children}</NextUIProvider>
 		</SessionProvider>
 	);
