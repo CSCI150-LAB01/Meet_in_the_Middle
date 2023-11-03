@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import User from '@/models/user';
 import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
-import { getUserById, getData, getFriendListById } from "../utils";
+import { getUserById, getData, getFriendListById } from "../../utils";
 
 const mongoose = require("mongoose");
 

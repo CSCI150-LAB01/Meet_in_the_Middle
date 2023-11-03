@@ -11,6 +11,10 @@ const friendListSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User model
   }],
+  isFresh : {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

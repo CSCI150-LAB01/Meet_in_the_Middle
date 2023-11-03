@@ -1,18 +1,22 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
+import bcrypt from 'bcrypt';
+const mongoose = require("mongoose");
+
 import User from '../../../models/user';
 import FriendList from '@/models/friend-list';
 import DefaultLocation from "@/models/default-location";
-import bcrypt from 'bcrypt';
 import FriendRequests from "@/models/friend-requests";
+import Notification from "@/models/notification";
 import Meetings from "@/models/meetings";
-const mongoose = require("mongoose");
+
 import * as utils from "../utils"
 
 //const {searchParams} = new URL(request.url)
 
 // SECURITY RISK - by returning "EMAIL ALREADY EXISTS"
 export async function POST(request: Request) {
+
     try {
         await dbConnect();
     } catch {
@@ -33,7 +37,7 @@ export async function POST(request: Request) {
     if (!coordinates) {
         coordinates = [0.0, 0.0];
     }
-    if (data.coordinates[0] < -180 || data.coordinates[0] > 180 || data.coordinates[1] < -90 || data.coordinates[1] > 90) {
+    if (data.coordinates[0] < -90.000000 || data.coordinates[0] > 90.000000 || data.coordinates[1] < -180.000000 || data.coordinates[1] > 180.000000) {
         return NextResponse.json({ message: "Invalid coordinates" }, { status: 400 });
     }
 
@@ -70,6 +74,7 @@ export async function POST(request: Request) {
         friendList = await new FriendList({
             _id: new mongoose.Types.ObjectId(),
             friends: [],
+            isFresh: false,
         });
     } catch (error) {
         return NextResponse.json({ message: "Error creating friend list", error }, { status: 500 });
@@ -91,10 +96,24 @@ export async function POST(request: Request) {
     try {
         friendRequests = await new FriendRequests({
             _id: new mongoose.Types.ObjectId(),
-            requests: [],
+            incomingRequests: [],
+            outgoingRequests: [],
+            isFresh: false,
         })
     } catch (error) {
         return NextResponse.json({ message: "Error creating friend requests", error }, { status: 500 });
+    }
+
+    // create notification
+    let notifications;
+    try {
+        notifications = await new Notification({
+            _id: new mongoose.Types.ObjectId(),
+            notifications: [],
+            isFresh: false,
+        })
+    } catch (error) {
+        return NextResponse.json({ message: "Error creating notification", error }, { status: 500 });
     }
 
     // encrypt password
@@ -116,51 +135,33 @@ export async function POST(request: Request) {
             friendListId: friendList._id,
             defaultLocationId: defaultLocation._id,
             meetingsId: meetings._id,
-            friendRequestsId: friendRequests._id
+            friendRequestsId: friendRequests._id,
+            notificationsId: notifications._id,
         });
     } catch (error) {
         return NextResponse.json({ message: "Error creating user", error }, { status: 500 });
     }
-
-    // Add userId to friend list and default location
+    // Set user id for friend list, friend requests, and default location
     friendList.userId = user._id;
     defaultLocation.userId = user._id;
     meetings.userId = user._id;
     friendRequests.userId = user._id;
+    notifications.userId = user._id;
 
-    // Save user, friend list, friend requests default location
+
+    // save data to database
     try {
         await friendList.save();
-    }
-    catch (error) {
-        return NextResponse.json({ message: "Error saving friend list", error }, { status: 500 });
-    }
-
-    try {
         await meetings.save();
-    } catch (error) {
-        return NextResponse.json({ message: "Error saving meetings", error }, { status: 500 });
-    }
-
-    try {
         await friendRequests.save();
-    } catch (error) {
-        return NextResponse.json({ message: "Error saving friend requests", error }, { status: 500 });
-    }
-
-    try {
         await defaultLocation.save();
-    }
-    catch (error) {
-        return NextResponse.json({ message: "Error saving default location", error }, { status: 500 });
-    }
-
-    try {
+        await notifications.save();
         await user.save();
     }
     catch (error) {
-        return NextResponse.json({ message: "Error saving user", error }, { status: 500 });
+        return NextResponse.json({ message: "Error saving to database", error }, { status: 500 });
     }
 
     return NextResponse.json({ message: "User created", user }, { status: 201 });
+
 }
