@@ -5,7 +5,7 @@ import FriendList from '@/models/friend-list';
 const mongoose = require("mongoose");
 import * as utils from "../../../utils"
 
-// Reject friend request
+// Reject friend request from sender to user
 export async function POST(request: Request) {
     try {
         await dbConnect();

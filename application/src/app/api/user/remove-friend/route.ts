@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
     const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
 
-    // Get data from body and check for errors
+    // Get data from body and error check
     const data = await getData(request);
     const friendId = data.friendId;
     if (!userId || !friendId) {
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Cannot unfriend self" }, { status: 400 });
     }
 
-    // Get User A and User B
+    // Get User and Friend
     const user = await getUserById(userId);
     const friend = await getUserById(friendId);
     if (user instanceof NextResponse) {
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
         return friend;
     }
 
-    // Get Friend List A and Friend List B
+    // Get User's Friend List and Friend's Friend List
     const userFriendList = await getFriendListById(user.friendListId);
     const friendFriendList = await getFriendListById(friend.friendListId);
     if (userFriendList instanceof NextResponse) {

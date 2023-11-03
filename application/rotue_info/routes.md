@@ -1,7 +1,7 @@
 # Signin and Signup
 
 
-## Signup User (Broken)
+## Signup User
   Creates a user based on information from body. Email is unique Friends List is initialized to empty. Default-Location is set to coordinates or [0,0] if not provided. <span style="color:red">Longitude must range from -180 to 180, and Latitude must range from -90 to 90. Coordinates has longitude first and then latitude</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/api/signup/</span>
@@ -164,7 +164,7 @@ Responds with the deafult location of the user provided in the URL
       }
       ```
 
-## Add or Update User Default Location
+## Add/Update User Default Location
 UserId provided in URL has default location updated with the coordinates in the body. Note if a default location already exists it will be OVERIDEN. <span style="color:red">Longitude must be between -180 and 180, and Latitude must be between -90 and 90. Coordinates has longitude first and then latitude</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/default-location/:userId</span>
@@ -187,11 +187,25 @@ UserId provided in URL has default location updated with the coordinates in the 
           "error": "Error saving default location"
       }
       ``
+## Get Notifications
+Get the User's notifications.
+- **Method**: <span style="color:lightgreen">POST</span>
+- **Route**: <span style="color:lightgreen">api/user/get-notifications/:userId</span>
+- **Body**:
+- **Response**:
+    - **Status 202**:
+      ```json
+        NEEDS JSON RESPONSE!!!!!!
+      ```
+    - **Status 500**:
+
+
 &nbsp;
+
 # Friend Routes
 Add and Remove friends from friend list. Display friend list
   
-## Get User's Friend List 
+## Get  Friend List 
 Returns user's friend list. User id is sent in URL.
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/user/friend-list/:userId</span>
@@ -239,7 +253,7 @@ Returns user's friend list. User id is sent in URL.
       ```
     - **Status 500**:
 
-## Send Friend Request (Working but Needs Testing) ADD NOTIFICATION
+## Send Friend Request (Working but Needs Testing) 
 Send a friend request from a user to a recipient. Message can be read by friend when friend request is recieved. After friend request is sent, it will be added to user's outging-requests, and recievers incoming-requests (friend request object).
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/send-friend-request/:userId</span>
@@ -293,8 +307,8 @@ Send a friend request from a user to a recipient. Message can be read by friend 
       ```
     - **Status 500**:
   
-## Accept Friend Request (Working but Needs Testing) ADD NOTIFICATION
-IMPORTANT README: User accepts the sender's friend request. This endpoint removes the friend request from both the users incoming request list, and from the senders outgoing request list. The endpoint also adds both the user and sender to each other's friend list.
+## Accept Friend Request (Working but Needs Testing)
+IMPORTANT README: User accepts the sender's friend request. Remove the friend request from both the users incoming request list, and from the senders outgoing request list. Add both the user and sender to each other's friend list.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/accept-friend-requests/:userId</span>
 - **Body**:
@@ -310,10 +324,10 @@ IMPORTANT README: User accepts the sender's friend request. This endpoint remove
       ```
     - **Status 500**:
 
-## Reject Friend Request (Working needs testing) ADD NOTIFICATION
-IMPORTANT README: User accepts the sender's friend request. This endpoint removes the friend request from both the users incoming request list, and from the senders outgoing request list. The endpoint also adds both the user and sender to each other's friend list.
+## Reject Friend Request (Working needs testing)
+User rejects the sender's friend request. Friend request is removed from both the user's and sender's incoming and outgoing requests, respectively.
 - **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/user/accept-friend-requests/:userId</span>
+- **Route**: <span style="color:lightgreen">/user/reject-friend-requests/:userId</span>
 - **Body**:
     ```json
       {
@@ -327,112 +341,8 @@ IMPORTANT README: User accepts the sender's friend request. This endpoint remove
       ```
     - **Status 500**:
 
-## Add Friends (Dev Route) 
-Add user A to user B's friend list. Then, add user B to user A's friend list. This makes user A and user B friends.
-- **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/dev/add-friends</span>
-- **Body**:
-    ```json
-      {
-        "userIdA" : "653ddc431694115a0df725e3",
-        "userIdB" : "653e1ab29459c162a1b392a1"
-      }
-    ```
-- **Response**:
-    - **Status 202**:
-      ```json
-        {
-          "message": "Friends Added",
-          "friendListA": {
-            "_id": "6540a5be0d8577911fe78fb5",
-            "friends": [
-              "6540a5a90d8577911fe78fae"
-            ],
-            "createdAt": "2023-10-31T06:59:10.685Z",
-            "updatedAt": "2023-10-31T07:44:20.807Z",
-            "userId": "6540a5be0d8577911fe78fb7",
-            "__v": 5
-          },
-          "friendListB": {
-            "_id": "6540a5a90d8577911fe78fac",
-            "friends": [
-              "6540a5be0d8577911fe78fb7"
-            ],
-            "createdAt": "2023-10-31T06:58:49.502Z",
-            "updatedAt": "2023-10-31T07:44:20.808Z",
-            "userId": "6540a5a90d8577911fe78fae",
-            "__v": 5
-          }
-        }
-      ```
-    - **Status 500**:
 
 
-## Remove Friend (Needs Testing)
-  User A is removed from user B's friend list. Then user B is removed from user A's friend list. This unfriends user A and user B
-- **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/remove-friends</span>
-- **Body**:
-    ```json
-    {
-      "friendId" : "6540a5a90d8577911fe78fae"
-    }
-    ```
-- **Response**:
-    - **Status 201**:
-      ```json
-      {
-        "message": "Friends Removed",
-        "friendListA": {
-          "_id": "6540a5be0d8577911fe78fb5",
-          "friends": [],
-          "createdAt": "2023-10-31T06:59:10.685Z",
-          "updatedAt": "2023-10-31T07:38:21.506Z",
-          "userId": "6540a5be0d8577911fe78fb7",
-          "__v": 4
-        },
-        "friendListB": {
-          "_id": "6540a5a90d8577911fe78fac",
-          "friends": [],
-          "createdAt": "2023-10-31T06:58:49.502Z",
-          "updatedAt": "2023-10-31T07:38:21.506Z",
-          "userId": "6540a5a90d8577911fe78fae",
-          "__v": 4
-        }
-      }
-      ```
-    - **Status 500**:
 
-## Get Global Friend List (DEV ROUTE)
-Intended as a DEV ROUTE. Returns all friend lists in the database. Route does not always return results, have not yet found the bug that is causing this. 
-- **Method**: <span style="color:lightgreen">GET</span>
-- **Route**: <span style="color:lightgreen">/api/friend-list</span>
-- **Body**: None
-- **Response**:
-    - **Status 201**:
-      ```json
-      [
-        {
-          "_id": "653cb96bb172a8cf95067f6c",
-          "friends": [
-              "6540a5a90d8577911fe78fae"
-            ],
-          "userId": "653cb96bb172a8cf95067f6e",
-          "__v": 0,
-          "createdAt": "2023-10-31T07:49:34.318Z",
-          "updatedAt": "2023-10-31T07:49:34.318Z"
-        },
-        {
-          "_id": "653cbc1bb172a8cf95067f90",
-          "friends": [
-              "6540a5a90d8577911fe78fae"
-            ],
-          "userId": "653cbc1bb172a8cf95067f92",
-          "__v": 0,
-          "createdAt": "2023-10-31T07:49:34.318Z",
-          "updatedAt": "2023-10-31T07:49:34.318Z"
-        }
-      ```
-    - **Status 500**:
 
 

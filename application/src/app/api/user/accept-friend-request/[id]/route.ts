@@ -2,6 +2,7 @@ import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
 import FriendRequests from '@/models/friend-requests';
 import FriendList from '@/models/friend-list';
+import Notification from "@/models/notifications";
 const mongoose = require("mongoose");
 import * as utils from "../../../utils"
 
@@ -97,7 +98,14 @@ export async function POST(request: Request) {
     userFriendList.isFresh = true;
     userFriendList.updatedAt = Date.now();
 
-    // SEND NOTIFICATION HERE
+    // Add notification to sender
+    let notifications = await utils.getNotificationsById(sender.notificationId)
+    if (notifications instanceof NextResponse) {
+        return notifications;
+    }
+    notifications.inbox.push({ message: "Friend request accepted", senderId: userId, isRead : false });
+    notifications.isFresh = true;
+
 
     for (const request of senderFriendRequests.incomingRequests) {
         if (request.senderId == userId) {
@@ -110,6 +118,7 @@ export async function POST(request: Request) {
         await userFriendRequests.save()
         await senderFriendList.save()
         await userFriendList.save()
+        await notifications.save()
     } catch {
         return NextResponse.json({ message: "Error saving to database", status: 500 })
     }

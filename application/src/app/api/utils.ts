@@ -4,6 +4,7 @@ import User from '@/models/user';
 import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
 import FriendRequest from "@/models/friend-requests";
+import Notifications from "@/models/notifications";
 import { get } from "http";
 
 const mongoose = require("mongoose");
@@ -82,4 +83,20 @@ export async function getDefaultLocationById(defaultLocationId: string) {
     }
 
     return defaultLocation;
+}
+
+export async function getNotificationsById(notificationsId: string) {
+    let notifications;
+    try {
+        notifications = await Notifications.findById(notificationsId);
+    } catch (error: any) {
+        if (error instanceof mongoose.Error.CastError) {
+            console.log("Default Location Not Found")
+            return NextResponse.json({ message: "Notificaiton Not Found", error }, { status: 404 });
+        }
+        console.log(error.stack)
+        return NextResponse.json({ message: "Error retrieving Notification by Id" }, { status: 500 });
+    }
+
+    return notifications;
 }

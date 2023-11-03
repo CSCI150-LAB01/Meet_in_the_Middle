@@ -1,6 +1,6 @@
 import mongoose, { Schema, models } from "mongoose";
 
-const notificationSchema = new Schema({
+const notificationsSchema = new Schema({
     // User ID who owns the friend list
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -44,5 +44,5 @@ const notificationSchema = new Schema({
     },
 });
 
-const Notification = models.Notification || mongoose.model("Notification", notificationSchema);
-export default Notification;
+const Notifications = models.Notifications || mongoose.model("Notifications", notificationsSchema);
+export default Notifications;

@@ -104,6 +104,18 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Error creating friend requests", error }, { status: 500 });
     }
 
+    // create notification
+    let notifications;
+    try {
+        notifications = await new Notification({
+            _id: new mongoose.Types.ObjectId(),
+            notifications: [],
+            isFresh: false,
+        })
+    } catch (error) {
+        return NextResponse.json({ message: "Error creating notification", error }, { status: 500 });
+    }
+
     // encrypt password
     let encryptedPassword
     try {
@@ -124,6 +136,7 @@ export async function POST(request: Request) {
             defaultLocationId: defaultLocation._id,
             meetingsId: meetings._id,
             friendRequestsId: friendRequests._id,
+            notificationsId: notifications._id,
         });
     } catch (error) {
         return NextResponse.json({ message: "Error creating user", error }, { status: 500 });
@@ -133,6 +146,7 @@ export async function POST(request: Request) {
     defaultLocation.userId = user._id;
     meetings.userId = user._id;
     friendRequests.userId = user._id;
+    notifications.userId = user._id;
 
 
     // save data to database
@@ -141,6 +155,7 @@ export async function POST(request: Request) {
         await meetings.save();
         await friendRequests.save();
         await defaultLocation.save();
+        await notifications.save();
         await user.save();
     }
     catch (error) {

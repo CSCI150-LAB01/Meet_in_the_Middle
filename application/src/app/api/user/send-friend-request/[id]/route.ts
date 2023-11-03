@@ -5,6 +5,7 @@ import FriendList from '@/models/friend-list';
 const mongoose = require("mongoose");
 import * as utils from "../../../utils"
 
+// Send friend request from user to proposed-friend
 export async function POST(request: Request) {
     try {
         await dbConnect();
@@ -86,11 +87,18 @@ export async function POST(request: Request) {
     proposedFriendRequests.isFresh = true;
     proposedFriendRequests.updatedAt = Date.now();
 
-    // SEND NOTIFICATION HERE
+    // Add notification to sender
+    let notifications = await utils.getNotificationsById(proposedFriend.notificationsId)
+    if (notifications instanceof NextResponse) {
+        return notifications;
+    }
+    notifications.inbox.push({ message: "Friend request accepted", senderId: userId, isRead: false });
+    notifications.isFresh = true;
 
     try {
         await userFriendRequests.save()
         await proposedFriendRequests.save()
+        await notifications.save()
     } catch {
         return NextResponse.json({ message: "Error saving user request or proposed friend request", status: 500 })
     }
