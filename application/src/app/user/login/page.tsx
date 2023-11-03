@@ -39,10 +39,12 @@ export default function Login() {
 			email: emailRef.current?.value || '',
 			password: passwordRef.current?.value || '',
 		};
-		signIn('credentials',
-			formData.email,
-			formData.password,					
-		  ).then(async () => {
+		signIn(
+			'credentials',
+			{},
+			{ email: formData.email, password: formData.password },
+		)
+			.then(async () => {
 				toast.success('User login successful!', {
 					position: toast.POSITION.BOTTOM_CENTER,
 				});
@@ -93,7 +95,12 @@ export default function Login() {
 						ref={passwordRef}
 					/>
 
-					<Button color='secondary' variant='solid' fullWidth>
+					<Button
+						color='secondary'
+						variant='solid'
+						fullWidth
+						onClick={handleSubmit}
+					>
 						Sign In
 					</Button>
 					<Button

@@ -36,9 +36,9 @@ import NoAuthNavBar from './navbar/noauth-navbar';
 export default function NavbarDesktop() {
 	const { data: session, status } = useSession();
 
-	if (status === "authenticated") {
-		return <AuthNavbar/>;
+	if (status === 'authenticated') {
+		return <AuthNavbar />;
 	} else {
-		return <NoAuthNavBar/>;
+		return <NoAuthNavBar />;
 	}
 }

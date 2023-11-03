@@ -1,7 +1,7 @@
 export const AuthRoutes = [
 	'/',
-	'/login',
-	'/register',
+	'/user/login',
+	'/user',
 	'/forgot-password',
 	'/error',
 ];

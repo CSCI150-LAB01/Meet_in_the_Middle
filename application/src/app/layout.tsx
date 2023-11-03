@@ -46,7 +46,6 @@ export default function RootLayout({
 	return (
 		<html lang='en' className={roboto.className + ' light'}>
 			<body>
-				{/* add navbar */}
 				<Providers>
 					<NavbarDesktop />
 					{children}

@@ -1,31 +1,31 @@
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import clientPromise from '@lib/db';
-import CredentialsProvider from "next-auth/providers/credentials";
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const authOptions = {
-    // may need to fix later
-    adapter: MongoDBAdapter(clientPromise),
-    session: {
-        strategy: 'jwt',
-    },
-    pages: {
-        // may need adjustment based on login route
-        signIn: "/signin"
-    },
-    providers: [
-        CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-                email: { label: "Email", type: "email" },
-                password: { label: "Password", type: "password" }
-            },
-            async authorize(credentials) {
-                try {
-                    const response = await fetch("/api/signin", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(credentials)
-                    })
+	// may need to fix later
+	adapter: MongoDBAdapter(clientPromise),
+	session: {
+		strategy: 'jwt',
+	},
+	pages: {
+		// may need adjustment based on login route
+		signIn: '/user/login',
+	},
+	providers: [
+		CredentialsProvider({
+			name: 'Credentials',
+			credentials: {
+				email: { label: 'Email', type: 'email' },
+				password: { label: 'Password', type: 'password' },
+			},
+			async authorize(credentials) {
+				try {
+					const response = await fetch('/api/signin', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(credentials),
+					});
 
 					const user = await response.json();
 					if (!user) {
