@@ -1,52 +1,63 @@
-"use client"
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import type { NextPage } from 'next';
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import CardLoading from './loading';
+import { Location } from '@/lib/types';
 
-const Map: NextPage = () => {
-    const containerStyle = {
-        width: '400px',
-        height: '400px'
-    };
-
-    const center = {
-        lat: -3.745,
-        lng: -38.523
-    };
-
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: process.env.MAPS_API as string
-    })
-
-    const [map, setMap] = useState(null)
-
-    console.log(process.env.NEXT_PUBLIC_MAPS_API as string)
-
-    const onLoad = useCallback(function callback(map) {
-        // This is just an example of getting and using the map instance!!! don't just blindly copy!
-        const bounds = new window.google.maps.LatLngBounds(center);
-        map.fitBounds(bounds);
-    
-        setMap(map)
-      }, [])
-
-      
-    const onUnmount = useCallback(function callback(map) {
-        setMap(null)
-      }, [])
-      return isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-        >
-          { /* Child components, such as markers, info windows, etc. */ }
-          <></>
-        </GoogleMap>
-    ) : <>loading</>
+interface MapProps {
+	height: string;
+	width: string;
+	options?: google.maps.MapOptions;
 }
 
-export default Map
+const Map: React.FC<MapProps> = ({ height, width, options }) => {
+	const [currentLocation, setCurrentLocation] = useState<Location>({
+		lat: 0,
+		lng: 0,
+	});
+	const [markers, setMarkers] = useState<Location[]>([]);
+
+	const { isLoaded } = useJsApiLoader({
+		id: 'google-map-script',
+		googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_API as string,
+	});
+
+	const [map, setMap] = useState(null);
+
+	const onLoad = useCallback(function callback(map) {
+		setMap(map);
+	}, []);
+
+	const onUnmount = useCallback(function callback(map) {
+		setMap(null);
+	}, []);
+
+	useEffect(() => {
+		navigator.geolocation.getCurrentPosition(
+			({ coords: { latitude: lat, longitude: lng } }) => {
+				setMarkers([{ lat, lng }]);
+				setCurrentLocation({ lat, lng });
+			},
+		);
+	}, []);
+
+	return isLoaded ? (
+		<div className='flex rounded-lg overflow-clip w-full'>
+			<GoogleMap
+				center={currentLocation}
+				zoom={15}
+				onLoad={onLoad}
+				options={{ ...options }}
+				onUnmount={onUnmount}
+				mapContainerStyle={{ height, width }}
+			>
+				{markers.map((mark, index) => (
+					<Marker key={index} position={mark} />
+				))}
+			</GoogleMap>
+		</div>
+	) : (
+		<CardLoading />
+	);
+};
+
+export default Map;
