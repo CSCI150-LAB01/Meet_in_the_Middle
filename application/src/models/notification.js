@@ -1,13 +1,13 @@
 import mongoose, { Schema, models } from "mongoose";
 
-const notificationListSchema = new Schema({
+const notificationSchema = new Schema({
     // User ID who owns the friend list
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User", unique: true// Reference to the User model
     },
-    // List of friends (an array of User Ids)
-    notifications: [{
+    // List of notifications
+    inbox: [{
         senderId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User", // Reference to the User model
@@ -16,6 +16,18 @@ const notificationListSchema = new Schema({
             type: String,
             default: "",
             maxLength: 500,
+        },
+        isRead: {
+            type: Boolean,
+            default: false,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
+        type : {
+            type: String,
+            default: "",
         },
     }],
     isFresh: {
@@ -32,5 +44,5 @@ const notificationListSchema = new Schema({
     },
 });
 
-const NotificationList = models.NotificationList || mongoose.model("NotificationList", notificationListSchema);
-export default NotificationList;
+const Notification = models.Notification || mongoose.model("Notification", notificationSchema);
+export default Notification;

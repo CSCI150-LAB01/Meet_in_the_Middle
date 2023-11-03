@@ -86,6 +86,8 @@ export async function POST(request: Request) {
     proposedFriendRequests.isFresh = true;
     proposedFriendRequests.updatedAt = Date.now();
 
+    // SEND NOTIFICATION HERE
+
     try {
         await userFriendRequests.save()
         await proposedFriendRequests.save()

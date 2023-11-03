@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import User from '@/models/user';
 import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
-import { getUserById, getData, getFriendListById } from "../utils";
+import { getUserById, getData, getFriendListById } from "../../utils";
 
 const mongoose = require("mongoose");
 
@@ -14,60 +14,61 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Error connecting to database", error }, { status: 500 });
     }
 
+    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+
     // Get data from body and check for errors
     const data = await getData(request);
-    const userIdA = data.userIdA;
-    const userIdB = data.userIdB;
-    if (!userIdA || !userIdB) {
-        console.log("Missing userIdA or userIdB")
+    const friendId = data.friendId;
+    if (!userId || !friendId) {
+        console.log("Missing user or friend")
         return NextResponse.json({ message: "Missing userIdA or userIdB" }, { status: 400 });
-    } else if (userIdA === userIdB) {
+    } else if (userId === friendId) {
         console.log("Cannot unfriend self")
         return NextResponse.json({ message: "Cannot unfriend self" }, { status: 400 });
     }
 
     // Get User A and User B
-    const userA = await getUserById(userIdA);
-    const userB = await getUserById(userIdB);
-    if (userA instanceof NextResponse) {
-        return userA;
-    } else if (userB instanceof NextResponse) {
-        return userB;
+    const user = await getUserById(userId);
+    const friend = await getUserById(friendId);
+    if (user instanceof NextResponse) {
+        return user;
+    } else if (friend instanceof NextResponse) {
+        return friend;
     }
 
     // Get Friend List A and Friend List B
-    const friendListA = await getFriendListById(userA.friendListId);
-    const friendListB = await getFriendListById(userB.friendListId);
-    if (friendListA instanceof NextResponse) {
-        return friendListA;
-    } else if (friendListB instanceof NextResponse) {
-        return friendListB;
+    const userFriendList = await getFriendListById(user.friendListId);
+    const friendFriendList = await getFriendListById(friend.friendListId);
+    if (userFriendList instanceof NextResponse) {
+        return userFriendList;
+    } else if (friendFriendList instanceof NextResponse) {
+        return friendFriendList;
     }
 
     // Check if already friends
-    if (!friendListA.friends.includes(userIdB) && !friendListB.friends.includes(userIdA)) {
+    if (!userFriendList.friends.includes(friendId) && !friendFriendList.friends.includes(userId)) {
         console.log("Cannot Unfriend. User A and User B are not friends!")
         return NextResponse.json({ message: "Cannot Unfriend. User A and User B are not friends" }, { status: 400 });
-    } else if (!friendListA.friends.includes(userIdB)) {
+    } else if (!userFriendList.friends.includes(friendId)) {
         console.log("Serrious ERROR, B is friend of A, But A is not friend of B")
         return NextResponse.json({ message: "Serrious ERROR, B is friend of A, But A is not friend of B" }, { status: 400 });
-    } else if (!friendListB.friends.includes(userIdA)) {
+    } else if (!friendFriendList.friends.includes(userId)) {
         console.log("Serrious ERROR, A is friend of B, But B is not friend of A")
         return NextResponse.json({ message: "Serrious ERROR, A is friend of B, But B is not friend of A" }, { status: 400 });
     }
 
     // Unfriend and save
-    await friendListA.friends.remove(userIdB)
-    await friendListB.friends.remove(userIdA)
-    friendListA.updatedAt = new Date();
-    friendListB.updatedAt = new Date();
+    await userFriendList.friends.remove(friendId)
+    await friendFriendList.friends.remove(userId)
+    userFriendList.updatedAt = new Date();
+    friendFriendList.updatedAt = new Date();
 
     try {
-        await friendListA.save();
-        await friendListB.save();
+        await userFriendList.save();
+        await friendFriendList.save();
     } catch (error) {
         return NextResponse.json({ message: "Error saving friend lists", error }, { status: 500 });
     }
 
-    return NextResponse.json({ message: "Friends Removed", friendListA, friendListB }, { status: 200 });
+    return NextResponse.json({ message: "Friends Removed", userFriendList: userFriendList, friendFriendList: friendFriendList }, { status: 200 });
 }

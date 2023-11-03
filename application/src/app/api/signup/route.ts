@@ -1,19 +1,21 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
+import bcrypt from 'bcrypt';
+const mongoose = require("mongoose");
+
 import User from '../../../models/user';
 import FriendList from '@/models/friend-list';
 import DefaultLocation from "@/models/default-location";
-import bcrypt from 'bcrypt';
 import FriendRequests from "@/models/friend-requests";
+import Notification from "@/models/notification";
 import Meetings from "@/models/meetings";
-const mongoose = require("mongoose");
+
 import * as utils from "../utils"
 
 //const {searchParams} = new URL(request.url)
 
 // SECURITY RISK - by returning "EMAIL ALREADY EXISTS"
 export async function POST(request: Request) {
-
 
     try {
         await dbConnect();
@@ -121,12 +123,11 @@ export async function POST(request: Request) {
             friendListId: friendList._id,
             defaultLocationId: defaultLocation._id,
             meetingsId: meetings._id,
-            friendRequestsId: friendRequests._id
+            friendRequestsId: friendRequests._id,
         });
     } catch (error) {
         return NextResponse.json({ message: "Error creating user", error }, { status: 500 });
     }
-
     // Set user id for friend list, friend requests, and default location
     friendList.userId = user._id;
     defaultLocation.userId = user._id;
@@ -134,43 +135,16 @@ export async function POST(request: Request) {
     friendRequests.userId = user._id;
 
 
-    // save friend list
+    // save data to database
     try {
         await friendList.save();
-    }
-    catch (error) {
-        return NextResponse.json({ message: "Error saving friend list", error }, { status: 500 });
-    }
-    console.log({message: "friendList" , friendList})
-
-    // save meetings
-    try {
         await meetings.save();
-    } catch (error) {
-        return NextResponse.json({ message: "Error saving meetings", error }, { status: 500 });
-    }
-
-    // save friend requests
-    try {
         await friendRequests.save();
-    } catch (error) {
-        return NextResponse.json({ message: "Error saving friend requests", error }, { status: 500 });
-    }
-
-    // save default location
-    try {
         await defaultLocation.save();
-    }
-    catch (error) {
-        return NextResponse.json({ message: "Error saving default location", error }, { status: 500 });
-    }
-
-    // save user
-    try {
         await user.save();
     }
     catch (error) {
-        return NextResponse.json({ message: "Error saving user", error }, { status: 500 });
+        return NextResponse.json({ message: "Error saving to database", error }, { status: 500 });
     }
 
     return NextResponse.json({ message: "User created", user }, { status: 201 });

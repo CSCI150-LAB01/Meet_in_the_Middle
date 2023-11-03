@@ -310,7 +310,7 @@ IMPORTANT README: User accepts the sender's friend request. This endpoint remove
       ```
     - **Status 500**:
 
-## Reject Friend Request (Not Working) ADD NOTIFICATION
+## Reject Friend Request (Working needs testing) ADD NOTIFICATION
 IMPORTANT README: User accepts the sender's friend request. This endpoint removes the friend request from both the users incoming request list, and from the senders outgoing request list. The endpoint also adds both the user and sender to each other's friend list.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/accept-friend-requests/:userId</span>
@@ -330,7 +330,7 @@ IMPORTANT README: User accepts the sender's friend request. This endpoint remove
 ## Add Friends (Dev Route) 
 Add user A to user B's friend list. Then, add user B to user A's friend list. This makes user A and user B friends.
 - **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/add-friends</span>
+- **Route**: <span style="color:lightgreen">/dev/add-friends</span>
 - **Body**:
     ```json
       {
@@ -368,15 +368,14 @@ Add user A to user B's friend list. Then, add user B to user A's friend list. Th
     - **Status 500**:
 
 
-## Remove Friends (Dev Route)
+## Remove Friend (Needs Testing)
   User A is removed from user B's friend list. Then user B is removed from user A's friend list. This unfriends user A and user B
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/remove-friends</span>
 - **Body**:
     ```json
     {
-      "userIdA" : "6540a5be0d8577911fe78fb7",
-      "userIdB" : "6540a5a90d8577911fe78fae"
+      "friendId" : "6540a5a90d8577911fe78fae"
     }
     ```
 - **Response**:
