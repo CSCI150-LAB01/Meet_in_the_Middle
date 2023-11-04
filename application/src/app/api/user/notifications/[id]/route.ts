@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     }
 
     const username = user.username;
-    return NextResponse.json({ message: username + " notificaitons", notifications }, { status: 200 });
+    return NextResponse.json({ message: username + " notificaitons", userId: userId, notifications }, { status: 200 });
 }
 
 // Delete an item from the notifications inbox
@@ -48,10 +48,11 @@ export async function DELETE(request: Request) {
 
     // get data and validate
     const data = await utils.getData(request)
+    const inboxId = data.inboxId
     if (data instanceof NextResponse) {
         return data;
     }
-    if (!data.inboxId) {
+    if (!inboxId) {
         return NextResponse.json({ message: "Missing inboxId" }, { status: 400 });
     }
 
@@ -70,8 +71,8 @@ export async function DELETE(request: Request) {
 
     // delete inbox entry associated with inboxId
     let found = false;
-    for (const entry of notifications.inbox) {
-        if (entry.inboxId == data.inboxId) {
+    for (let entry of notifications.inbox) {
+        if (entry._id == inboxId) {
             notifications.inbox.pull(entry);
             found = true;
         }
@@ -88,6 +89,6 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ message: "Error updating notifications", error, status: 500 })
     }
 
-    return NextResponse.json({ message: "Notificaitons", notifications }, { status: 200 });
+    return NextResponse.json({ message: "Notificaiton removed", notifications }, { status: 200 });
 }
 

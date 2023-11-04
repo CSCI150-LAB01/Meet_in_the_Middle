@@ -7,7 +7,8 @@ import { getUserById, getData, getFriendListById } from "../../../utils";
 
 const mongoose = require("mongoose");
 
-export async function POST(request: Request) {
+
+export async function DELETE(request: Request) {
     try {
         dbConnect();
     } catch (error) {
@@ -18,6 +19,10 @@ export async function POST(request: Request) {
 
     // Get data from body and error check
     const data = await getData(request);
+    if (data instanceof NextResponse) {
+        return data;
+    }
+    
     const friendId = data.friendId;
     if (!userId || !friendId) {
         console.log("Missing user or friend")

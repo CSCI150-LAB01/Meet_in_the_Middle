@@ -108,7 +108,6 @@ export async function getNotificationsById(notificationsId: string) {
     if (!notifications){
         return NextResponse.json({ message: "Notificaiton Not Found" }, { status: 404 });
     }
-
     return notifications;
 }
 
