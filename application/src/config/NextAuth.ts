@@ -1,8 +1,9 @@
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
-import clientPromise from '@lib/db';
+import clientPromise from '@/lib/mongodb';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { NextAuthOptions } from 'next-auth';
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
 	// may need to fix later
 	adapter: MongoDBAdapter(clientPromise),
 	session: {
@@ -41,12 +42,12 @@ export const authOptions = {
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				(token.id = user.id),
-					// Assign default values if none are supplied
-					(token.email = user.email),
-					(token.name = user.name),
-					(token.image = user.image ?? ''),
-					(token.defaultLocation = user.defaultLocation ?? [0, 0]);
+				token.id = user.id;
+				// Assign default values if none are supplied
+				token.email = user.email;
+				token.name = user.name;
+				token.image = user.image ?? '';
+				// token.defaultLocation = user.defaultLocation ?? [0, 0];
 				// adjust default value structure
 			}
 			return token;
@@ -56,7 +57,7 @@ export const authOptions = {
 			session.user.email = token.email;
 			session.user.name = token.name;
 			session.user.image = token.image;
-			session.user.defaultLocation = token.defaultLocation;
+			// session.user.defaultLocation = token.defaultLocation;
 			return session;
 		},
 	},
