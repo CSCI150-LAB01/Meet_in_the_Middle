@@ -7,7 +7,7 @@ import User from '../../../models/user';
 import FriendList from '@/models/friend-list';
 import DefaultLocation from "@/models/default-location";
 import FriendRequests from "@/models/friend-requests";
-import Notification from "@/models/notification";
+import Notification from "@/models/notifications";
 import Meetings from "@/models/meetings";
 
 import * as utils from "../utils"
