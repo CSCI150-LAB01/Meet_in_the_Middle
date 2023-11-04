@@ -1,10 +1,10 @@
 import '@/styles/globals.scss';
-import type { Metadata } from "next";
-import { Providers } from "./providers";
-import NavbarDesktop from "../components/navbar";
-import { roboto } from "@/styles/fonts";
-import { AppConfig } from "@/utils/AppConfig";
-import Footer from "@/components/footer";
+import type { Metadata } from 'next';
+import { Providers } from './providers';
+import NavbarDesktop from '../components/navbar';
+import { roboto } from '@/styles/fonts';
+import { AppConfig } from '@/utils/AppConfig';
+import Footer from '@/components/footer';
 
 // Metadata
 export const metadata: Metadata = {
@@ -15,24 +15,24 @@ export const metadata: Metadata = {
 	description: AppConfig.description,
 	icons: [
 		{
-			rel: "apple-touch-icon",
-			url: "/apple-icon.png",
+			rel: 'apple-touch-icon',
+			url: '/apple-icon.png',
 		},
 		{
-			rel: "icon",
-			type: "image/png",
-			sizes: "32x32",
-			url: "/favicon-32x32.png",
+			rel: 'icon',
+			type: 'image/png',
+			sizes: '32x32',
+			url: '/favicon-32x32.png',
 		},
 		{
-			rel: "icon",
-			type: "image/png",
-			sizes: "16x16",
-			url: "/favicon-16x16.png",
+			rel: 'icon',
+			type: 'image/png',
+			sizes: '16x16',
+			url: '/favicon-16x16.png',
 		},
 		{
-			rel: "icon",
-			url: "/favicon.ico",
+			rel: 'icon',
+			url: '/favicon.ico',
 		},
 	],
 };
@@ -44,11 +44,12 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className={roboto.className + " light"}>
+		<html lang='en' className={roboto.className + ' light'}>
 			<body>
-				{/* add navbar */}
-				<NavbarDesktop />
-				<Providers>{children}</Providers>
+				<Providers>
+					<NavbarDesktop />
+					{children}
+				</Providers>
 				<Footer />
 			</body>
 		</html>

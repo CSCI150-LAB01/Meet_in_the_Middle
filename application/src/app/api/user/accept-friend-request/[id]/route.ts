@@ -99,13 +99,14 @@ export async function POST(request: Request) {
     userFriendList.updatedAt = Date.now();
 
     // Add notification to sender
-    let notifications = await utils.getNotificationsById(sender.notificationId)
-    if (notifications instanceof NextResponse) {
-        return notifications;
+    let senderNotifications = await utils.getNotificationsById(sender.notificationId)
+    if (senderNotifications instanceof NextResponse) {
+        return senderNotifications;
     }
-    notifications.inbox.push({ message: "Friend request accepted", senderId: userId, isRead : false });
-    notifications.isFresh = true;
-
+    const username = user.username;
+    senderNotifications.inbox.push({ message: username + " accepted friend request from ", senderId: userId, isRead : false,  type: "friend-request"});
+    senderNotifications.isFresh = true;
+    senderNotifications.updatedAt = Date.now();
 
     for (const request of senderFriendRequests.incomingRequests) {
         if (request.senderId == userId) {
@@ -118,7 +119,7 @@ export async function POST(request: Request) {
         await userFriendRequests.save()
         await senderFriendList.save()
         await userFriendList.save()
-        await notifications.save()
+        await senderNotifications.save()
     } catch {
         return NextResponse.json({ message: "Error saving to database", status: 500 })
     }
