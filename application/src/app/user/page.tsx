@@ -22,38 +22,39 @@ import 'react-toastify/dist/ReactToastify.css';
 import CardLoading from '@/components/loading';
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
+import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 
 export default function Register() {
-	// const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
 	// const [isAuthenticated, setIsAuthenticated] = useState(false);
 	// setIsAuthenticated(status === 'authenticated');
-
+  
 	// // if already logged in
 	// if (isAuthenticated) {
-	// 	useRouter().push('/dashboard');
-	// }
-
-	// Form States / Vars
-	const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
-
-	const [isVisible, setIsVisible] = useState(false); // Password visibility state
-	const usernameRef = useRef<HTMLInputElement | null>(null);
-	const emailRef = useRef<HTMLInputElement | null>(null);
-	const passwordRef = useRef<HTMLInputElement | null>(null);
-	const router = useRouter();
-
-	// Location is "currentLocation"
-	// Map States / Vars
-	const [map, setMap] = useState(null);
-	const [placeholderText, setPlaceholderText] = useState<string>(
-		'Enter your location',
-	);
-	const [currentLocation, setCurrentLocation] = useState<Location>({
-		lat: 0,
-		lng: 0,
-	});
-	const [markers, setMarkers] = useState<Location[]>([]);
-	const searchBox = useRef<google.maps.places.SearchBox | null>(null);
+    // 	useRouter().push('/dashboard');
+    // }
+    
+    // Form States / Vars
+    const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
+    
+    const [isVisible, setIsVisible] = useState(false); // Password visibility state
+    const usernameRef = useRef<HTMLInputElement | null>(null);
+    const emailRef = useRef<HTMLInputElement | null>(null);
+    const passwordRef = useRef<HTMLInputElement | null>(null);
+    const router = useRouter();
+    
+    // Location is "currentLocation"
+    // Map States / Vars
+    const [map, setMap] = useState(null);
+    const [placeholderText, setPlaceholderText] = useState<string>(
+      'Enter your location',
+      );
+      const [currentLocation, setCurrentLocation] = useState<Location>({
+        lat: 0,
+        lng: 0,
+      });
+      const [markers, setMarkers] = useState<Location[]>([]);
+      const searchBox = useRef<google.maps.places.SearchBox | null>(null);
 
 	// Map Loader
 	const { isLoaded } = useJsApiLoader({
