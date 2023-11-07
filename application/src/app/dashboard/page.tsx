@@ -11,20 +11,22 @@ export default function Dashboard() {
 
 	const isLoaded = false;
 	return (
-		<>
-			<p>{response ? JSON.stringify(response) : 'no resp'}</p>
-			<p>Location Data</p>
-			<div className='flex flex-col gap-3 w-full p-3'>
-				<Map height='350px' width='900px' />
+		<div className='flex w-full justify-center'>
+			<div className='flex min-h-screen flex-col items-center lg:px-24 py-24 w-full max-w-[1080px]'>
+				<p>{response ? JSON.stringify(response) : 'no resp'}</p>
+				<p>Location Data</p>
+				<div className='flex flex-col gap-3 w-full p-3'>
+					<Map height='350px' width='900px' />
+				</div>
+				<p>Upcoming Events</p>
+				<div className='flex flex-col gap-3 w-full p-3'>
+					<CardLoading />
+				</div>
+				<p>Friends</p>
+				<div className='flex flex-col gap-3 w-full p-3'>
+					<CardLoading />
+				</div>
 			</div>
-			<p>Upcoming Events</p>
-			<div className='flex flex-col gap-3 w-full p-3'>
-				<CardLoading />
-			</div>
-			<p>Friends</p>
-			<div className='flex flex-col gap-3 w-full p-3'>
-				<CardLoading />
-			</div>
-		</>
+		</div>
 	);
 }
