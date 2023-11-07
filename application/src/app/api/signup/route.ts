@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     if (!coordinates) {
         coordinates = [0.0, 0.0];
     }
-    if (data.coordinates[0] < -90.000000 || data.coordinates[0] > 90.000000 || data.coordinates[1] < -180.000000 || data.coordinates[1] > 180.000000) {
+    if (data.coordinates[1] < -90.000000 || data.coordinates[1] > 90.000000 || data.coordinates[0] < -180.000000 || data.coordinates[0] > 180.000000) {
         return NextResponse.json({ message: "Invalid coordinates" }, { status: 400 });
     }
 
