@@ -39,22 +39,28 @@ export default function Login() {
 			email: emailRef.current?.value || '',
 			password: passwordRef.current?.value || '',
 		};
-		signIn(
-			'credentials',
-			{},
-			{ email: formData.email, password: formData.password },
-		)
-			.then(async () => {
-				toast.success('User login successful!', {
-					position: toast.POSITION.BOTTOM_CENTER,
-				});
+		signIn('credentials', {
+			redirect: false, // Change to true if you want to redirect after sign-in
+			email: formData.email,
+			password: formData.password,
+		})
+			.then(async response => {
+				if (response?.error) {
+					toast.error(response?.error, {
+						position: toast.POSITION.BOTTOM_CENTER,
+					});
+				} else {
+					toast.success('User login successful!', {
+						position: toast.POSITION.BOTTOM_CENTER,
+					});
+				}
 			})
 			.catch(error => {
 				toast.error(`${error}`, {
 					position: toast.POSITION.BOTTOM_CENTER,
 				});
-				console.log(error);
 			});
+		router.push('/dashboard');
 	};
 	return (
 		<>
