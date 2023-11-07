@@ -23,7 +23,6 @@ import CardLoading from '@/components/loading';
 import useGoogleMaps from '@/hooks/useGoogleMaps';
 import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
-import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 
 export default function Register() {
   const { data: session, status } = useSession();
