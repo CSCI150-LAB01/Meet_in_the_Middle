@@ -2,7 +2,7 @@ import mongoose, { Schema, models } from "mongoose";
 
 const meetingsSchema = new Schema({
   // Owner of the meeting
-  ownerId: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
   meetingLocationId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "MeetingLocation",

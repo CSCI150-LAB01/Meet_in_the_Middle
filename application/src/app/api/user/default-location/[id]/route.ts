@@ -3,68 +3,78 @@ import { NextResponse } from 'next/server'
 import DefaultLocation from '@/models/default-location';
 import User from '@/models/user';
 const mongoose = require("mongoose");
+import * as utils from "../../../utils"
 
-// Create new default location for a specific user
-// If the user already has a default location, delete it
+// Get user's default locaiton
+export async function GET(request: Request) {
+  await dbConnect();
+
+    // Get user ID from request
+    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+    const user = await utils.getUserById(userId);
+    if (user instanceof NextResponse) {
+      return user
+    }
+
+    // Find the user's default location
+    const defaultLocation = await utils.getDefaultLocationById(user.defaultLocationId);
+    if (defaultLocation instanceof NextResponse) {
+      return defaultLocation
+    }
+
+    return NextResponse.json(defaultLocation, { status: 200 });
+}
+
+
+// Add user's default location, if it already exists, delete it and add the new one
 export async function POST(request: Request) {
   await dbConnect();
 
+  // get coordinates from request and validate
+  const data = await request.json();
+  const coordinates = data.coordinates;
+  if ((!coordinates[0] && !coordinates[1]) || !coordinates[0] || !coordinates[1] || coordinates[2]) {
+    return NextResponse.json({ message: "Invalid coordinates" }, { status: 400 });
+  }
+  if (coordinates[0] <= -180 || coordinates[0] >= 180 || coordinates[1] <= -90 || coordinates[1] >= 90) {
+    return NextResponse.json({ message: "Longitude must be between -180 and 180, latitude must be between -90 and 90" }, { status: 400 });
+  }
+
+  // get user
+  const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+  const user = await utils.getUserById(userId);
+  if (user instanceof NextResponse) {
+    return user
+  }
+
+  // Create a new default location 
+  const defaultLocation = await new DefaultLocation({
+    _id: new mongoose.Types.ObjectId(),
+    coordinates: coordinates
+  });
+  defaultLocation.updatedAt = Date.now();
+  user.updatedAt = Date.now();
+
+  // Delete the old default location
+  const oldDefaultLocationId = user.defaultLocationId;
   try {
-    const data = await request.json();
-    const coordinates = data.coordinates;
-
-    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await User.findById(userId);
-    
-    // Create a new default location object
-    const defaultLocation = await new DefaultLocation({
-      _id: new mongoose.Types.ObjectId(),
-      coordinates: coordinates
-    });
-    defaultLocation.save();
-
-    // Delete the old default location object
-    const oldDefaultLocationId = user.defaultLocationId;
     if (oldDefaultLocationId) {
       await DefaultLocation.findByIdAndDelete(oldDefaultLocationId);
     }
-
-    // Update the user's defaultLocation reference with the new location's ID
-    user.defaultLocationId = defaultLocation._id;
-    await user.save();
-    
-    console.log({ message: "\ndefaultLocation" }, defaultLocation);
-    return NextResponse.json({ message: "Default location set successfully" }, { status: 201 });
-
   } catch (error) {
-    return NextResponse.json(error, { status: 500 });
+    return NextResponse.json({ message: "error deleting default location", error }, { status: 500 });
   }
+
+  // Update user default location ID and save
+  user.defaultLocationId = defaultLocation._id;
+  try {
+    await defaultLocation.save();
+    await user.save();
+  } catch (error) {
+    return NextResponse.json({ message: "error saving to database", error }, { status: 500 });
+  }
+
+  console.log({ message: "\ndefaultLocation" }, defaultLocation);
+  return NextResponse.json({ message: "Success", defaultLocation }, { status: 201 });
 }
 
-export async function GET(request: Request) {
-  await dbConnect();
-  try{
-    // Get user ID from request
-    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await User.findById(userId);
-    
-    console.log("HERE IS HOW FAR WE GET")
-    if (!userId) {
-      return NextResponse.json({ message: "Provide userId in GET request" }, { status: 400 });
-    }
-
-    // Find the user
-    console.log("User")
-    console.log(user)
-
-    // Find the user's default location
-    const defaultLocation = await DefaultLocation.findById(user.defaultLocationId);
-    console.log("DefaultLocation")
-    console.log(defaultLocation)
-
-    return NextResponse.json(defaultLocation, { status: 200 });
-
-  }catch(error){
-    return NextResponse.json(error, { status: 500 });
-  }
-}
