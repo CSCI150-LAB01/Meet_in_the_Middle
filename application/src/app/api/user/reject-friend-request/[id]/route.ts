@@ -52,17 +52,18 @@ export async function POST(request: Request) {
     if (senderFriendRequests instanceof NextResponse) {
         return senderFriendRequests;
     }
-
+    
     // Delete sender outgoing request
     for (const request of senderFriendRequests.outgoingRequests) {
-        if (request.recipientId == senderId) {
+        if (request.recipientId == userId) {
             senderFriendRequests.outgoingRequests.pull(request);
         }
     }
+    
 
     // Delete user incoming request
     for (const request of userFriendRequests.incomingRequests) {
-        if (request.recipientId == userId) {
+        if (request.senderId == senderId) {
             userFriendRequests.incomingRequests.pull(request);
         }
     }
@@ -74,7 +75,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Error saving friend requests", status: 500 })
     }
 
-    return NextResponse.json({ message: "Friends added", senderFriendRequests, userFriendRequests }, { status: 200 })
+    return NextResponse.json({ message: "Friend Request Rejected", senderFriendRequests, userFriendRequests }, { status: 200 })
 }
 
 

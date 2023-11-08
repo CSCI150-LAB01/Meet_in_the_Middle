@@ -10,72 +10,82 @@ import * as utils from "../../utils"
 // WORKING
 // Find and return user
 export async function GET(request: Request) {
-  await dbConnect();
-
   try {
-    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await User.findById(userId);
-
-    return NextResponse.json(user, { status: 200 });
-
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json({ status: 500 });
+    await dbConnect();
   }
+  catch (error) {
+    return NextResponse.json({ message: "Error connecting to database", error, status: 500 })
+  }
+
+  const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+  const user = await utils.getUserById(userId);
+  if (user instanceof NextResponse) {
+    return user
+  }
+
+  return NextResponse.json( {user : user}, { status: 200 });
 }
 
 // WORKING
 // Delete user default-location, delete friend-list, then delete user
 export async function DELETE(request: Request) {
-  try{
-  await dbConnect();
+  try {
+    await dbConnect();
   } catch {
     return NextResponse.json({ message: "Error connecting to database", status: 500 })
   }
-  
-    // Find user
-    console.log("Fetching User");
-    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await utils.getUserById(userId);
-    if (user instanceof NextResponse) {
-      return user;
-    }
-    console.log(user);
-    
-    // Find default-location 
-    console.log("Fetching Default Location")
-    const defaultLocation = await utils.getDefaultLocationById(user.defaultLocationId);
-    if (defaultLocation instanceof NextResponse) {
-      return defaultLocation;
-    }
-    console.log(defaultLocation)
-    
-    // Find friends list
-    console.log("Fetching Friends List")
-    const friendList = await utils.getFriendListById(user.friendListId);
-    if (friendList instanceof NextResponse) {
-      return friendList;
-    }
-    console.log(friendList)
 
-    // Find friend requests
-    console.log("Fetching Friend Requests")
-    const friendRequests = await utils.getFriendRequestById(user.friendRequestsId);
-    if (friendRequests instanceof NextResponse) {
-      return friendRequests;
-    }
-    console.log(friendRequests)
+  // Find user
+  const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+  const user = await utils.getUserById(userId);
+  if (user instanceof NextResponse) {
+    return user;
+  }
 
+  // Find meetings
+  const meetings = await utils.getMeetingsById(user.meetingsId);
+  if (meetings instanceof NextResponse) {
+    return meetings;
+  }
 
-    // Delete default-location, friends list, and friend requests
-   await friendList.deleteOne();
-   await defaultLocation.deleteOne();
-   await friendRequests.deleteOne();
-    
-    
-    // Delete user
-    await user.deleteOne();
-    return NextResponse.json({ message: "User deleted" }, { status: 200 });
+  // Find default-location 
+  const defaultLocation = await utils.getDefaultLocationById(user.defaultLocationId);
+  if (defaultLocation instanceof NextResponse) {
+    return defaultLocation;
+  }
+
+  // Find friends list
+  const friendList = await utils.getFriendListById(user.friendListId);
+  if (friendList instanceof NextResponse) {
+    return friendList;
+  }
+
+  // Find friend requests
+  const friendRequests = await utils.getFriendRequestById(user.friendRequestsId);
+  if (friendRequests instanceof NextResponse) {
+    return friendRequests;
+  }
+
+  // Find notifications
+  const notifications = await utils.getNotificationsById(user.notificationsId);
+  if (notifications instanceof NextResponse) {
+    return notifications;
+  }
+
+  // Delete default-location, friends list, and friend requests
+try{
+  await friendList.deleteOne();
+  await defaultLocation.deleteOne();
+  await friendRequests.deleteOne();
+  await notifications.deleteOne();
+  await meetings.deleteOne();
+  await user.deleteOne();
+}catch (error) {
+  return NextResponse.json({ message: "Error deleting one of the objects in database", error, status: 500 })
+}
+
+  // Delete user
+  return NextResponse.json({ message: "User deleted", user : user }, { status: 200 });
 
 }
 

@@ -58,10 +58,8 @@ export async function POST(request: Request) {
     }
 
     // check if user and sender are friends
-    for (const someFriend of userFriendList.friends) {
-        if (someFriend.userId === senderId) {
-            return NextResponse.json({ message: "Friend already exists" }, { status: 400 })
-        }
+    if (userFriendList.friends.includes(senderId)) {
+        return NextResponse.json({ message: "Friend already exists" }, { status: 400 })
     }
 
     // get user friend requests, proposed-friend friend requests
@@ -89,23 +87,24 @@ export async function POST(request: Request) {
     }
 
     // Add user to sender's friend list
-    senderFriendList.friends.push({ userId });
+    senderFriendList.friends.push(userId);
     senderFriendList.isFresh = true;
     senderFriendList.updatedAt = Date.now();
 
     // Add sender to user's friend list
-    userFriendList.friends.push({ userId: senderId });
+    userFriendList.friends.push(senderId);
     userFriendList.isFresh = true;
     userFriendList.updatedAt = Date.now();
 
     // Add notification to sender
-    let notifications = await utils.getNotificationsById(sender.notificationId)
-    if (notifications instanceof NextResponse) {
-        return notifications;
+    let senderNotifications = await utils.getNotificationsById(sender.notificationsId)
+    if (senderNotifications instanceof NextResponse) {
+        return senderNotifications;
     }
-    notifications.inbox.push({ message: "Friend request accepted", senderId: userId, isRead : false });
-    notifications.isFresh = true;
-
+    const username = user.username;
+    senderNotifications.inbox.push({ message: username + " accepted friend request", isRead: false, type: "friend-request" });
+    senderNotifications.isFresh = true;
+    senderNotifications.updatedAt = Date.now();
 
     for (const request of senderFriendRequests.incomingRequests) {
         if (request.senderId == userId) {
@@ -118,7 +117,7 @@ export async function POST(request: Request) {
         await userFriendRequests.save()
         await senderFriendList.save()
         await userFriendList.save()
-        await notifications.save()
+        await senderNotifications.save()
     } catch {
         return NextResponse.json({ message: "Error saving to database", status: 500 })
     }
