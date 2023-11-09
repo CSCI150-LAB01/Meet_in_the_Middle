@@ -2,13 +2,14 @@
 'use client';
 import { SessionProvider } from 'next-auth/react';
 import { NextUIProvider } from '@nextui-org/react';
+import LocationContextProvider from '@/contexts/LocationContext';
 
-export function Providers(
-	{ children }: { children: React.ReactNode }
-) {
+export function Providers({ children }: { children: React.ReactNode }) {
 	return (
 		<SessionProvider>
-			<NextUIProvider>{children}</NextUIProvider>
+			<LocationContextProvider>
+				<NextUIProvider>{children}</NextUIProvider>
+			</LocationContextProvider>
 		</SessionProvider>
 	);
 }
