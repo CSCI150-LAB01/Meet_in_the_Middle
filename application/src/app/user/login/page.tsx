@@ -134,7 +134,7 @@ export default function Login() {
 
 			<Link
 				className='text-secondary text-center hidden md:block'
-				href='/user/register'
+				href='/user'
 				size='sm'
 			>
 				Don't have an account? Sign Up
