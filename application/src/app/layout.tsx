@@ -5,6 +5,7 @@ import NavbarDesktop from '../components/navbar';
 import { roboto } from '@/styles/fonts';
 import { AppConfig } from '@/utils/AppConfig';
 import Footer from '@/components/footer';
+import 'react-modern-drawer/dist/index.css';
 
 // Metadata
 export const metadata: Metadata = {

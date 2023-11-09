@@ -22,19 +22,23 @@ export const authOptions: NextAuthOptions = {
 			},
 			async authorize(credentials) {
 				try {
-					const response = await fetch('/api/signin', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(credentials),
-					});
+					const response = await fetch(
+						process.env.NEXTAUTH_URI + '/api/signin',
+						{
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify(credentials),
+						},
+					);
 
-					const user = await response.json();
-					if (!user) {
-						return null;
+					if (response.status === 200) {
+						const user = await response.json();
+						return user;
+					} else {
+						throw new Error(`Authentication failed. Credentials Invalid.`);
 					}
-					return user;
 				} catch (error) {
-					return null;
+					throw new Error(`Authentication failed ${error?.message}`);
 				}
 			},
 		}),

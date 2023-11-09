@@ -25,28 +25,37 @@ import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 
 export default function Register() {
-  const { data: session, status } = useSession();
+	const { data: session, status } = useSession();
 	// const [isAuthenticated, setIsAuthenticated] = useState(false);
 	// setIsAuthenticated(status === 'authenticated');
-  const { position, status: locationStatus } = useGeolocation();
-  
+	const { position, status: locationStatus } = useGeolocation();
+
 	// // if already logged in
 	// if (isAuthenticated) {
-    // 	useRouter().push('/dashboard');
-    // }
-    
-    // Form States / Vars
-    const [currentLocation, setCurrentLocation] = useState<Location>({
-      lat: position?.latitude || 0,
-      lng: position?.longitude || 0,
-    });
-    const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
-    const { searchBox, isLoaded, placeholderText, markers, onSBLoad, onPlacesChanged, onLoad, onUnmount } = useGoogleMaps();
-    const [isVisible, setIsVisible] = useState(false); // Password visibility state
-    const usernameRef = useRef<HTMLInputElement | null>(null);
-    const emailRef = useRef<HTMLInputElement | null>(null);
-    const passwordRef = useRef<HTMLInputElement | null>(null);
-    const router = useRouter();
+	// 	useRouter().push('/dashboard');
+	// }
+
+	// Form States / Vars
+	const [currentLocation, setCurrentLocation] = useState<Location>({
+		lat: position?.latitude || 0,
+		lng: position?.longitude || 0,
+	});
+	const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
+	const {
+		searchBox,
+		isLoaded,
+		placeholderText,
+		markers,
+		onSBLoad,
+		onPlacesChanged,
+		onLoad,
+		onUnmount,
+	} = useGoogleMaps();
+	const [isVisible, setIsVisible] = useState(false); // Password visibility state
+	const usernameRef = useRef<HTMLInputElement | null>(null);
+	const emailRef = useRef<HTMLInputElement | null>(null);
+	const passwordRef = useRef<HTMLInputElement | null>(null);
+	const router = useRouter();
 
 	// Form Functions
 	const handleSubmit = (e: React.FormEvent) => {
@@ -74,14 +83,14 @@ export default function Register() {
 				console.log(error);
 			});
 	};
-  useEffect(() => {
-    if (position && locationStatus === 'granted') {
-      setCurrentLocation({
-        lat: position.latitude,
-        lng: position.longitude,
-      });
-    }
-  }, [position, locationStatus]);
+	useEffect(() => {
+		if (position && locationStatus === 'granted') {
+			setCurrentLocation({
+				lat: position.latitude,
+				lng: position.longitude,
+			});
+		}
+	}, [position, locationStatus]);
 	return (
 		<>
 			<div className='w-full text-sm bg-primary rounded-2xl flex flex-col flex-1 grow'>
