@@ -37,6 +37,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-geocode": "^0.2.3",
+    "cypress": "^13.5.0",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
     "prettier": "^3.0.3",
