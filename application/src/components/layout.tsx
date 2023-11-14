@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
-import React, { PropsWithChildren } from "react";
-import NavbarDesktop from "./navbar";
-  
+import React, { PropsWithChildren } from 'react';
+import NavbarDesktop from './navbar';
+
 const Layout = ({ children }: PropsWithChildren) => {
 	return (
 		<>
-			<NavbarDesktop />
-			<div className="container">{children}</div>
+			<div className='container'>{children}</div>
 		</>
 	);
 };

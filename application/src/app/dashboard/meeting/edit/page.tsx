@@ -2,9 +2,11 @@
 import { berlin } from '@/styles/fonts';
 import { Button, Input, Textarea } from '@nextui-org/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { MdOutlineSearch } from 'react-icons/md';
 
 export default function edit() {
+	const router = useRouter();
 	return (
 		<main className='flex justify-center flex-col px-0 w-full gap-y-5 min-h-screen'>
 			<div className='px-5 flex gap-y-5 flex-col'>
@@ -27,7 +29,13 @@ export default function edit() {
 							No Friends Added
 						</div>
 					</div>
-					<Button color='secondary' className='w-full text-md'>
+					<Button
+						color='secondary'
+						className='w-full text-md'
+						onClick={() => {
+							router.push('/dashboard/meeting/edit/invite');
+						}}
+					>
 						Invite Friends
 					</Button>
 
