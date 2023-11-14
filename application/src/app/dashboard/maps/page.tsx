@@ -3,7 +3,6 @@ import Map from '@/components/map';
 import { Button, Input } from '@nextui-org/react';
 import { MdOutlineSearch } from 'react-icons/md';
 
-// https://stackoverflow.com/questions/28411499/disable-scrolling-on-body
 export default function Maps() {
 	return (
 		<>

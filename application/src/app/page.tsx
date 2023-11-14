@@ -32,7 +32,7 @@ export default function Home() {
 								{AppConfig.title}
 							</h1>
 							<p className='py-6'>{AppConfig.description}</p>
-							<Link href='/user/' className='w-fit self-end'>
+							<Link href='/user/signup' className='w-fit self-end'>
 								<Button color='secondary' variant='ghost' size='lg'>
 									Get Started
 								</Button>
