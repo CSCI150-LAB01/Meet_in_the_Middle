@@ -8,7 +8,7 @@ Get the User's notifications. Notifications have types that can be sorted after 
     - **Status 202**:
       ```json
       {
-        "message": "bob notificaitons",
+        "message": "user notificaitons",
         "userId": "6545e45698fe7f58fa524310",
         "notifications": {
           "_id": "6545e45698fe7f58fa52430e",
