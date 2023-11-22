@@ -37,8 +37,16 @@ export default function NavbarDesktop() {
 	const { data: session, status } = useSession();
 
 	if (status === 'authenticated') {
-		return <AuthNavbar />;
+		return (
+			<>
+				<AuthNavbar />
+			</>
+		);
 	} else {
-		return <NoAuthNavBar />;
+		return (
+			<>
+				<NoAuthNavBar />
+			</>
+		);
 	}
 }

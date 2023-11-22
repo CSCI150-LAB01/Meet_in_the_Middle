@@ -17,7 +17,7 @@ export async function createUser(
 		coordinates,
 	};
 
-	const apiUrl = '/api/user/signup/';
+	const apiUrl = '/api/signup/';
 
 	try {
 		const response = await fetch(apiUrl, {
