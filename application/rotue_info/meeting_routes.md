@@ -35,20 +35,39 @@ https://developers.google.com/maps/documentation/javascript/supported_types
     }
     ```
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
         {
-          "friendList": {
-          "_id": "653e15ef9459c162a1b39282",
-          "friends": [
-            "653ddc431694115a0df725e3",
-            "653e1ab29459c162a1b392a1"
-          ],
-          "createdAt": "2023-10-29T08:21:03.623Z",
-          "updatedAt": "2023-10-29T08:21:03.623Z",
-          "userId": "653e15ef9459c162a1b39284",
-          "__v": 2
-          }
+        "results": [
+            {
+                "name": "The Frederick Hotel",
+                "place_id": "ChIJYSjtGB9awokRvtwfGw4UEpc",
+                "rating": 4.2,
+                "types": [
+                    "lodging",
+                    "restaurant",
+                    "point_of_interest",
+                    "food",
+                    "establishment"
+            ],
+                "user_ratings_total": 757,
+                "vicinity": "95 West Broadway, New York"
+            },
+            {
+                "name": "NOMO SOHO",
+                "place_id": "ChIJM8mGj4lZwokRSbZBvNOVNKM",
+                "rating": 4,
+                "types": [
+                    "lodging",
+                    "restaurant",
+                    "point_of_interest",
+                    "food",
+                    "establishment"
+                ],
+                "user_ratings_total": 1617,
+                "vicinity": "9 Crosby Street, New York"
+            },
+            ...
         }
       ```
     - **Status 500**:
