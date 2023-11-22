@@ -1,11 +1,14 @@
 import mongoose, { Schema, models } from "mongoose";
 
-const meetingsSchema = new Schema({
+const meetingSchema = new Schema({
   // Owner of the meeting
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
+  creatorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
   meetingLocationId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "MeetingLocation",
+  },
+  meetingDate: {
+    type: Date
   },
   members: [
     {
@@ -27,6 +30,6 @@ const meetingsSchema = new Schema({
   },
 });
 
-const Meetings = models.Meetings || mongoose.model("Meetings", meetingsSchema);;
+const Meeting = models.Meeting || mongoose.model("Meeting", meetingSchema);;
 
-export default Meetings;
+export default Meeting;
