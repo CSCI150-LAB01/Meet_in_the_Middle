@@ -104,15 +104,16 @@ Returns user's friend list. User id is sent in URL.
       }
       ```
 
-## Create Meeting (NOT WORKING)
+## Create Meeting 
 Send a friend request from a user to a recipient. After friend request is sent, it will be added to user's outging-requests and the recievers incoming-requests.
 - **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/user/send-friend-request/:userId</span>
+- **Route**: <span style="color:lightgreen">/user/meeting/:userId</span>
 - **Body**:
   ```json
     {
-      "recipientId" : "65431d26f82ab63467719b94",
-      "message" : "will you be my friend?"
+      "placeId" : "xChIJc_F6SZDglIARiwcdwXAqF1A",
+      "title" : "Really Great Meeting",
+      "dateTime" : "2012-04-23T18:25:43.511Z",
     }
   ```
 - **Response**:
@@ -158,7 +159,7 @@ Send a friend request from a user to a recipient. After friend request is sent, 
       ```
 
 
-## Create Meeting Invite (NOT WORKING)
+## Delete Meeting (NOT WORKING)
 Send a friend request from a user to a recipient. After friend request is sent, it will be added to user's outging-requests and the recievers incoming-requests.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/send-friend-request/:userId</span>
