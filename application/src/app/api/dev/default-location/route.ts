@@ -2,7 +2,7 @@
 
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
-import DefaultLocation from '../../../models/default-location';
+import DefaultLocation from '../../../../models/default-location.js';
 const mongoose = require("mongoose");
 
 // WORKING
