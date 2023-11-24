@@ -3,6 +3,7 @@ import dbConnect from '@/lib/db';
 import Meeting from '@/models/meeting';
 import { NextResponse } from 'next/server';
 import { validatePOSTRequest, validateSender } from '../utils';
+import Notification from '@/models/notification';
 
 // Get all meeting invites for a user
 export async function GET(request: Request) {
@@ -65,12 +66,14 @@ export async function POST(request: Request) {
 		);
 	}
 
-	const senderId = await validateSender(request, meeting);
-	if (senderId instanceof NextResponse) {
-		return senderId;
+	const sender = await validateSender(request, meeting);
+	if (sender instanceof NextResponse) {
+		return sender;
 	}
 
+	// invite users to meeting
 	for (let userId of data.userIds) {
+		// check if user has already been invited
 		if (
 			meeting.accepted.includes(userId) ||
 			meeting.pending.includes(userId) ||
@@ -82,9 +85,25 @@ export async function POST(request: Request) {
 			continue;
 		}
 		meeting.pending.push(userId);
+
+		// notify user of meeting invite
+		try {
+			const notification = new Notification({
+				userId, message: `${sender.username} invited you to a meeting!`,
+				isFresh: true,
+				createdAt: new Date()
+			})
+			await notification.save();
+		} catch (error) {
+			console.log(error);
+			return NextResponse.json(
+				{ message: 'Error saving notification' },
+				{ status: 500 },
+			);
+		}
 	}
 	meeting.updatedAt = new Date();
-
+	
 	try {
 		await meeting.save();
 	} catch (error) {

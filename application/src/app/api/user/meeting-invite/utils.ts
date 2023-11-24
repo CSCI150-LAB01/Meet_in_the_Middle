@@ -30,20 +30,16 @@ export async function validatePOSTRequest(request: any) {
 }
 
 export async function validateSender(request: any, meeting: any) {
-	const senderId = request.url.slice(request.url.lastIndexOf('/') + 1);
-	
-	// validate sender exists
-	const sender = await getUserById(senderId);
-	if (sender instanceof NextResponse) {
-		return sender;
-	}
 	
 	// validate sender has permission to invite users to meeting
+	const senderId = request.url.slice(request.url.lastIndexOf('/') + 1);
 	if (senderId != meeting.creatorId) {
 		return NextResponse.json(
 			{ message: 'You are not the creator of this meeting' },
 			{ status: 401 },
 		);
 	}
-	return senderId;
+
+	const sender = await getUserById(senderId);	
+	return sender;
 }
