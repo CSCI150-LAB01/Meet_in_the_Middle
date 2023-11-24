@@ -1,7 +1,7 @@
 # Friend Routes
 Add and Remove friends from friend list. Display friend list
   
-## Get  Friend List (QA)
+## Get Friend List
 Returns user's friend list. User id is sent in URL.
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">api/user/friend-list/:userId</span>
@@ -25,7 +25,7 @@ Returns user's friend list. User id is sent in URL.
       ```
     - **Status 500**:
   
-## Get Friend Requests (QA)
+## Get Friend Requests
 Returns user's friend list. User id is sent in URL. 
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/user/friend-requests/:userId</span>
@@ -57,7 +57,7 @@ Returns user's friend list. User id is sent in URL.
       }
       ```
 
-## Send Friend Request (QA)
+## Send Friend Request
 Send a friend request from a user to a recipient. After friend request is sent, it will be added to user's outging-requests and the recievers incoming-requests.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/send-friend-request/:userId</span>
@@ -110,7 +110,7 @@ Send a friend request from a user to a recipient. After friend request is sent, 
         }
       ```
   
-## Accept Friend Request (QA)
+## Accept Friend Request
 User accepts the sender's friend request. Remove the friend request from both the users incoming request list, and from the senders outgoing request list. Add both the user and sender to each other's friend list.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/accept-friend-requests/:userId</span>
@@ -150,7 +150,7 @@ User accepts the sender's friend request. Remove the friend request from both th
       }
       ```
 
-## Reject Friend Request (QA)
+## Reject Friend Request
 User rejects the sender's friend request. Friend request is removed from both the user's incoming friend-requests and sender's outgoing friend requests.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/reject-friend-requests/:userId</span>
@@ -188,7 +188,7 @@ User rejects the sender's friend request. Friend request is removed from both th
       }      
       ```
   
-## Remove Friend (QA)
+## Remove Friend
 Remove friend from user's friend list. 
 - **Method**: <span style="color:lightgreen">DELETE</span>
 - **Route**: <span style="color:lightgreen">/api/user/remove-friend/:userId</span>

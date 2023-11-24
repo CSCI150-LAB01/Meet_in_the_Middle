@@ -1,12 +1,7 @@
 import mongoose, { Schema, models } from "mongoose";
 
 const meetingSchema = new Schema({
-  // Owner of the meeting
-  creatorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
-  // meetingLocationId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "MeetingLocation",
-  // },
+  creatorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   title : {type: String},
   placeId: {type: String, required : true}, // Google Place ID
   meetingDateTime: {

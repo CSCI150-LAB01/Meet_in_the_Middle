@@ -1,13 +1,35 @@
 # Meeting Routes
-Add and Remove friends from friend list. Display friend list
+[Get Suggestions](#get-suggestions) | [Get Meetings](#get-meetings) | [Create Meeting](#create-meeting) | [Delete Meeting](#delete-meeting)
   
 ## Get Suggestions
 - Returns a list of suggestions given a search radius (in meters), a type of place, and a list of coordinates.
-- 1-10 coordinate sets are accpeted.
-- 1-5 types can be included in a request. The types use logical "or" relationship. 
-- **Place Type Examples** amusement_park, art_gallery, bar, bowling_alley, cafe, campground, casino, clothing_store, department_store, gym, hair_care, movie_theater, museum, night_club, park, restaurant,shoe_store, shopping_mall, spa, zoo
-- The full list of supported place types is available at: 
-https://developers.google.com/maps/documentation/javascript/supported_types
+- 1-10 coordinate sets are accepted.
+- 1-5 types can be included in a request. The types use a logical "or" relationship.
+
+**Place Type Examples:**
+- amusement_park
+- art_gallery
+- bar
+- bowling_alley
+- cafe
+- campground
+- casino
+- clothing_store
+- department_store
+- gym
+- hair_care
+- movie_theater
+- museum
+- night_club
+- park
+- restaurant
+- shoe_store
+- shopping_mall
+- spa
+- zoo
+
+The **Full List** of supported place types is available at: [Google Maps Supported Types](https://developers.google.com/maps/documentation/javascript/supported_types)
+
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">api/suggesstion</span>
 - **Body**:
@@ -68,44 +90,56 @@ https://developers.google.com/maps/documentation/javascript/supported_types
                 "vicinity": "9 Crosby Street, New York"
             },
             ...
+            ...
+            ...
         }
       ```
-    - **Status 500**:
+
   
-## Get Meeting (NOT WORKING)
-Returns user's friend list. User id is sent in URL. 
+## Get Meetings
+Returns a list of meetings where the user has accepted an invitation to. 
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/user/friend-requests/:userId</span>
 - **Body**:
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
       {
-        "userId": "6545e45698fe7f58fa524310",
-        "friendRequests": [
+        "meetings": [
           {
-            "_id": "6545e45698fe7f58fa52430c",
-            "incomingRequests": [
-                {
-                    "senderId": "6545c1d5809eea63dfc73f47",
-                    "message": "will you be my friend?",
-                    "_id": "6545ed168656cb4a1c9b9d99",
-                    "createdAt": "2023-11-04T07:04:54.716Z"
-                }
+            "_id": "656107982e5684c0dcaeac7d",
+            "creatorId": "6545c1d5809eea63dfc73f47",
+            "title": "Really Not Great Meeting",
+            "placeId": "xChIJc_F6SZDglIARiwcdwXAqF1B",
+            "pending": [],
+            "denied": [],
+            "accepted": [
+                "6545c1d5809eea63dfc73f47"
             ],
-            "outgoingRequests": [],
-            "isFresh": true,
-            "createdAt": "2023-11-04T06:27:34.569Z",
-            "updatedAt": "2023-11-04T07:04:54.716Z",
-            "userId": "6545e45698fe7f58fa524310",
-            "__v": 7
+            "createdAt": "2023-11-24T20:29:12.273Z",
+            "updatedAt": "2023-11-24T20:29:12.273Z",
+            "__v": 0
+          },
+          {
+            "_id": "656107a12e5684c0dcaeac80",
+            "creatorId": "6545c1d5809eea63dfc73f47",
+            "title": "Really Not Great Meeting",
+            "placeId": "xChIJc_F6SZDglIARiwcdwXAqF1B",
+            "pending": [],
+            "denied": [],
+            "accepted": [
+                "6545c1d5809eea63dfc73f47"
+            ],
+            "createdAt": "2023-11-24T20:29:21.611Z",
+            "updatedAt": "2023-11-24T20:29:21.611Z",
+            "__v": 0
           }
         ]
       }
       ```
 
 ## Create Meeting 
-Send a friend request from a user to a recipient. After friend request is sent, it will be added to user's outging-requests and the recievers incoming-requests.
+User creates a new meeting with a Google placeId, title of the meeting, and date and time the meeting will take place. The creator of the meeting is added to the accepted list.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/meeting/:userId</span>
 - **Body**:
@@ -113,154 +147,46 @@ Send a friend request from a user to a recipient. After friend request is sent, 
     {
       "placeId" : "xChIJc_F6SZDglIARiwcdwXAqF1A",
       "title" : "Really Great Meeting",
-      "dateTime" : "2012-04-23T18:25:43.511Z",
+      "dateTime" : "2012-04-23T18:25:43.511Z"
     }
   ```
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
-        {
-        "message": "Friend Requests Sent",
-        "userFriendRequests": {
-          "_id": "6543516d6fba2bbb82382d71",
-          "incomingRequests": [],
-          "outgoingRequests": [
-            {
-                "recipientId": "654351646fba2bbb82382d64",
-                "message": "hello",
-                "_id": "654351ef6fba2bbb82382d87",
-                "createdAt": "2023-11-02T07:38:23.716Z"
-            }
+      {
+        "meeting": {
+          "creatorId": "6545c1d5809eea63dfc73f47",
+          "title": "Really Not Great Meeting",
+          "placeId": "xChIJc_F6SZDglIARiwcdwXAqF1B",
+          "pending": [],
+          "denied": [],
+          "accepted": [
+            "6545c1d5809eea63dfc73f47"
           ],
-          "isFresh": false,
-          "createdAt": "2023-11-02T07:36:13.278Z",
-          "updatedAt": "2023-11-02T07:38:23.717Z",
-          "userId": "6543516d6fba2bbb82382d73",
+          "_id": "656107a12e5684c0dcaeac80",
+          "createdAt": "2023-11-24T20:29:21.611Z",
+          "updatedAt": "2023-11-24T20:29:21.611Z",
           "__v": 0
-        },
-        "recipientFriendRequests": {
-          "_id": "654351646fba2bbb82382d62",
-          "incomingRequests": [
-            {
-                "senderId": "6543516d6fba2bbb82382d73",
-                "message": "hello",
-                "_id": "654351ef6fba2bbb82382d88",
-                "createdAt": "2023-11-02T07:38:23.718Z"
-            }
-          ],
-          "outgoingRequests": [],
-          "isFresh": true,
-          "createdAt": "2023-11-02T07:36:04.162Z",
-          "updatedAt": "2023-11-02T07:38:23.718Z",
-          "userId": "654351646fba2bbb82382d64",
-          "__v": 0
-          }
         }
+      }
       ```
 
 
-## Delete Meeting (NOT WORKING)
-Send a friend request from a user to a recipient. After friend request is sent, it will be added to user's outging-requests and the recievers incoming-requests.
+## Delete Meeting
+Remove a user's meeting from the database. The user Id is sent in the URL and the meeting Id is sent in the body.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/send-friend-request/:userId</span>
 - **Body**:
   ```json
     {
-      "recipientId" : "65431d26f82ab63467719b94",
-      "message" : "will you be my friend?"
+      "meetingId": "656107982e5684c0dcaeac7d"
     }
   ```
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
-        {
-        "message": "Friend Requests Sent",
-        "userFriendRequests": {
-          "_id": "6543516d6fba2bbb82382d71",
-          "incomingRequests": [],
-          "outgoingRequests": [
-            {
-                "recipientId": "654351646fba2bbb82382d64",
-                "message": "hello",
-                "_id": "654351ef6fba2bbb82382d87",
-                "createdAt": "2023-11-02T07:38:23.716Z"
-            }
-          ],
-          "isFresh": false,
-          "createdAt": "2023-11-02T07:36:13.278Z",
-          "updatedAt": "2023-11-02T07:38:23.717Z",
-          "userId": "6543516d6fba2bbb82382d73",
-          "__v": 0
-        },
-        "recipientFriendRequests": {
-          "_id": "654351646fba2bbb82382d62",
-          "incomingRequests": [
-            {
-                "senderId": "6543516d6fba2bbb82382d73",
-                "message": "hello",
-                "_id": "654351ef6fba2bbb82382d88",
-                "createdAt": "2023-11-02T07:38:23.718Z"
-            }
-          ],
-          "outgoingRequests": [],
-          "isFresh": true,
-          "createdAt": "2023-11-02T07:36:04.162Z",
-          "updatedAt": "2023-11-02T07:38:23.718Z",
-          "userId": "654351646fba2bbb82382d64",
-          "__v": 0
-          }
-        }
+      {
+        "message": "deleted 656107982e5684c0dcaeac7d"
+      }
       ```
 
-## Create Meeting (NOT WORKING)
-Send a friend request from a user to a recipient. After friend request is sent, it will be added to user's outging-requests and the recievers incoming-requests.
-- **Method**: <span style="color:lightgreen">POST</span>
-- **Route**: <span style="color:lightgreen">/user/send-friend-request/:userId</span>
-- **Body**:
-  ```json
-    {
-      "recipientId" : "65431d26f82ab63467719b94",
-      "message" : "will you be my friend?"
-    }
-  ```
-- **Response**:
-    - **Status 202**:
-      ```json
-        {
-        "message": "Friend Requests Sent",
-        "userFriendRequests": {
-          "_id": "6543516d6fba2bbb82382d71",
-          "incomingRequests": [],
-          "outgoingRequests": [
-            {
-                "recipientId": "654351646fba2bbb82382d64",
-                "message": "hello",
-                "_id": "654351ef6fba2bbb82382d87",
-                "createdAt": "2023-11-02T07:38:23.716Z"
-            }
-          ],
-          "isFresh": false,
-          "createdAt": "2023-11-02T07:36:13.278Z",
-          "updatedAt": "2023-11-02T07:38:23.717Z",
-          "userId": "6543516d6fba2bbb82382d73",
-          "__v": 0
-        },
-        "recipientFriendRequests": {
-          "_id": "654351646fba2bbb82382d62",
-          "incomingRequests": [
-            {
-                "senderId": "6543516d6fba2bbb82382d73",
-                "message": "hello",
-                "_id": "654351ef6fba2bbb82382d88",
-                "createdAt": "2023-11-02T07:38:23.718Z"
-            }
-          ],
-          "outgoingRequests": [],
-          "isFresh": true,
-          "createdAt": "2023-11-02T07:36:04.162Z",
-          "updatedAt": "2023-11-02T07:38:23.718Z",
-          "userId": "654351646fba2bbb82382d64",
-          "__v": 0
-          }
-        }
-      ```
