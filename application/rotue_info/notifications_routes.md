@@ -1,6 +1,7 @@
 # Notifications
 ## Get Notifications (QA)
 Get the User's notifications. Notifications have types that can be sorted after they have been downloaded.
+meeting
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">api/user/notifications/:userId</span>
 - **Body**:

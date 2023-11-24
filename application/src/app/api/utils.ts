@@ -5,8 +5,9 @@ import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
 import FriendRequest from "@/models/friend-requests";
 import Notifications from "@/models/notifications";
-import Meetings from "@/models/meetings";
+import Meeting from "@/models/meeting";
 import { get } from "http";
+import { PLACE_TYPES } from "./constants";
 
 const mongoose = require("mongoose");
 
@@ -32,7 +33,7 @@ export async function getUserById(userId: string) {
         console.log(error.stack)
         return NextResponse.json({ message: "Error retrieving user by Id" }, { status: 500 });
     }
-    if (!user){
+    if (!user) {
         return NextResponse.json({ message: "User Not Found" }, { status: 404 });
     }
     return user;
@@ -50,14 +51,13 @@ export async function getFriendListById(friendListId: string) {
         console.log(error.stack)
         return NextResponse.json({ message: "Error retrieving friend list by Id" }, { status: 500 });
     }
-    if (!friendList){
+    if (!friendList) {
         return NextResponse.json({ message: "Friend List Not Found" }, { status: 404 });
     }
     return friendList;
 }
 
-export async function getFriendRequestById(friendRequestId: string)
-{
+export async function getFriendRequestById(friendRequestId: string) {
     let friendRequest;
     try {
         friendRequest = await FriendRequest.findById(friendRequestId);
@@ -69,7 +69,7 @@ export async function getFriendRequestById(friendRequestId: string)
         console.log(error.stack)
         return NextResponse.json({ message: "Error retrieving friend Request by Id" }, { status: 500 });
     }
-    if (!friendRequest){
+    if (!friendRequest) {
         return NextResponse.json({ message: "Friend Request Not Found" }, { status: 404 });
     }
     return friendRequest;
@@ -87,7 +87,7 @@ export async function getDefaultLocationById(defaultLocationId: string) {
         console.log(error.stack)
         return NextResponse.json({ message: "Error retrieving default location by Id" }, { status: 500 });
     }
-    if (!defaultLocation){
+    if (!defaultLocation) {
         return NextResponse.json({ message: "Default Location Not Found" }, { status: 404 });
     }
     return defaultLocation;
@@ -105,16 +105,16 @@ export async function getNotificationsById(notificationsId: string) {
         console.log(error.stack)
         return NextResponse.json({ message: "Error retrieving Notification by Id" }, { status: 500 });
     }
-    if (!notifications){
+    if (!notifications) {
         return NextResponse.json({ message: "Notificaiton Not Found" }, { status: 404 });
     }
     return notifications;
 }
 
-export async function getMeetingsById(meetingsId: string) {
-    let meetings;
+export async function getMeetingById(meetingId: string) {
+    let meeting;
     try {
-        meetings = await Meetings.findById(meetingsId);
+        meeting = await Meeting.findById(meetingId);
     } catch (error: any) {
         if (error instanceof mongoose.Error.CastError) {
             console.log("Meetings Not Found")
@@ -123,9 +123,10 @@ export async function getMeetingsById(meetingsId: string) {
         console.log(error.stack)
         return NextResponse.json({ message: "Error retrieving Meetings by Id" }, { status: 500 });
     }
-    if (!meetings){
+    if (!meeting) {
         return NextResponse.json({ message: "Meetings Not Found" }, { status: 404 });
     }
 
-    return meetings;
+    return meeting;
 }
+

@@ -1,0 +1,34 @@
+import mongoose, {Schema, models} from "mongoose";
+
+const meetingInviteSchema = new Schema({    
+    // User who sends the invite
+    senderId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Reference to the User model
+        id : false, // prevent mongoose from creating a sub id
+    },
+    meetingId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Meeting", // Reference to the Meeting model
+    },
+    message: {
+        type: String,
+        default: "",
+        maxLength: 500,
+    },      
+    isFresh : {
+        type: Boolean,
+        default: false,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      updatedAt: {
+        type: Date,
+        default: Date.now,
+      },
+});
+
+const MeetingInvite = models.MeetingInvite || mongoose.model("MeetingInvite", meetingInviteSchema);
+export default MeetingInvite;
