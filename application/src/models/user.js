@@ -10,10 +10,8 @@ const userSchema = new Schema({
     defaultLocationId: { type: mongoose.Schema.Types.ObjectId, ref: "DefaultLocation" },
     friendListId: { type: mongoose.Schema.Types.ObjectId, ref: "FriendList" },
     friendRequestsId: { type: mongoose.Schema.Types.ObjectId, ref: "FriendRequests" },
-    notificationsId: { type: mongoose.Schema.Types.ObjectId, ref: "Notification" },
 
     image: { type: String, required: false },
-    meetingsId: { type: mongoose.Schema.Types.ObjectId, ref: "Meeting" },
     bio: { type: String, required: false, maxlength: 500 },
     
     // Created at timestamp
