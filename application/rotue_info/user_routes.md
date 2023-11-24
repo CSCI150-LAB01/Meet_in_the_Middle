@@ -1,7 +1,8 @@
 # User Routes
-  Add, Remove, and Modify Users and User data. Signin and Login
+[Get User Info](#get-user-in) | [Get List of Users](#get-list-of-users) | [Get User Default Location](#get-user-default-location) | [Add/Update User Default Location](#add/update-user-default-location) | [Delete User](#delete-user)
 
-## Get User Info (QA)
+
+## Get User Info
 Returns the user that is provided in the URL.
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/api/user/:userId</span>
@@ -25,7 +26,7 @@ Returns the user that is provided in the URL.
       ```
     - **Status 500**:
 
-## Get List of Users (QA)
+## Get List of Users
 Provides a list of ALL USERS in the database. Can be used to search for friends. 
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/api/user-list</span>
@@ -59,7 +60,7 @@ Provides a list of ALL USERS in the database. Can be used to search for friends.
       ```
     - **Status 500**
 
-## Get User Default Location (QA)
+## Get User Default Location
 Responds with the deafult location of the user provided in the URL.
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/api/user/default-location/:userId</span>
@@ -79,7 +80,7 @@ Responds with the deafult location of the user provided in the URL.
       ```
 
 
-## Add/Update User Default Location (QA)
+## Add/Update User Default Location
 UserId provided in URL has default location updated with the coordinates in the body. Note if a default location already exists it will be OVERIDEN. <span style="color:red">Longitude must be between -180 and 180, and Latitude must be between -90 and 90. Coordinates has longitude first and then latitude</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/default-location/:userId</span>
@@ -102,7 +103,7 @@ UserId provided in URL has default location updated with the coordinates in the 
 - **Response**:
     
 
-## Delete User (QA)
+## Delete User 
 Deletes the user that is provided in the URL. Friends List, Default-location, and all other objects related to user are also deleted.
 - **Method**: <span style="color:lightgreen">DELETE</span>
 - **Route**: <span style="color:lightgreen">/api/user/:userId</span>

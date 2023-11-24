@@ -4,10 +4,9 @@ import User from '@/models/user';
 import FriendList from "@/models/friend-list";
 const mongoose = require("mongoose");
 import * as utils from "../../../utils"
-import * as meetingUtils from "./utils"
+import * as meetingUtils from "../utils"
 import Meeting from "@/models/meeting";
 
-//!! TEST WITH MULTIPLE MEETINGS, also needs attendee meetings
 // Return all meetings where the user is the creator or an attendee
 export async function GET(request: Request) {
     try {
@@ -75,10 +74,6 @@ export async function POST(request: Request) {
             console.error('Error:', error);
         });
 
-    // if (!location.result.geometry) {
-    //     return NextResponse.json({ message: "Invalid place" }, { status: 400 });
-    // }
-
     const meeting = new Meeting({
         title: title,
         dateTime: dateTime,
@@ -113,7 +108,6 @@ export async function DELETE(request: Request) {
     if (user instanceof NextResponse) {
         return user
     }
-    console.log("userId" + userId);
 
     const data = await utils.getData(request);
     if (data instanceof NextResponse) {
@@ -131,7 +125,7 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ message: "Error deleting meeting" }, { status: 400 });
     }
 
-    return NextResponse.json({ message: `deleted ${data.meetingId}` }, { status: 200 });
+    return NextResponse.json({ message: `deleted meeting ${data.meetingId}` }, { status: 200 });
 }
 
 

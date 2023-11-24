@@ -1,5 +1,5 @@
 # Signin and Signup
-
+[Signup User](#signup-user) | [Signin User](#signin-user)
 
 ## Signup User
   Creates a user based on information from body. Email is unique Friends List is initialized to empty. Default-Location is set to coordinates or [0,0] if not provided. <span style="color:red">Longitude must range from -180 to 180, and Latitude must range from -90 to 90. Coordinates has longitude first and then latitude</span>
@@ -36,7 +36,7 @@
       }
       ```
 
-## Signin User (Not working with Frontend)
+## Signin User
 Requires a username, email, and password to signin. <span style="color:red">Google Signin Not Setup</span>
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/api/signin</span>
