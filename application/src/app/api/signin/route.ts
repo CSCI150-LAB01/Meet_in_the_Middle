@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const password = data.password;
 
     if (!email || !password) {
-      return null
+      return NextResponse.json({ message: "email and password required" }, { status: 400 });
     }
 
     const user = await User.findOne({ email });
