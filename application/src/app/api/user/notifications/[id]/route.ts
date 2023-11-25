@@ -1,9 +1,10 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
 import User from '@/models/user';
-import FriendList from "@/models/friend-list";
 const mongoose = require("mongoose");
-import * as utils from "../../../utils"
+import {getData, getUserById} from "../../../utils"
+import Notification from "@/models/notification";
+import { getNotificationById } from "../utils";
 
 // Get user's notifications
 export async function GET(request: Request) {
@@ -15,27 +16,20 @@ export async function GET(request: Request) {
 
     // get user
     const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await utils.getUserById(userId);
+    const user = await getUserById(userId);
     if (user instanceof NextResponse) {
         return user;
     }
 
     // get notifications
-    let notifications = await utils.getNotificationsById(user.notificationsId);
-    if (notifications instanceof NextResponse) {
-        return notifications;
-    }
-    notifications.isFresh = false;
-
-    // save notifications
+    let notifications;
     try {
-        await notifications.save();
+    notifications = await Notification.find({userId});
     } catch (error) {
-        return NextResponse.json({ message: "Error updating notifications", error, status: 500 })
+        return NextResponse.json({ message: "Error retrieving notifications", error, status: 500 })
     }
 
-    const username = user.username;
-    return NextResponse.json({ message: username + " notificaitons", userId: userId, notifications }, { status: 200 });
+    return NextResponse.json({ message: "Successfully returned notifications", notifications }, { status: 200 });
 }
 
 // Delete an item from the notifications inbox
@@ -46,49 +40,37 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ message: "Error connecting to database", status: 500 })
     }
 
-    // get data and validate
-    const data = await utils.getData(request)
-    const inboxId = data.inboxId
+    // get data from querry
+    const data = await getData(request)
     if (data instanceof NextResponse) {
         return data;
     }
-    if (!inboxId) {
-        return NextResponse.json({ message: "Missing inboxId" }, { status: 400 });
-    }
-
-    // get user
+    
+    // get user from url
     const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
-    const user = await utils.getUserById(userId);
+    const user = await getUserById(userId);
     if (user instanceof NextResponse) {
         return user;
     }
 
-    // get notifications
-    let notifications = await utils.getNotificationsById(user.notificationsId);
-    if (notifications instanceof NextResponse) {
-        return notifications;
+    // get notification
+    const notification = await getNotificationById(data.notificationId);
+    if (notification instanceof NextResponse) {
+        return notification;
     }
 
-    // delete inbox entry associated with inboxId
-    let found = false;
-    for (let entry of notifications.inbox) {
-        if (entry._id == inboxId) {
-            notifications.inbox.pull(entry);
-            found = true;
-        }
-    }
-    if (!found) {
-        return NextResponse.json({ message: "inboxId not found in inbox" }, { status: 400 });
+    // check if notification is in user's notifications
+    if (userId != notification.userId) {
+        return NextResponse.json({ message: "Notification not found in user's notifications", status: 404 })
     }
 
-    // save notificaitons
-    notifications.updatedAt = new Date();
+    // delete notification
     try {
-        await notifications.save();
+        await Notification.deleteOne({_id : notification._id});
     } catch (error) {
-        return NextResponse.json({ message: "Error updating notifications", error, status: 500 })
+        return NextResponse.json({ message: "Error deleting notification", error, status: 500 })
     }
-
-    return NextResponse.json({ message: "Notificaiton removed", notifications }, { status: 200 });
+    
+    return NextResponse.json({ message: "Notificaiton deleted"}, { status: 200 });
 }
 

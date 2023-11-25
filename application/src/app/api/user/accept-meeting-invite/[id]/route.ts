@@ -62,7 +62,6 @@ export async function POST(request: Request) {
 		const notification = new Notification({
 			userId: meeting.creatorId,
 			message: `${user.username} accepted your meeting invite`,
-			isFresh: true,
 			createdAt: new Date()
 		});
 	} catch (error) {
