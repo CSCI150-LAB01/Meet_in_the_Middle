@@ -11,7 +11,7 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "node16",
+    "module": "Node16",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -25,8 +25,7 @@
       "@/*": [
         "./src/*"
       ]
-    },
-    "moduleResolution": "node"
+    }
   },
   "include": [
     "next-env.d.ts",
