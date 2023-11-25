@@ -193,7 +193,8 @@ Remove a user's meeting from the database. The user Id is sent in the URL and th
       ```
 
 ## Get Meeting Invites
-Get a list of meetings the user has been invited to.
+Get a list of meetings the user has been invited to.\
+**NOTE:** Meeting Id is required, NOT the meeting invite ID
 - **Method**: <span style="color:lightgreen">GET</span>
 - **Route**: <span style="color:lightgreen">/user/get-meeting-invite/:userId</span>
 - **Body**:
@@ -206,7 +207,7 @@ Get a list of meetings the user has been invited to.
     - **Status 200**:
       ```json
       {
-        "meetings": [
+        "meeting": [
           {
             "_id": "656107a12e5684c0dcaeac80",
             "creatorId": "6545c1d5809eea63dfc73f47",
@@ -223,8 +224,7 @@ Get a list of meetings the user has been invited to.
                 "6545e45698fe7f58fa524310"
             ],
             "createdAt": "2023-11-24T20:29:21.611Z",
-            "updatedAt": "2023-11-24T20:29:21.611Z",
-            "__v": 4
+            "updatedAt": "2023-11-24T20:29:21.611Z"
           }
         ]
       }
@@ -317,7 +317,7 @@ User rejects an invite to a meeting. The user MUST already be in the pending arr
     - **Status 200**:
       ```json
       {
-        "message": "Successfully accepted meeting invite",
+        "message": "Successfully rejected meeting invite",
         "meeting": {
             "_id": "656107a12e5684c0dcaeac80",
             "creatorId": "6545c1d5809eea63dfc73f47",

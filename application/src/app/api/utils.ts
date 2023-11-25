@@ -17,7 +17,7 @@ export async function getData(request: Request) {
 export async function getUserById(userId: string) {
     let user;
     try {
-        user = await User.findById(userId)
+        user = await User.findById(userId, '-__v')
     } catch (error: any) {
         if (error instanceof mongoose.Error.CastError) {
             console.log("User Not Found")
@@ -35,7 +35,7 @@ export async function getUserById(userId: string) {
 export async function getDefaultLocationById(defaultLocationId: string) {
     let defaultLocation;
     try {
-        defaultLocation = await DefaultLocation.findById(defaultLocationId);
+        defaultLocation = await DefaultLocation.findById(defaultLocationId, '-__v');
     } catch (error: any) {
         if (error instanceof mongoose.Error.CastError) {
             console.log("Default Location Not Found")
@@ -53,7 +53,7 @@ export async function getDefaultLocationById(defaultLocationId: string) {
 export async function getMeetingById(meetingId: string) {
     let meeting;
     try {
-        meeting = await Meeting.findById(meetingId);
+        meeting = await Meeting.findById(meetingId, '-__v');
     } catch (error: any) {
         if (error instanceof mongoose.Error.CastError) {
             console.log("Meetings Not Found")
@@ -72,7 +72,7 @@ export async function getMeetingById(meetingId: string) {
 export async function getMeetingsByUserId(userId: string[]) {
     let meetings;
     try {
-        meetings = await Meeting.find({ userId: { $in: userId } });
+        meetings = await Meeting.find({ userId: { $in: userId } }, '-__v');
     } catch (error: any) {
         if (error instanceof mongoose.Error.CastError) {
             console.log("Meetings Not Found")

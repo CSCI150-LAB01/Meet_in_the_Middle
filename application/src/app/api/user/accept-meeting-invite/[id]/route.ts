@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
 	let meeting;
 	try {
-		meeting = await Meeting.findById(data.meetingId);
+		meeting = await Meeting.findById(data.meetingId, '-__v');
 	} catch (error) {
 		console.log(error);
 		return NextResponse.json(
@@ -39,11 +39,24 @@ export async function POST(request: Request) {
 		return user;
 	}
 
-	if (!meeting.pending.includes(userId)) {
-		return NextResponse.json({ message: 'User has not been invited to meeting' }, { status: 400 });
+	if (meeting.accepted.includes(userId)) {
+		return NextResponse.json(
+			{ message: 'User has already accepted meeting invite' },
+			{ status: 400 },
+		);
 	}
 
-	meeting.pending.remove(userId);
+	// has user been invited to meeting?
+	if (!meeting.pending.includes(userId) && !meeting.denied.includes(userId)) {
+		return NextResponse.json({ message: 'User has not been invited to meeting' }, { status: 400 });
+	}
+	if (meeting.denied.includes(userId)) {
+		meeting.denied.remove(userId);
+	}
+	if (meeting.pending.includes(userId)) {
+		meeting.pending.remove(userId);
+	}
+
 	meeting.accepted.push(userId);
 	meeting.updatedAt = new Date();
 
@@ -63,11 +76,11 @@ export async function POST(request: Request) {
 			userId: meeting.creatorId,
 			message: `${user.username} accepted your meeting invite`,
 			createdAt: new Date()
-		});
+		}, '-__v');
 	} catch (error) {
 		console.log(error);
 		return NextResponse.json(
-			{ message: 'Error saving notification'},
+			{ message: 'Error saving notification' },
 			{ status: 500 },
 		);
 	}

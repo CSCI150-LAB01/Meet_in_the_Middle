@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 
     console.log("Fetching Friend Requests");
     try {
-        const friendRequests = await FriendRequest.find({ senderId: userId })
+        const friendRequests = await FriendRequest.find({ recipientId: userId })
         return NextResponse.json({ message: "Successfully returned friend requests", userId, friendRequsts: friendRequests }, { status: 200 });
 
     } catch {

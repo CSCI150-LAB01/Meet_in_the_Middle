@@ -30,6 +30,12 @@ export async function POST(request: Request) {
     const recipientId = data.recipientId;
     const message = data.message;
 
+    // Check if recipient exists
+    const recipient = await getUserById(recipientId)
+    if (recipient instanceof NextResponse) {
+        return recipient;
+    }
+
     // Get user
     const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
     const user = await getUserById(userId)

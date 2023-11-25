@@ -58,12 +58,12 @@ export async function POST(request: Request) {
     const relationA = new FriendRelation({
         userId,
         friendId: senderId,
-    });
+    }, '-__v');
 
     const relationB = new FriendRelation({
         userId: senderId,
         friendId: userId,
-    });
+    }, '-__v');
 
     try {
         await relationA.save();
@@ -90,7 +90,7 @@ export async function POST(request: Request) {
         notification = new Notification({
             userId: senderId,
             message: `${user.username} accepted your friend request`
-        });
+        }, '-__v');
         await notification.save();
     } catch (error) {
         return NextResponse.json({ message: "Error creating notification", error, status: 500 })

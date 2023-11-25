@@ -101,29 +101,33 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ message: "Error connecting to database", status: 500 })
     }
 
-    // return NextResponse.json({ message: "Not implemented" }, { status: 501 });
-
+    // get user from url
     const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
     const user = await utils.getUserById(userId);
     if (user instanceof NextResponse) {
         return user
     }
 
+    // get data from body
     const data = await utils.getData(request);
     if (data instanceof NextResponse) {
         return data;
     }
 
+    //get meetingId from data
     if (!data.meetingId) {
         return NextResponse.json({ message: "Missing meetingId" }, { status: 400 });
     }
 
+    // delete meeting
     try {
         await Meeting.deleteOne({ _id: data.meetingId });
     } catch (err) {
         console.log(err);
         return NextResponse.json({ message: "Error deleting meeting" }, { status: 400 });
     }
+
+    // delete
 
     return NextResponse.json({ message: `deleted meeting ${data.meetingId}` }, { status: 200 });
 }
