@@ -7,6 +7,7 @@ import FriendRequest from "@/models/friend-requests";
 import Meeting from "@/models/meeting";
 import { get } from "http";
 import { PLACE_TYPES } from "./constants";
+import Notification from "@/models/notification";
 
 const mongoose = require("mongoose");
 

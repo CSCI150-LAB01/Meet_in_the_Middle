@@ -86,23 +86,23 @@ export async function POST(request: Request) {
     proposedFriendRequests.isFresh = true;
     proposedFriendRequests.updatedAt = Date.now();
 
-    // Add notification to sender
-    let proposedFriendNotifications = await utils.getNotificationsById(proposedFriend.notificationsId)
-    if (proposedFriendNotifications instanceof NextResponse) {
-        return proposedFriendNotifications;
-    }
-    const username = user.username;
-    proposedFriendNotifications.inbox.push({ message: username + " sent friend request", senderId: userId, isRead: false, type: "friend-request" });
-    proposedFriendNotifications.isFresh = true;
-    proposedFriendNotifications.updatedAt = Date.now();
-
-    // try {
-    //     await userFriendRequests.save()
-    //     await proposedFriendRequests.save()
-    //     await proposedFriendNotifications.save()
-    // } catch {
-    //     return NextResponse.json({ message: "Error saving user request or proposed friend request", status: 500 })
+    // // Add notification to sender
+    // let proposedFriendNotifications = await utils.getNotificationsById(proposedFriend.notificationsId)
+    // if (proposedFriendNotifications instanceof NextResponse) {
+    //     return proposedFriendNotifications;
     // }
+    // const username = user.username;
+    // proposedFriendNotifications.inbox.push({ message: username + " sent friend request", senderId: userId, isRead: false, type: "friend-request" });
+    // proposedFriendNotifications.isFresh = true;
+    // proposedFriendNotifications.updatedAt = Date.now();
+
+    try {
+        await userFriendRequests.save()
+        await proposedFriendRequests.save()
+        // await proposedFriendNotifications.save()
+    } catch {
+        return NextResponse.json({ message: "Error saving user request or proposed friend request", status: 500 })
+    }
 
     return NextResponse.json({ message: "Friend Request Sent", userId, userFriendRequests, recipientFriendRequests: proposedFriendRequests }, { status: 200 })
 }

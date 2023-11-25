@@ -89,8 +89,8 @@ export async function POST(request: Request) {
 		// notify user of meeting invite
 		try {
 			const notification = new Notification({
-				userId, message: `${sender.username} invited you to a meeting!`,
-				isFresh: true,
+				userId, 
+				message: `${sender.username} invited you to a meeting!`,
 				createdAt: new Date()
 			})
 			await notification.save();
