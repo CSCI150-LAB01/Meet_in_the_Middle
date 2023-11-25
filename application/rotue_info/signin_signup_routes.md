@@ -20,19 +20,15 @@
       {
         "message": "User created",
         "user": {
-          "email": "email@gmail.com",
-          "password": "$2b$10...",
-          "username": "joe",
-          "defaultLocationId": "6545c1d5809eea63dfc73f3e",
-          "friendListId": "6545c1d5809eea63dfc73f3f",
-          "friendRequestsId": "6545c1d5809eea63dfc73f43",
-          "notificationsId": "6545c1d5809eea63dfc73f45",
-          "meetingsId": "6545c1d5809eea63dfc73f41",
-          "_id": "6545c1d5809eea63dfc73f47",
-          "createdAt": "2023-11-04T04:00:21.421Z",
-          "updatedAt": "2023-11-04T04:00:21.421Z",
-          "__v": 0
-          }
+            "email": "email@gmail.com",
+            "password": "$2b$10$NOG9/...",
+            "username": "joe",
+            "defaultLocationId": "65615258757f05f60d42f6d8",
+            "_id": "65615258757f05f60d42f6d9",
+            "createdAt": "2023-11-25T01:48:08.464Z",
+            "updatedAt": "2023-11-25T01:48:08.464Z",
+            "__v": 0
+        }
       }
       ```
 

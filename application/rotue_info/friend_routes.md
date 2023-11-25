@@ -9,21 +9,16 @@ Returns user's friend list. User id is sent in URL.
 - **Response**:
     - **Status 202**:
       ```json
-        {
-          "friendList": {
-          "_id": "653e15ef9459c162a1b39282",
-          "friends": [
-            "653ddc431694115a0df725e3",
-            "653e1ab29459c162a1b392a1"
-          ],
-          "createdAt": "2023-10-29T08:21:03.623Z",
-          "updatedAt": "2023-10-29T08:21:03.623Z",
-          "userId": "653e15ef9459c162a1b39284",
-          "__v": 2
-          }
-        }
+      {
+        "message": "Successfully returned friendIds",
+        "friendIds": [
+          "65615258757f05f60d42f6d9",
+          "65615258757f05f60d42f212",
+          "65615258757f05f60d42f5g6",
+          ...
+        ]
+      }
       ```
-    - **Status 500**:
   
 ## Get Friend Requests
 Returns user's friend list. User id is sent in URL. 
@@ -31,29 +26,40 @@ Returns user's friend list. User id is sent in URL.
 - **Route**: <span style="color:lightgreen">/user/friend-requests/:userId</span>
 - **Body**:
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
       {
-        "userId": "6545e45698fe7f58fa524310",
-        "friendRequests": [
+        "message": "Successfully returned friend requests",
+        "userId": "65615258757f05f60d42f6d9",
+        "friendRequsts": [
           {
-            "_id": "6545e45698fe7f58fa52430c",
-            "incomingRequests": [
-                {
-                    "senderId": "6545c1d5809eea63dfc73f47",
-                    "message": "will you be my friend?",
-                    "_id": "6545ed168656cb4a1c9b9d99",
-                    "createdAt": "2023-11-04T07:04:54.716Z"
-                }
-            ],
-            "outgoingRequests": [],
-            "isFresh": true,
-            "createdAt": "2023-11-04T06:27:34.569Z",
-            "updatedAt": "2023-11-04T07:04:54.716Z",
-            "userId": "6545e45698fe7f58fa524310",
-            "__v": 7
+              "_id": "65616a43a6746ea45ea5db45",
+              "senderId": "65615258757f05f60d42f6d9",
+              "recipientId": "65615888a9933298a2bfc118",
+              "message": "be my friend",
+              "createdAt": "2023-11-25T03:30:11.944Z",
+              "__v": 0
           }
         ]
+      }
+      ```
+
+## Delete Friend Request from User to Recipient
+Delete a friend request that a user sent to a recipient.
+- **Method**: <span style="color:lightgreen">DELETE</span>
+- **Route**: <span style="color:lightgreen">/user/friend-requests/:userId</span>
+- **Body**:
+```json
+  {
+    "recipientId": "6545e45698fe7f58fa524310"
+  }
+ ```
+- **Response**:
+    - **Status 200**:
+      ```json
+      {
+        "message": "Friend request deleted",
+        "status": 200
       }
       ```
 
@@ -71,43 +77,15 @@ Send a friend request from a user to a recipient. After friend request is sent, 
 - **Response**:
     - **Status 202**:
       ```json
-        {
-        "message": "Friend Requests Sent",
-        "userFriendRequests": {
-          "_id": "6543516d6fba2bbb82382d71",
-          "incomingRequests": [],
-          "outgoingRequests": [
-            {
-                "recipientId": "654351646fba2bbb82382d64",
-                "message": "hello",
-                "_id": "654351ef6fba2bbb82382d87",
-                "createdAt": "2023-11-02T07:38:23.716Z"
-            }
-          ],
-          "isFresh": false,
-          "createdAt": "2023-11-02T07:36:13.278Z",
-          "updatedAt": "2023-11-02T07:38:23.717Z",
-          "userId": "6543516d6fba2bbb82382d73",
+      {
+        "message": "Friend Request Sent",
+        "friendRequest": {
+          "userId": "65615258757f05f60d42f6d9",
+          "_id": "656158e5a9933298a2bfc11d",
+          "createdAt": "2023-11-25T02:16:05.772Z",
           "__v": 0
-        },
-        "recipientFriendRequests": {
-          "_id": "654351646fba2bbb82382d62",
-          "incomingRequests": [
-            {
-                "senderId": "6543516d6fba2bbb82382d73",
-                "message": "hello",
-                "_id": "654351ef6fba2bbb82382d88",
-                "createdAt": "2023-11-02T07:38:23.718Z"
-            }
-          ],
-          "outgoingRequests": [],
-          "isFresh": true,
-          "createdAt": "2023-11-02T07:36:04.162Z",
-          "updatedAt": "2023-11-02T07:38:23.718Z",
-          "userId": "654351646fba2bbb82382d64",
-          "__v": 0
-          }
         }
+      }
       ```
   
 ## Accept Friend Request
@@ -124,33 +102,25 @@ User accepts the sender's friend request. Remove the friend request from both th
     - **Status 200**:
       ```json
       {
-        "message": "Friends added",
-        "senderFriendList": {
-          "_id": "6545c1d5809eea63dfc73f3f",
-          "friends": [
-            "6545e45698fe7f58fa524310"
-          ],
-          "isFresh": true,
-          "createdAt": "2023-11-04T04:00:21.368Z",
-          "updatedAt": "2023-11-04T07:17:21.067Z",
-          "userId": "6545c1d5809eea63dfc73f47",
-          "__v": 1
+        "message": "created friends",
+        "relationA": {
+            "userId": "65615888a9933298a2bfc118",
+            "friendId": "65615258757f05f60d42f6d9",
+            "_id": "65616a4aa6746ea45ea5db4c",
+            "createdAt": "2023-11-25T03:30:18.060Z",
+            "__v": 0
         },
-        "userFriendList": {
-          "_id": "6545e45698fe7f58fa524308",
-          "friends": [
-            "6545c1d5809eea63dfc73f47"
-          ],
-          "isFresh": true,
-          "createdAt": "2023-11-04T06:27:34.566Z",
-          "updatedAt": "2023-11-04T07:17:21.067Z",
-          "userId": "6545e45698fe7f58fa524310",
-          "__v": 1
+        "relationB": {
+            "userId": "65615258757f05f60d42f6d9",
+            "friendId": "65615888a9933298a2bfc118",
+            "_id": "65616a4aa6746ea45ea5db4d",
+            "createdAt": "2023-11-25T03:30:18.060Z",
+            "__v": 0
         }
       }
       ```
 
-## Reject Friend Request
+## Reject Friend Request from Sender to User
 User rejects the sender's friend request. Friend request is removed from both the user's incoming friend-requests and sender's outgoing friend requests.
 - **Method**: <span style="color:lightgreen">POST</span>
 - **Route**: <span style="color:lightgreen">/user/reject-friend-requests/:userId</span>
@@ -202,28 +172,7 @@ Remove friend from user's friend list.
     - **Status 200**:
       ```json
       {
-        "message": "Friends added",
-        "senderFriendList": {
-          "_id": "6545c1d5809eea63dfc73f3f",
-          "friends": [
-            "6545e45698fe7f58fa524310"
-          ],
-          "isFresh": true,
-          "createdAt": "2023-11-04T04:00:21.368Z",
-          "updatedAt": "2023-11-04T07:17:21.067Z",
-          "userId": "6545c1d5809eea63dfc73f47",
-          "__v": 1
-        },
-        "userFriendList": {
-          "_id": "6545e45698fe7f58fa524308",
-          "friends": [
-            "6545c1d5809eea63dfc73f47"
-          ],
-          "isFresh": true,
-          "createdAt": "2023-11-04T06:27:34.566Z",
-          "updatedAt": "2023-11-04T07:17:21.067Z",
-          "userId": "6545e45698fe7f58fa524310",
-          "__v": 1
-        }
+        "message": "Successfully removed friend",
+        "friendId": "654351646fba2bbb82382d62"
       }
       ```
