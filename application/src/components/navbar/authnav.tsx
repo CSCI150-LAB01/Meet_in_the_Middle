@@ -1,19 +1,16 @@
 'use client';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Drawer from 'react-modern-drawer';
+import dynamic from 'next/dynamic';
+
 import {
 	Navbar,
 	NavbarContent,
 	Link,
 	NavbarMenu,
 	NavbarMenuItem,
-	NavbarMenuToggle,
 	Avatar,
 	Button,
-	Dropdown,
-	DropdownTrigger,
-	DropdownMenu,
-	DropdownSection,
 } from '@nextui-org/react';
 import Image from 'next/image';
 import {
@@ -21,22 +18,20 @@ import {
 	MdHome,
 	MdMap,
 	MdMenu,
-	MdMenuOpen,
-	MdOutlineSearch,
+	MdNotifications,
 } from 'react-icons/md';
-import { useSession, signOut } from 'next-auth/react';
-import { useCurrentLocation } from '@/hooks/useCurrentLocation';
-import useGeolocation from '@/hooks/useGeolocation';
-import { fromLatLng } from 'react-geocode';
+import { getUser } from '@/utils/apiCalls';
 
 interface MenuItem {
 	pageName: string;
 	location: string;
 }
+const DrawerContents = dynamic(() => import('./drawer'));
 
 export default function AuthNavbar() {
-	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-	const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const [username, setUsername] = useState('Loading..');
 
 	const toggleDrawer = () => {
 		setIsDrawerOpen(prevState => !prevState);
@@ -49,7 +44,14 @@ export default function AuthNavbar() {
 		{ pageName: 'Menu', location: '/menu' },
 	];
 
-	const formattedAddress = useCurrentLocation().placeholderText;
+	useEffect(() => {
+		const fetchUser = async () => {
+			const userData = await getUser();
+			setUsername(userData.username);
+		};
+		fetchUser();
+	}, []);
+
 	return (
 		<>
 			<Navbar
@@ -96,8 +98,9 @@ export default function AuthNavbar() {
 				</NavbarContent>
 
 				<NavbarContent className='gap-2' justify='end'>
+					<MdNotifications className='text-white text-2xl' />
 					<Avatar
-						name='Joe Brandon'
+						name={username}
 						className='hover:cursor-pointer'
 						onClick={toggleDrawer}
 					/>
@@ -119,6 +122,7 @@ export default function AuthNavbar() {
 					))}
 				</NavbarMenu>
 			</Navbar>
+
 			{/* BTM Nav for Authenticated Mobile Users */}
 			<Navbar
 				isBordered
@@ -142,8 +146,9 @@ export default function AuthNavbar() {
 					</Link>
 				</Button>
 				<Button isIconOnly aria-label='Menu' className='bg-transparent'>
-					{/* not sure what the menu page has, add functionality later */}
-					<MdMenu size='25px' className='text-neutral-400' />
+					<Link href='/dashboard/menu'>
+						<MdMenu size='25px' className='text-neutral-400' />
+					</Link>
 				</Button>
 			</Navbar>
 
@@ -157,33 +162,7 @@ export default function AuthNavbar() {
 				overlayClassName='!z-[1]'
 				overlayOpacity={0}
 			>
-				<div className='bg-white rounded-lg p-5 flex gap-2 flex-col'>
-					<h3 className='text-zinc-500 font-semibold self-end text-lg'>
-						Welcome Back
-					</h3>
-					<div className='flex flex-col gap-2 items-center justify-center w-full'>
-						<p className='font-semibold text-zinc-500'>My Location</p>
-						<p>{formattedAddress}</p>
-						<Button className='w-full' color='secondary'>
-							Update Location
-						</Button>
-					</div>
-
-					<p key='dashboard' className='hover:cursor-pointer hover:underline'>
-						Profile
-					</p>
-					<p key='settings' className='hover:cursor-pointer hover:underline'>
-						Friend Requests
-					</p>
-					<p
-						key='logout'
-						className='text-danger hover:cursor-pointer hover:underline'
-						color='danger'
-						onClick={() => signOut({ redirect: false, callbackUrl: '/#' })}
-					>
-						Logout
-					</p>
-				</div>
+				{isDrawerOpen && <DrawerContents />}
 			</Drawer>
 		</>
 	);

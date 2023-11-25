@@ -1,9 +1,5 @@
 import Image from 'next/image';
-import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-	title: 'Sign In / Sign Up',
-};
 export default function UserLayout({
 	children,
 }: {

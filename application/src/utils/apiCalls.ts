@@ -1,3 +1,5 @@
+import useStorage from '@/hooks/useStorage';
+import { User } from '@/types/types';
 export async function createUser(
 	email: string,
 	password: string,
@@ -40,8 +42,11 @@ export async function createUser(
 	}
 }
 
-export async function loginUser(email: string, password: string): Promise<any> {
-	const apiUrl = '/api/user/login';
+export async function updateUser(
+	email: string,
+	password: string,
+): Promise<any> {
+	const apiUrl = '/api/signin';
 
 	const requestBody = {
 		email,
@@ -58,15 +63,64 @@ export async function loginUser(email: string, password: string): Promise<any> {
 		});
 
 		if (!response.ok) {
-			// Handle non-successful HTTP responses (e.g., 4xx, 5xx)
 			throw new Error(
-				`Failed to log in: ${response.status} - ${response.statusText}`,
+				`Failed to get user: ${response.status} - ${response.statusText}`,
 			);
 		}
 
-		// Parse and return the response JSON
-		return await response.json();
+		const responseBody = await response.json();
+		useStorage().setItem('user', JSON.stringify(responseBody));
+
+		return await responseBody;
 	} catch (error) {
 		throw error;
 	}
+}
+
+export function getUser(): Promise<User> {
+	return new Promise<User>(resolve => {
+		try {
+			const userString = useStorage().getItem('user');
+			const parsedUser: Partial<User> = JSON.parse(userString || '{}');
+
+			const fallbacks: User = {
+				_id: 'noId',
+				email: 'noEmail',
+				password: 'noPassword',
+				username: 'noUsername',
+				defaultLocationId: 'noDefaultLocationId',
+				friendListId: 'noFriendListId',
+				friendRequestsId: 'noFriendRequestsId',
+				notificationsId: 'noNotificationsId',
+				meetingsId: 'noMeetingsId',
+				createdAt: 'noCreatedAt',
+				updatedAt: 'noUpdatedAt',
+				__v: 'noV',
+			};
+
+			const mergedUser = { ...fallbacks, ...parsedUser };
+			resolve(mergedUser as User);
+		} catch (error) {
+			console.error('Error parsing user data:', error);
+			// Handle the error or reject the promise if needed
+			resolve(getDefaultUser());
+		}
+	});
+}
+
+function getDefaultUser(): User {
+	return {
+		_id: 'noId',
+		email: 'noEmail',
+		password: 'noPassword',
+		username: 'noUsername',
+		defaultLocationId: 'noDefaultLocationId',
+		friendListId: 'noFriendListId',
+		friendRequestsId: 'noFriendRequestsId',
+		notificationsId: 'noNotificationsId',
+		meetingsId: 'noMeetingsId',
+		createdAt: 'noCreatedAt',
+		updatedAt: 'noUpdatedAt',
+		__v: 'noV',
+	};
 }

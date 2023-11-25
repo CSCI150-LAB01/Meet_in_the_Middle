@@ -38,7 +38,7 @@ export default function NoAuthNavBar() {
 		{ pageName: 'Home', location: '/#' },
 		{ pageName: 'Features', location: '/#features' },
 		{ pageName: 'Contact', location: '/#contact' },
-		{ pageName: 'Sign Up', location: '/user' },
+		{ pageName: 'Sign Up', location: '/user/signup' },
 	];
 
 	return (

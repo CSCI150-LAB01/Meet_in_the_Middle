@@ -6,26 +6,18 @@ import { MdEmail } from 'react-icons/md';
 import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 import { berlin } from '@/styles/fonts';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { loginUser } from '@/utils/apiCalls';
-import { getSession, useSession, signIn, signOut } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { updateUser } from '@/utils/apiCalls';
 
 export default function Login() {
 	// password visibility
 	const [isVisible, setIsVisible] = useState(false);
-	const toggleVisibility = () => setIsVisible(!isVisible);
+	const toggleVisibility = () => setIsVisible(prev => !prev);
 	const router = useRouter();
-
-	// const { data: session, status } = useSession();
-	// const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-	// setIsAuthenticated(status === 'authenticated');
-
-	// // if already logged in
-	// if (isAuthenticated) {
-	// 	useRouter().push('/dashboard');
-	// }
+	const toastPosition = toast.POSITION.BOTTOM_CENTER;
 
 	// form refs
 	const emailRef = useRef<HTMLInputElement | null>(null);
@@ -39,28 +31,28 @@ export default function Login() {
 			email: emailRef.current?.value || '',
 			password: passwordRef.current?.value || '',
 		};
+
 		signIn('credentials', {
-			redirect: false, // Change to true if you want to redirect after sign-in
+			redirect: false,
 			email: formData.email,
 			password: formData.password,
 		})
-			.then(async response => {
+			.then(response => {
 				if (response?.error) {
-					toast.error(response?.error, {
-						position: toast.POSITION.BOTTOM_CENTER,
-					});
+					toast.error(response?.error, { position: toastPosition });
 				} else {
-					toast.success('User login successful!', {
-						position: toast.POSITION.BOTTOM_CENTER,
-					});
+					handleSuccess();
 				}
 			})
 			.catch(error => {
-				toast.error(`${error}`, {
-					position: toast.POSITION.BOTTOM_CENTER,
-				});
+				toast.error(`${error}`, { position: toastPosition });
 			});
-		router.push('/dashboard');
+
+		const handleSuccess = () => {
+			toast.success('User login successful!', { position: toastPosition });
+			updateUser(formData.email, formData.password);
+			router.push('/dashboard');
+		};
 	};
 	return (
 		<>
@@ -127,14 +119,16 @@ export default function Login() {
 				>
 					<p className='pt-5'>
 						Don&apos;t have an account?{' '}
-						<span className='text-secondary'>Sign Up</span>
+						<Link href='/user/signup'>
+							<span className='text-secondary'>Sign Up</span>
+						</Link>
 					</p>
 				</Button>
 			</div>
 
 			<Link
 				className='text-secondary text-center hidden md:block'
-				href='/user'
+				href='/user/signup'
 				size='sm'
 			>
 				Don&apos;t have an account? Sign Up
