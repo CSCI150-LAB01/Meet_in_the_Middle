@@ -126,7 +126,7 @@ export default function Login() {
 					fullWidth
 				>
 					<p className='pt-5'>
-						Don't have an account?{' '}
+						{`Don't have an account? `}
 						<span className='text-secondary'>Sign Up</span>
 					</p>
 				</Button>
@@ -137,7 +137,7 @@ export default function Login() {
 				href='/user'
 				size='sm'
 			>
-				Don't have an account? Sign Up
+				{`Don't have an account? Sign Up`}
 			</Link>
 		</>
 	);
