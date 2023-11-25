@@ -10,19 +10,17 @@ Returns the user that is provided in the URL.
 - **Response**:
     - **Status 200**:
       ```json
-       {
-          "_id": "6545c1d5809eea63dfc73f47",
-          "email": "joe@gmail.com",
-          "password": "$2b$10$sOZnb...",
-          "username": "joe",
-          "defaultLocationId": "6545c1d5809eea63dfc73f3e",
-          "friendListId": "6545c1d5809eea63dfc73f3f",
-          "friendRequestsId": "6545c1d5809eea63dfc73f43",
-          "notificationsId": "6545c1d5809eea63dfc73f45",
-          "meetingsId": "6545c1d5809eea63dfc73f41",
-          "createdAt": "2023-11-04T04:00:21.421Z",
-          "updatedAt": "2023-11-04T04:00:21.421Z"
+      {
+        "user": {
+          "_id": "6561865672d4c70129269c1a",
+          "email": "jose@gmail.com",
+          "password":   "$2b$10$ftkcIcBl...",
+          "username": "jose",
+          "defaultLocationId": "6561865672d4c70129269c19",
+          "createdAt": "2023-11-25T05:29:58.244Z",
+          "updatedAt": "2023-11-25T05:29:58.244Z"
         }
+      }
       ```
     - **Status 500**:
 
@@ -34,29 +32,30 @@ Provides a list of ALL USERS in the database. Can be used to search for friends.
 - **Response**:
     - **Status 200**:
       ```json
-      [
-          "userList": {
-              "_id": "6545c1c7809eea63dfc73f35",
-              "email": "bob@gmail.com",
-              "password": "$2b$10$x...",
-              "username": "bob",
-              "defaultLocationId": "6545c1c7809eea63dfc73f2c",
-              "friendListId": "6545c1c7809eea63dfc73f2d",
-              "friendRequestsId": "6545c1c7809eea63dfc73f31",
-              "notificationsId": "6545c1c7809eea63dfc73f33",
-              "meetingsId": "6545c1c7809eea63dfc73f2f",
-              "createdAt": "2023-11-04T04:00:07.213Z",
-              "updatedAt": "2023-11-04T04:00:07.213Z"
-          },
-          {
-              "id": "6526405977a7ac5811437f87",
-              "email": "dummy@gmail.com",
-              "name": "John Doe",
-              "password": "pass",
-              ...
-          },
-          ...
-      ]
+      {
+        "userList": [
+            {
+                "_id": "6561865672d4c70129269c1a",
+                "email": "jose@gmail.com",
+                "password": "$2b$10$bpJnd...",
+                "username": "jose",
+                "defaultLocationId": "6561865672d4c70129269c19",
+                "createdAt": "2023-11-25T05:29:58.244Z",
+                "updatedAt": "2023-11-25T05:29:58.244Z"
+            },
+            {
+                "_id": "6561866172d4c70129269c20",
+                "email": "kyle@gmail.com",
+                "password": "$2b$10$96i...",
+                "username": "kyle",
+                "defaultLocationId": "6561866172d4c70129269c1f",
+                "createdAt": "2023-11-25T05:30:09.634Z",
+                "updatedAt": "2023-11-25T05:30:09.634Z"
+            },
+            ...
+            ...
+        ]
+      }
       ```
     - **Status 500**
 
@@ -69,6 +68,7 @@ Responds with the deafult location of the user provided in the URL.
     - **Status 200**:
       ```json
       {
+          "message": "Successfully returned default location",
           "defaultLocation": {
               "_id": "653a14848e46a1fdc2caf8e2",
               "coordinates": [55.445, 67.891],
@@ -96,7 +96,6 @@ UserId provided in URL has default location updated with the coordinates in the 
         ],
         "createdAt": "2023-11-04T05:02:09.800Z",
         "updatedAt": "2023-11-04T05:02:09.800Z",
-        "__v": 0
       }
     }
     ```
@@ -113,19 +112,15 @@ Deletes the user that is provided in the URL. Friends List, Default-location, an
     - **Status 200**: 
       ```json
       {
-          "message": "User deleted",
-          {
-              "_id": "6545c1c7809eea63dfc73f35",
-              "email": "bob@gmail.com",
-              "password": "$2b$10$x...",
-              "username": "bob",
-              "defaultLocationId": "6545c1c7809eea63dfc73f2c",
-              "friendListId": "6545c1c7809eea63dfc73f2d",
-              "friendRequestsId": "6545c1c7809eea63dfc73f31",
-              "notificationsId": "6545c1c7809eea63dfc73f33",
-              "meetingsId": "6545c1c7809eea63dfc73f2f",
-              "createdAt": "2023-11-04T04:00:07.213Z",
-              "updatedAt": "2023-11-04T04:00:07.213Z"
-          }
+        "message": "User deleted",
+        "user": {
+            "_id": "6561863472d4c70129269c14",
+            "email": "bob@gmail.com",
+            "password": "$2b$10$UL...",
+            "username": "bob",
+            "defaultLocationId": "6561863472d4c70129269c13",
+            "createdAt": "2023-11-25T05:29:24.452Z",
+            "updatedAt": "2023-11-25T05:29:24.452Z"
+        }
       }
       ```

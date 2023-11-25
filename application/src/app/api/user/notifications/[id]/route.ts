@@ -24,7 +24,7 @@ export async function GET(request: Request) {
     // get notifications
     let notifications;
     try {
-    notifications = await Notification.find({userId});
+    notifications = await Notification.find({userId}, '-__v');
     } catch (error) {
         return NextResponse.json({ message: "Error retrieving notifications", error, status: 500 })
     }

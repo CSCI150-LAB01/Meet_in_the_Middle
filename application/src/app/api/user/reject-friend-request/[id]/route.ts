@@ -1,82 +1,45 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
-import FriendRequests from '@/models/friend-requests';
-import FriendList from '@/models/friend-list';
 const mongoose = require("mongoose");
-import * as utils from "../../../utils"
 
-// Reject friend request from sender to user
-export async function POST(request: Request) {
+import {getData, getUserById} from "../../../utils";
+
+import FriendRelation from "@/models/friend-relation";
+import FriendRequest from "@/models/friend-request";
+
+// deletes a friend request
+export async function DELETE(request: Request) {
     try {
         await dbConnect();
     } catch {
         return NextResponse.json({ message: "Error connecting to database", status: 500 })
     }
-    
+
     // Get data from body and url
-    const data = await utils.getData(request)
+    const data = await getData(request)
     if (data instanceof NextResponse) {
         return data;
     }
+    if (!data.senderId) {
+        return NextResponse.json({ message: "Missing recipientId", status: 400 })
+    }
     const senderId = data.senderId;
+
     const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
-    
-    // check that all fields are present in body
-    if (!senderId) {
-        return NextResponse.json({ message: "senderId required" }, { status: 400 });
-    }
 
-    // check if friend is self
-    if (senderId === userId) {
-        return NextResponse.json({ message: "Cannot make friends with self" }, { status: 400 })
-    }
-
-    // get sender and sender friend list
-    const sender = await utils.getUserById(senderId);
-    if (sender instanceof NextResponse) {
-        return sender;
-    }
-
-    // get user and user friend list
-    const user = await utils.getUserById(userId);
-    if (user instanceof NextResponse) {
-        return user;
-    }
-
-    // get user friend requests, proposed-friend friend requests
-    let userFriendRequests = await utils.getFriendRequestById(user.friendRequestsId)
-    if (userFriendRequests instanceof NextResponse) {
-        return userFriendRequests;
-    }
-    let senderFriendRequests = await utils.getFriendRequestById(sender.friendRequestsId)
-    if (senderFriendRequests instanceof NextResponse) {
-        return senderFriendRequests;
-    }
-    
-    // Delete sender outgoing request
-    for (const request of senderFriendRequests.outgoingRequests) {
-        if (request.recipientId == userId) {
-            senderFriendRequests.outgoingRequests.pull(request);
-        }
-    }
-    
-
-    // Delete user incoming request
-    for (const request of userFriendRequests.incomingRequests) {
-        if (request.senderId == senderId) {
-            userFriendRequests.incomingRequests.pull(request);
-        }
+    let friendRequest = await FriendRequest.findOne({ senderId: senderId, recipientId: userId })
+    if (!friendRequest) {
+        return NextResponse.json({ message: "Friend request not found", status: 404 })
     }
 
     try {
-        await senderFriendRequests.save();
-        await userFriendRequests.save();
-    } catch { 
-        return NextResponse.json({ message: "Error saving friend requests", status: 500 })
+        await friendRequest.deleteOne()
+    } catch {
+        return NextResponse.json({ message: "Error deleting friend request", status: 500 })
     }
 
-    return NextResponse.json({ message: "Friend Request Rejected", senderFriendRequests, userFriendRequests }, { status: 200 })
-}
+    return NextResponse.json({ message: "Friend request deleted", status: 200 })
 
+}
 
 
