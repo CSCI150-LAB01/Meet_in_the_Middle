@@ -131,7 +131,7 @@ export default function Login() {
 				href='/user/signup'
 				size='sm'
 			>
-				Don't have an account? Sign Up
+				{`Don't have an account? Sign Up`}
 			</Link>
 		</>
 	);

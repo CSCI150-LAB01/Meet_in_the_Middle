@@ -24,7 +24,7 @@ export default function edit() {
 					</Button>
 
 					<div className='flex self-start flex-col gap-2 w-full'>
-						<p className='text-white'>Who's Going?</p>
+						<p className='text-white'>{`Who's Going?`}</p>
 						<div className='min-h-[160px] flex items-center justify-center bg-white rounded-lg w-full'>
 							No Friends Added
 						</div>
