@@ -33,13 +33,7 @@ export default function Invite() {
 			<div className='w-full flex h-full items-center item-end text-sm flex-col gap-4 grow'>
 				<div className='w-full text-sm bg-primary rounded-t-2xl flex flex-col flex-1 grow py-5 px-5 items-center sm:items-start'>
 					<div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 w-full'>
-						<FriendCard />
-						<FriendCard />
-						<FriendCard />
-						<FriendCard />
-						<FriendCard />
-						<FriendCard />
-						<FriendCard />
+						<p>You have no friends.</p>
 					</div>
 				</div>
 			</div>

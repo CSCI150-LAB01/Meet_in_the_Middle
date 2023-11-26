@@ -51,6 +51,7 @@ export default function Login() {
 		const handleSuccess = () => {
 			toast.success('User login successful!', { position: toastPosition });
 			UpdateUser(formData.email, formData.password);
+			router.refresh();
 			router.push('/dashboard');
 		};
 	};

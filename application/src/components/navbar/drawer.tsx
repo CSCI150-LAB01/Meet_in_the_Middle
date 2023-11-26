@@ -1,7 +1,6 @@
 'use client';
 import mongoose, { Schema, models } from 'mongoose';
 import { getDefaultLocationById } from '@/app/api/utils';
-import useStorage from '@/hooks/useStorage';
 import {
 	fetchDefaultLocation,
 	getFormattedAddress,
@@ -49,7 +48,8 @@ export default function DrawerContents() {
 				Welcome {username + ','}
 			</h3>
 			<div className='flex flex-col gap-2 items-center justify-center w-full'>
-				<p className='font-semibold text-zinc-500'>My Location</p>
+				{/* Fix this at some point to figure out what it's for? */}
+				<p className='font-semibold text-zinc-500'>My Default Location</p>
 				<p>{address ? address : ''}</p>
 				<Button className='w-full' color='secondary'>
 					Update Location

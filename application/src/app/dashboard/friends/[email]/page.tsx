@@ -36,9 +36,6 @@ export default function SearchFriends({
 				const email: string = decodeURIComponent(params.email);
 				const response = await searchFriends(email);
 				setSearchList(response);
-				console.log(decodeURI(params.email));
-				console.log(response);
-				throw new Error(email);
 			} catch (error) {
 				console.error('Error fetching user:', error);
 			}
@@ -96,7 +93,7 @@ export default function SearchFriends({
 									))
 							) : (
 								<p className='text-center text-white pt-5'>
-									We couldn't find anyone.
+									We couldn&apos;t find anyone.
 								</p>
 							)
 						) : (

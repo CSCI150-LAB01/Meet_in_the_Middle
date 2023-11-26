@@ -39,9 +39,9 @@ export default function AuthNavbar() {
 
 	const menuItems: MenuItem[] = [
 		{ pageName: 'Dashboard', location: '/dashboard' },
-		{ pageName: 'Maps', location: '/maps' },
-		{ pageName: 'Friends', location: '/friends' },
-		{ pageName: 'Menu', location: '/menu' },
+		{ pageName: 'Maps', location: '/dashboard/maps' },
+		{ pageName: 'Friends', location: '/dashboard/friends' },
+		{ pageName: 'Menu', location: '/dashboard/menu' },
 	];
 
 	useEffect(() => {
@@ -92,7 +92,10 @@ export default function AuthNavbar() {
 				</NavbarContent>
 
 				<NavbarContent className='gap-5' justify='end'>
-					<MdNotifications className='text-white text-2xl' />
+					<Link href='/dashboard/notifications'>
+						<MdNotifications className='text-white text-2xl' />
+					</Link>
+
 					<Avatar
 						name={username}
 						className='hover:cursor-pointer'

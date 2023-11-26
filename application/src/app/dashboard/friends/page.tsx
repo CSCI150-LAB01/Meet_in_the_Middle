@@ -4,7 +4,7 @@ import { MdOutlineSearch } from 'react-icons/md';
 import { Input } from '@nextui-org/react';
 import { berlin } from '@/styles/fonts';
 import FriendCard from './components/Card';
-import { fetchFriendsList, getUser } from '@/utils/apiCalls';
+import { fetchFriendsList, getUser, getUserInfo } from '@/utils/apiCalls';
 import CardLoading from '@/components/loading';
 import { useRouter } from 'next/navigation';
 
@@ -65,7 +65,18 @@ export default function Friends() {
 					<div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 w-full'>
 						{friendsList ? (
 							friendsList.length > 0 ? (
-								friendsList.map(friendId => <FriendCard key={friendId} />)
+								friendsList.map(async friendId => {
+									const friendData = await getUserInfo(friendId);
+									return (
+										<FriendCard
+											key={friendId}
+											name={friendData.username}
+											email={friendData.email}
+											id={friendData._id}
+											add={false}
+										/>
+									);
+								})
 							) : (
 								<p className='text-center text-white pt-5'>
 									You have no friends yet.

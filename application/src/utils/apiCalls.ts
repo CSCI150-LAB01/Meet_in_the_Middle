@@ -72,7 +72,7 @@ export async function UpdateUser(
 		}
 
 		const responseBody = await response.json();
-		useStorage().setItem('user', JSON.stringify(responseBody));
+		useStorage().setItem('user', JSON.stringify(responseBody), 'local');
 
 		return await responseBody;
 	} catch (error) {
@@ -160,7 +160,7 @@ export async function fetchFriendsList(userId: string) {
 export function getUser(): Promise<User> {
 	return new Promise<User>(resolve => {
 		try {
-			const userString = useStorage().getItem('user');
+			const userString = useStorage().getItem('user', 'local');
 			const parsedUser: Partial<User> = JSON.parse(userString || '{}');
 
 			const fallbacks: User = {
@@ -275,3 +275,81 @@ export async function sendFriendRequest(
 		return 'Error sending friend request';
 	}
 }
+
+export async function getUserInfo(userId: string): Promise<noVUser> {
+	const url = `/api/user/${userId}`;
+
+	try {
+		const response = await fetch(url);
+
+		if (!response.ok) {
+			console.error('Error:', response.status);
+
+			if (response.status === 500) {
+				throw new Error('Internal Server Error');
+			}
+		}
+
+		const data = await response.json();
+		const user = data.user;
+
+		console.log('User Info:', user);
+		return user;
+	} catch (error) {
+		throw error;
+	}
+}
+
+interface MeetingRequest {
+	placeId: string;
+	title: string;
+	dateTime: string;
+}
+
+interface MeetingResponse {
+	meeting: {
+		creatorId: string;
+		title: string;
+		placeId: string;
+		pending: string[];
+		denied: string[];
+		accepted: string[];
+		_id: string;
+		createdAt: string;
+		updatedAt: string;
+		__v: number;
+	};
+}
+
+async function createMeeting(
+	userId: string,
+	meetingData: MeetingRequest,
+): Promise<MeetingResponse> {
+	const url = `/api/user/meeting/${userId}`;
+
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(meetingData),
+	});
+
+	if (!response.ok) {
+		// Handle error if needed
+		throw new Error(
+			`Failed to create meeting: ${response.status} - ${response.statusText}`,
+		);
+	}
+
+	const result: MeetingResponse = await response.json();
+	return result;
+}
+
+// Example usage:
+const userId = 'yourUserId';
+const meetingData: MeetingRequest = {
+	placeId: 'xChIJc_F6SZDglIARiwcdwXAqF1A',
+	title: 'Really Great Meeting',
+	dateTime: '2012-04-23T18:25:43.511Z',
+};
