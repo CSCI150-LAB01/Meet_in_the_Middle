@@ -7,10 +7,6 @@ import useStorage from '@/hooks/useStorage';
 import { getUser } from '@/utils/apiCalls';
 
 export default async function NavbarDesktop() {
-	// Loads faster
-	if (useStorage().getItem('user')) {
-		return <AuthNavbar />;
-	}
 	// Flashes white
 	const session = await getServerSession(authOptions);
 	return <>{session?.user ? <AuthNavbar /> : <NoAuthNavBar />}</>;

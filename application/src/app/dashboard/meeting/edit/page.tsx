@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MdOutlineSearch } from 'react-icons/md';
 
-export default function edit() {
+export default function Edit() {
 	const router = useRouter();
 	return (
 		<main className='flex justify-center flex-col px-0 w-full gap-y-5 min-h-screen'>
