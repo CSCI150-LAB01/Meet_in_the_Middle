@@ -1,100 +1,49 @@
 # Notifications
-## Get Notifications (QA)
+[Get Notifications](#get-notificaitons) | [Delete Notification](#delete-notification)
+## Get Notifications
 Get the User's notifications. Notifications have types that can be sorted after they have been downloaded.
+meeting
 - **Method**: <span style="color:lightgreen">GET</span>
-- **Route**: <span style="color:lightgreen">api/user/notifications/:userId</span>
+- **Route**: <span style="color:lightgreen">api/user/notification/:userId</span>
 - **Body**:
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
       {
-        "message": "user notificaitons",
-        "userId": "6545e45698fe7f58fa524310",
-        "notifications": {
-          "_id": "6545e45698fe7f58fa52430e",
-          "isFresh": false,
-          "inbox": [
+        "message": "Successfully returned notifications",
+        "notifications": [
             {
-                "senderId": "6545c1d5809eea63dfc73f47",
-                "message": "joe sent friend request",
-                "isRead": false,
-                "type": "friend-request",
-                "_id": "6545ec0c8656cb4a1c9b9d69",
-                "createdAt": "2023-11-04T07:00:28.381Z"
+                "_id": "65618df272d4c70129269c59",
+                "userId": "6561866172d4c70129269c20",
+                "message": "jose sent you a friend request",
+                "createdAt": "2023-11-25T06:02:26.112Z"
             },
             {
-                "senderId": "6545c1d5809eea63dfc73f47",
-                "message": "joe sent friend request",
-                "isRead": false,
-                "type": "friend-request",
-                "_id": "6545ec278656cb4a1c9b9d7f",
-                "createdAt": "2023-11-04T07:00:55.772Z"
+                "_id": "656190606a5538fd51ce509a",
+                "userId": "6561866172d4c70129269c20",
+                "message": "george sent you a friend request",
+                "createdAt": "2023-11-25T06:12:48.879Z"
             },
-            {
-                "senderId": "6545c1d5809eea63dfc73f47",
-                "message": "joe sent friend request",
-                "isRead": false,
-                "type": "friend-request",
-                "_id": "6545ed168656cb4a1c9b9d9e",
-                "createdAt": "2023-11-04T07:04:54.855Z"
-            }
-          ],
-          "createdAt": "2023-11-04T06:27:34.569Z",
-          "updatedAt": "2023-11-04T07:46:58.605Z",
-          "userId": "6545e45698fe7f58fa524310",
-          "__v": 5
-        }
+            ...
+            ...
+        ]
       }
       ```
 
-## Delete from the Inbox (QA)
+## Delete Notification
 Delete a single user notification from the inbox. Must send internal inbox ID, not to be confused with the notifications ID.
 - **Method**: <span style="color:lightgreen">DELETE</span>
-- **Route**: <span style="color:lightgreen">api/user/notifications/:userId</span>
+- **Route**: <span style="color:lightgreen">api/user/notification/:userId</span>
 - **Body**:
   ```json
   {
-    "inboxId": "6545e45698fe7f58fa524310"
+    "notificationId": "6545e45698fe7f58fa524310"
   }
   ```
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
       {
-        "message": "Notificaiton removed",
-        "notifications": {
-          "_id": "6545e45698fe7f58fa52430e",
-          "isFresh": false,
-          "inbox": [
-            {
-                "senderId": "6545c1d5809eea63dfc73f47",
-                "message": "joe sent friend request",
-                "isRead": false,
-                "type": "friend-request",
-                "_id": "6545ec0c8656cb4a1c9b9d69",
-                "createdAt": "2023-11-04T07:00:28.381Z"
-            },
-            {
-                "senderId": "6545c1d5809eea63dfc73f47",
-                "message": "joe sent friend request",
-                "isRead": false,
-                "type": "friend-request",
-                "_id": "6545ec278656cb4a1c9b9d7f",
-                "createdAt": "2023-11-04T07:00:55.772Z"
-            },
-            {
-                "senderId": "6545c1d5809eea63dfc73f47",
-                "message": "joe sent friend request",
-                "isRead": false,
-                "type": "friend-request",
-                "_id": "6545ed168656cb4a1c9b9d9e",
-                "createdAt": "2023-11-04T07:04:54.855Z"
-            }
-          ],
-          "createdAt": "2023-11-04T06:27:34.569Z",
-          "updatedAt": "2023-11-04T07:46:58.605Z",
-          "userId": "6545e45698fe7f58fa524310",
-          "__v": 5
-        }
+        "message": "Notificaiton deleted"
       }
       ```

@@ -1,25 +1,45 @@
 'use client';
-import { useCurrentLocation } from '@/hooks/useCurrentLocation';
+import mongoose, { Schema, models } from 'mongoose';
+import { getDefaultLocationById } from '@/app/api/utils';
 import useStorage from '@/hooks/useStorage';
-import { getUser } from '@/utils/apiCalls';
+import {
+	fetchDefaultLocation,
+	getFormattedAddress,
+	getUser,
+} from '@/utils/apiCalls';
 import { Button } from '@nextui-org/react';
 import { signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 export default function DrawerContents() {
-	var address = useCurrentLocation().placeholderText;
 	const [username, setUsername] = useState('Back');
+	const [address, setAddress] = useState('Loading..');
 
 	const handleLogout = () => {
-		useStorage().removeItem('user');
 		signOut({ redirect: true, callbackUrl: '/user/login' });
 	};
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const userData = await getUser();
-			setUsername(userData.username);
+			try {
+				const userData = await getUser();
+				setUsername(userData.username);
+				const location = await fetchDefaultLocation(userData._id);
+				const { coordinates } = location.defaultLocation || {};
+				if (coordinates && coordinates.length === 2) {
+					const address = await getFormattedAddress(
+						coordinates[1],
+						coordinates[0],
+					);
+					setAddress(address);
+				}
+			} catch (error) {
+				console.error('Error fetching user:', error);
+				setAddress('There was a problem getting your default address');
+			}
 		};
+
+		// Call the function
 		fetchUser();
 	}, []);
 
@@ -30,11 +50,7 @@ export default function DrawerContents() {
 			</h3>
 			<div className='flex flex-col gap-2 items-center justify-center w-full'>
 				<p className='font-semibold text-zinc-500'>My Location</p>
-				<p>
-					{address.includes('Enter your location')
-						? 'Loading location...'
-						: address}
-				</p>
+				<p>{address ? address : ''}</p>
 				<Button className='w-full' color='secondary'>
 					Update Location
 				</Button>

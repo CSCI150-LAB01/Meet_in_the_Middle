@@ -1,5 +1,7 @@
 import useStorage from '@/hooks/useStorage';
 import { User } from '@/types/types';
+import { StringChain } from 'cypress/types/lodash';
+import { fromLatLng, setKey } from 'react-geocode';
 export async function createUser(
 	email: string,
 	password: string,
@@ -42,7 +44,7 @@ export async function createUser(
 	}
 }
 
-export async function updateUser(
+export async function UpdateUser(
 	email: string,
 	password: string,
 ): Promise<any> {
@@ -77,6 +79,61 @@ export async function updateUser(
 	}
 }
 
+// Function to get formatted address
+export async function getFormattedAddress(
+	lat: number,
+	lng: number,
+): Promise<string> {
+	const apiKey = process.env.NEXT_PUBLIC_MAPS_API;
+	if (apiKey !== undefined) {
+		setKey(apiKey);
+	} else {
+		throw new Error(
+			'API key is undefined. Please check your environment variables.',
+		);
+	}
+	try {
+		const response = await fromLatLng(lat, lng);
+		const formattedAddress = response?.results[0]?.formatted_address;
+
+		if (formattedAddress) {
+			return formattedAddress;
+		} else {
+			throw new Error('Unable to fetch formatted address');
+		}
+	} catch (error) {
+		console.error('Error getting formatted address:', error);
+		throw new Error('Unable to fetch formatted address');
+	}
+}
+
+export async function fetchDefaultLocation(userId: string) {
+	try {
+		interface locationResponse {
+			message: string;
+			defaultLocation: {
+				_id: string;
+				coordinates: [number, number];
+				createdAt: string;
+				updatedAt: string;
+			} | null;
+		}
+
+		const response = await fetch(`/api/user/default-location/${userId}`);
+		const data: locationResponse = await response.json();
+
+		if (response.ok) {
+			return data;
+		} else {
+			console.error('Error in fetchData:', data);
+			throw new Error('Internal server error');
+		}
+	} catch (error) {
+		console.error('Error in fetchData:', error);
+		throw new Error('Network error');
+	}
+}
+
 export function getUser(): Promise<User> {
 	return new Promise<User>(resolve => {
 		try {
@@ -107,7 +164,6 @@ export function getUser(): Promise<User> {
 		}
 	});
 }
-
 function getDefaultUser(): User {
 	return {
 		_id: 'noId',

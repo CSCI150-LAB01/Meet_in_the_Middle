@@ -26,7 +26,7 @@ interface MenuItem {
 	pageName: string;
 	location: string;
 }
-const DrawerContents = dynamic(() => import('./drawer'));
+const DrawerContents = dynamic(() => import('./drawer.tsx') as any);
 
 export default function AuthNavbar() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,7 +63,6 @@ export default function AuthNavbar() {
 						? 'bg-white transition-colors z-[3]'
 						: 'bg-primary rounded-b-3xl transition-colors z-[3] fixed'
 				}
-				position='static'
 			>
 				{/* Top Nav */}
 				{/* If auth => show icon else show hamburger menu*/}
@@ -82,22 +81,17 @@ export default function AuthNavbar() {
 					/>
 				</NavbarContent>
 
-				<NavbarContent className='hidden sm:flex gap-2' justify='center'>
+				<NavbarContent className='hidden sm:flex gap-5' justify='center'>
 					{menuItems.map((item: MenuItem) => (
 						<NavbarMenuItem key={`${item.pageName}`}>
-							<Link
-								className='w-full text-white'
-								href={item.location}
-								isBlock
-								size='sm'
-							>
+							<Link className='w-full text-white' href={item.location}>
 								{item.pageName}
 							</Link>
 						</NavbarMenuItem>
 					))}
 				</NavbarContent>
 
-				<NavbarContent className='gap-2' justify='end'>
+				<NavbarContent className='gap-5' justify='end'>
 					<MdNotifications className='text-white text-2xl' />
 					<Avatar
 						name={username}
@@ -110,12 +104,7 @@ export default function AuthNavbar() {
 				<NavbarMenu className='rounded-b-lg'>
 					{menuItems.map((item: MenuItem) => (
 						<NavbarMenuItem key={`${item.pageName}`}>
-							<Link
-								color='secondary'
-								className='w-full'
-								href={item.location}
-								size='sm'
-							>
+							<Link className='w-full' href={item.location}>
 								{item.pageName}
 							</Link>
 						</NavbarMenuItem>

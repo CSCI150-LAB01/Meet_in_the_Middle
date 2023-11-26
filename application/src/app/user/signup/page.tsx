@@ -204,7 +204,6 @@ export default function SignUp() {
 			<Link
 				className='text-secondary text-center hidden md:block'
 				href='/user/login'
-				size='sm'
 			>
 				Already have an account? Sign In
 			</Link>

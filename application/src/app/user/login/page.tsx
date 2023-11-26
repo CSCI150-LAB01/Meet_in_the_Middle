@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { updateUser } from '@/utils/apiCalls';
+import { UpdateUser } from '@/utils/apiCalls';
 
 export default function Login() {
 	// password visibility
@@ -50,7 +50,7 @@ export default function Login() {
 
 		const handleSuccess = () => {
 			toast.success('User login successful!', { position: toastPosition });
-			updateUser(formData.email, formData.password);
+			UpdateUser(formData.email, formData.password);
 			router.push('/dashboard');
 		};
 	};
@@ -118,7 +118,7 @@ export default function Login() {
 					fullWidth
 				>
 					<p className='pt-5'>
-						Don&apos;t have an account?{' '}
+						Don&apos;t have an account?
 						<Link href='/user/signup'>
 							<span className='text-secondary'>Sign Up</span>
 						</Link>
@@ -129,7 +129,6 @@ export default function Login() {
 			<Link
 				className='text-secondary text-center hidden md:block'
 				href='/user/signup'
-				size='sm'
 			>
 				Don&apos;t have an account? Sign Up
 			</Link>

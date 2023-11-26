@@ -1,10 +1,13 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
-import FriendRequests from '@/models/friend-requests';
-import FriendList from '@/models/friend-list';
-import Notification from "@/models/notifications";
 const mongoose = require("mongoose");
-import * as utils from "../../../utils"
+
+import {getData, getUserById} from "../../../utils";
+import {isFriends} from "../utils";
+
+import FriendRelation from "@/models/friend-relation";
+import FriendRequest from "@/models/friend-request";
+import Notification from "@/models/notification";
 
 // Accept friend request
 export async function POST(request: Request) {
@@ -14,17 +17,24 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Error connecting to database", status: 500 })
     }
 
-    // Get data from body and url
-    const data = await utils.getData(request)
+    // Get data from body
+    const data = await getData(request)
     if (data instanceof NextResponse) {
         return data;
     }
-    const senderId = data.senderId;
-    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
 
-    // check that all fields are present in body
-    if (!senderId) {
-        return NextResponse.json({ message: "senderId required" }, { status: 400 });
+    // get sender from data
+    const senderId = data.senderId;
+    const sender = await getUserById(senderId);
+    if (sender instanceof NextResponse) {
+        return sender;
+    }
+
+    // get user from url
+    const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
+    const user = await getUserById(userId);
+    if (user instanceof NextResponse) {
+        return user;
     }
 
     // check if friend is self
@@ -32,97 +42,61 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "Cannot make friends with self" }, { status: 400 })
     }
 
-    // get sender and sender friend list
-    const sender = await utils.getUserById(senderId);
-    if (sender instanceof NextResponse) {
-        return sender;
-    }
-    const senderFriendList = await utils.getFriendListById(sender.friendListId);
-    if (senderFriendList instanceof NextResponse) {
-        return senderFriendList;
-    }
-    for (const someFriend of senderFriendList.friends) {
-        if (someFriend.userId === userId) {
-            return NextResponse.json({ message: "Friend already exists" }, { status: 400 })
-        }
-    }
-
-    // get user and user friend list
-    const user = await utils.getUserById(userId);
-    if (user instanceof NextResponse) {
-        return user;
-    }
-    const userFriendList = await utils.getFriendListById(user.friendListId);
-    if (userFriendList instanceof NextResponse) {
-        return userFriendList;
+    // check if friend request exists
+    console.log("senderId", senderId)
+    console.log("userId", userId)
+    if(await FriendRequest.findOne({senderId, recipientId : userId}) == null)
+    {
+        return NextResponse.json({ message: "Friend request does not exist, cannot add friend" }, { status: 400 })
     }
 
     // check if user and sender are friends
-    if (userFriendList.friends.includes(senderId)) {
+    if(await isFriends(userId, senderId))
         return NextResponse.json({ message: "Friend already exists" }, { status: 400 })
+    
+    // add friend relation
+    const relationA = new FriendRelation({
+        userId,
+        friendId: senderId,
+    }, '-__v');
+
+    const relationB = new FriendRelation({
+        userId: senderId,
+        friendId: userId,
+    }, '-__v');
+
+    try {
+        await relationA.save();
+        await relationB.save();
+    } catch {
+        return NextResponse.json({ message: "Error saving friend relation" }, { status: 500 })
     }
 
-    // get user friend requests, proposed-friend friend requests
-    let userFriendRequests = await utils.getFriendRequestById(user.friendRequestsId)
-    if (userFriendRequests instanceof NextResponse) {
-        return userFriendRequests;
-    }
-    let senderFriendRequests = await utils.getFriendRequestById(sender.friendRequestsId)
-    if (senderFriendRequests instanceof NextResponse) {
-        return senderFriendRequests;
-    }
-
-    // Delete sender outgoing request
-    for (const request of senderFriendRequests.outgoingRequests) {
-        if (request.recipientId == senderId) {
-            senderFriendRequests.outgoingRequests.pull(request);
-        }
-    }
-
-    // Delete user incoming request
-    for (const request of userFriendRequests.incomingRequests) {
-        if (request.recipientId == userId) {
-            userFriendRequests.incomingRequests.pull(request);
-        }
-    }
-
-    // Add user to sender's friend list
-    senderFriendList.friends.push(userId);
-    senderFriendList.isFresh = true;
-    senderFriendList.updatedAt = Date.now();
-
-    // Add sender to user's friend list
-    userFriendList.friends.push(senderId);
-    userFriendList.isFresh = true;
-    userFriendList.updatedAt = Date.now();
-
-    // Add notification to sender
-    let senderNotifications = await utils.getNotificationsById(sender.notificationsId)
-    if (senderNotifications instanceof NextResponse) {
-        return senderNotifications;
-    }
-    const username = user.username;
-    senderNotifications.inbox.push({ message: username + " accepted friend request", isRead: false, type: "friend-request" });
-    senderNotifications.isFresh = true;
-    senderNotifications.updatedAt = Date.now();
-
-    for (const request of senderFriendRequests.incomingRequests) {
-        if (request.senderId == userId) {
-            return NextResponse.json({ message: "ERROR in send-friend-request: Should never send and not receive request" }, { status: 400 })
-        }
+    // delete friend request
+    let friendRequest = await FriendRequest.findOne({ senderId: senderId, recipientId: userId})
+    if (!friendRequest) {
+        return NextResponse.json({ message: "Friend request not found", status: 404 })
     }
 
     try {
-        await senderFriendRequests.save()
-        await userFriendRequests.save()
-        await senderFriendList.save()
-        await userFriendList.save()
-        await senderNotifications.save()
+        await friendRequest.deleteOne()
     } catch {
-        return NextResponse.json({ message: "Error saving to database", status: 500 })
+        return NextResponse.json({ message: "Error deleting friend request", status: 500 })
     }
 
-    return NextResponse.json({ message: "Friends added", senderFriendList, userFriendList }, { status: 200 })
+    // create notification
+    let notification
+    try {
+        notification = new Notification({
+            userId: senderId,
+            message: `${user.username} accepted your friend request`
+        }, '-__v');
+        await notification.save();
+    } catch (error) {
+        return NextResponse.json({ message: "Error creating notification", error, status: 500 })
+    }
+
+    return NextResponse.json({ message: "created friends and sent notification", relationA, relationB, notification }, { status: 200 })
 }
 
 

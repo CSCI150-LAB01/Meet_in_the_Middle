@@ -1,13 +1,15 @@
 import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
-import User from '../../../../models/user';
-import DefaultLocation from "@/models/default-location";
-import FriendList from "@/models/friend-list";
-import FriendRequests from "@/models/friend-requests";
 const mongoose = require("mongoose");
 import * as utils from "../../utils"
 
-// WORKING
+import User from '../../../../models/user';
+import DefaultLocation from "@/models/default-location";
+import Meeting from "@/models/meeting";
+import FriendRelation from "@/models/friend-relation";
+import FriendRequest from "@/models/friend-request";
+import Notification from "@/models/notification";
+
 // Find and return user
 export async function GET(request: Request) {
   try {
@@ -23,11 +25,10 @@ export async function GET(request: Request) {
     return user
   }
 
-  return NextResponse.json( {user : user}, { status: 200 });
+  return NextResponse.json({ user: user }, { status: 200 });
 }
 
-// WORKING
-// Delete user default-location, delete friend-list, then delete user
+// Delete user and all associated data
 export async function DELETE(request: Request) {
   try {
     await dbConnect();
@@ -42,10 +43,35 @@ export async function DELETE(request: Request) {
     return user;
   }
 
-  // Find meetings
-  const meetings = await utils.getMeetingsById(user.meetingsId);
-  if (meetings instanceof NextResponse) {
-    return meetings;
+  // Delete meetings
+  try {
+    await Meeting.deleteMany({ creatorId: userId });
+  } catch (error) {
+    return NextResponse.json({ message: "Error deleting meetings", error, status: 500 })
+  }
+
+  // Delete friend relations
+  try {
+    await FriendRelation.deleteMany({ userId: userId });
+    await FriendRelation.deleteMany({ friendId: userId });
+  } catch (error) {
+    return NextResponse.json({ message: "Error deleting friend relations", error, status: 500 })
+  }
+
+  // Delete friend requests
+  try {
+    await FriendRequest.deleteMany({ userId: userId });
+    await FriendRequest.deleteMany({ friendId: userId });
+  } catch (error) {
+    return NextResponse.json({ message: "Error deleting friend requests", error, status: 500 })
+  }
+
+  // Delete notifications
+  try {
+    await Notification.deleteMany({ userId: userId });
+    await Notification.deleteMany({ friendId: userId });
+  } catch (error) {
+    return NextResponse.json({ message: "Error deleting friend requests", error, status: 500 })
   }
 
   // Find default-location 
@@ -54,38 +80,14 @@ export async function DELETE(request: Request) {
     return defaultLocation;
   }
 
-  // Find friends list
-  const friendList = await utils.getFriendListById(user.friendListId);
-  if (friendList instanceof NextResponse) {
-    return friendList;
+  try {
+    await defaultLocation.deleteOne();
+    await user.deleteOne();
+  } catch (error) {
+    return NextResponse.json({ message: "Error deleting one of the objects in database", error, status: 500 })
   }
 
-  // Find friend requests
-  const friendRequests = await utils.getFriendRequestById(user.friendRequestsId);
-  if (friendRequests instanceof NextResponse) {
-    return friendRequests;
-  }
-
-  // Find notifications
-  const notifications = await utils.getNotificationsById(user.notificationsId);
-  if (notifications instanceof NextResponse) {
-    return notifications;
-  }
-
-  // Delete default-location, friends list, and friend requests
-try{
-  await friendList.deleteOne();
-  await defaultLocation.deleteOne();
-  await friendRequests.deleteOne();
-  await notifications.deleteOne();
-  await meetings.deleteOne();
-  await user.deleteOne();
-}catch (error) {
-  return NextResponse.json({ message: "Error deleting one of the objects in database", error, status: 500 })
-}
-
-  // Delete user
-  return NextResponse.json({ message: "User deleted", user : user }, { status: 200 });
+  return NextResponse.json({ message: "User deleted", user: user }, { status: 200 });
 
 }
 

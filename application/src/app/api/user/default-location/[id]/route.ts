@@ -22,7 +22,7 @@ export async function GET(request: Request) {
       return defaultLocation
     }
 
-    return NextResponse.json(defaultLocation, { status: 200 });
+    return NextResponse.json({ message: "Successfully returned default location", defaultLocation}, { status: 200 });
 }
 
 
