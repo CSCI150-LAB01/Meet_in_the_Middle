@@ -2,6 +2,7 @@ import useStorage from '@/hooks/useStorage';
 import { User } from '@/types/types';
 import { StringChain } from 'cypress/types/lodash';
 import { fromLatLng, setKey } from 'react-geocode';
+
 export async function createUser(
 	email: string,
 	password: string,
@@ -231,5 +232,46 @@ export async function searchFriends(keyword: string): Promise<noVUser[]> {
 		console.error('Error fetching user list:', error);
 		// If an error occurs, return an empty array as a fallback
 		return [];
+	}
+}
+
+export async function sendFriendRequest(
+	userId: string,
+	message: string,
+	recipientId: string,
+) {
+	const url = `/api/user/send-friend-request/${userId}`;
+
+	const requestBody = {
+		recipientId: recipientId,
+		message: message,
+	};
+
+	interface requestResponse {
+		message: string;
+		status: number; // Replace 'string' with the actual type of friendIds if it's not a string array
+	}
+
+	const requestOptions: RequestInit = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(requestBody),
+	};
+
+	try {
+		const response = await fetch(url, requestOptions);
+		const responseData: requestResponse = await response.json();
+
+		if (responseData.status === 200) {
+			return;
+		} else {
+			console.error('Error sending friend request:', responseData.message);
+			return responseData.message;
+		}
+	} catch (error) {
+		console.error('Error sending friend request');
+		return 'Error sending friend request';
 	}
 }

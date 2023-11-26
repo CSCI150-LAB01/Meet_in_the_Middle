@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MdOutlineSearch } from 'react-icons/md';
 import { Input, Button } from '@nextui-org/react';
 import { berlin } from '@/styles/fonts';
@@ -11,6 +11,7 @@ import {
 	searchFriends,
 } from '@/utils/apiCalls';
 import CardLoading from '@/components/loading';
+import { useRouter } from 'next/navigation';
 
 export default function SearchFriends({
 	params,
@@ -19,12 +20,25 @@ export default function SearchFriends({
 }) {
 	const [searchList, setSearchList] = useState<noVUser[] | null>(null);
 	const [visibleItems, setVisibleItems] = useState<number>(5);
+	const searchFriendsRef = useRef<HTMLInputElement | null>(null);
+	const router = useRouter();
+
+	const handleKeyDown = (e: React.KeyboardEvent) => {
+		if (e.key === 'Enter') {
+			const query = searchFriendsRef.current?.value || '';
+			router.push(`/dashboard/friends/${encodeURI(query)}`);
+		}
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await searchFriends(params.email);
+				const email: string = decodeURIComponent(params.email);
+				const response = await searchFriends(email);
 				setSearchList(response);
+				console.log(decodeURI(params.email));
+				console.log(response);
+				throw new Error(email);
 			} catch (error) {
 				console.error('Error fetching user:', error);
 			}
@@ -60,7 +74,8 @@ export default function SearchFriends({
 					type='search'
 					variant='bordered'
 					color='primary'
-					value={params.email}
+					ref={searchFriendsRef}
+					onKeyDown={handleKeyDown}
 				/>
 			</div>
 			<div className='w-full flex h-full items-center item-end text-sm flex-col gap-4 grow'>
@@ -75,6 +90,7 @@ export default function SearchFriends({
 											key={user._id}
 											name={user.username}
 											email={user.email}
+											id={user._id}
 											add
 										/>
 									))
