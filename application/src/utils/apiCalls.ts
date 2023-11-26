@@ -134,6 +134,28 @@ export async function fetchDefaultLocation(userId: string) {
 	}
 }
 
+export async function fetchFriendsList(userId: string) {
+	try {
+		interface friendListResponse {
+			message: string;
+			friendIds: string[]; // Replace 'string' with the actual type of friendIds if it's not a string array
+		}
+
+		const response = await fetch(`/api/user/friend-list/${userId}`);
+		const data: friendListResponse = await response.json();
+
+		if (response.ok) {
+			return data;
+		} else {
+			console.error('Error in fetchData:', data);
+			throw new Error('Internal server error');
+		}
+	} catch (error) {
+		console.error('Error in fetchData:', error);
+		throw new Error('Network error');
+	}
+}
+
 export function getUser(): Promise<User> {
 	return new Promise<User>(resolve => {
 		try {
