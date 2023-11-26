@@ -202,3 +202,34 @@ function getDefaultUser(): User {
 		__v: 'noV',
 	};
 }
+
+export interface noVUser {
+	_id: string;
+	email: string;
+	password: string;
+	username: string;
+	defaultLocationId: string;
+	createdAt: string;
+	updatedAt: string;
+}
+export async function searchFriends(keyword: string): Promise<noVUser[]> {
+	try {
+		interface UserListResponse {
+			userList: noVUser[];
+		}
+
+		const response = await fetch(`/api/user-list`);
+		const data: UserListResponse = await response.json();
+
+		// Filter the userList based on the keyword
+		const filteredUsers = data.userList.filter(user =>
+			user.email.toLowerCase().includes(keyword.toLowerCase()),
+		);
+
+		return filteredUsers;
+	} catch (error) {
+		console.error('Error fetching user list:', error);
+		// If an error occurs, return an empty array as a fallback
+		return [];
+	}
+}
