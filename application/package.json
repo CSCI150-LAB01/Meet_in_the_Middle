@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^2.0.3",
+    "@aws-amplify/adapter-nextjs": "^1.0.5",
     "@nextui-org/react": "^2.1.12",
     "@react-google-maps/api": "^2.19.2",
     "@types/googlemaps": "^3.43.3",
