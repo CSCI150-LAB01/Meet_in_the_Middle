@@ -80,10 +80,10 @@ export default function SearchFriends({
 									.slice(0, visibleItems)
 									.map(user => (
 										<FriendCard
-											key={user._id}
 											name={user.username}
 											email={user.email}
 											id={user._id}
+											key={user._id}
 											add
 										/>
 									))

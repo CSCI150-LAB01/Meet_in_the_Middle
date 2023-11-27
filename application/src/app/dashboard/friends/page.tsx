@@ -97,6 +97,7 @@ export default function Friends() {
 										accept={true}
 										reject={true}
 										onAccept={handleReload}
+										key={friendRequest.senderId}
 									/>
 								);
 						  })
@@ -112,6 +113,7 @@ export default function Friends() {
 												name={friend.username}
 												email={friend.email}
 												id={friend._id}
+												key={friend._id}
 												// @TODO: Add delete friends
 											/>
 										);

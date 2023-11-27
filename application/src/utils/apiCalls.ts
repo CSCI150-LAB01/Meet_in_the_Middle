@@ -53,7 +53,7 @@ export async function createUser(
 	return handleApiResponse<User>(response);
 }
 
-export async function updateUser(
+export async function UpdateUser(
 	email: string,
 	password: string,
 ): Promise<User> {
