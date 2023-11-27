@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { UpdateUser } from '@/utils/apiCalls';
+import { updateUser } from '@/utils/apiCalls';
 
 export default function Login() {
 	// password visibility
@@ -50,7 +50,7 @@ export default function Login() {
 
 		const handleSuccess = () => {
 			toast.success('User login successful!', { position: toastPosition });
-			UpdateUser(formData.email, formData.password);
+			updateUser(formData.email, formData.password);
 			router.refresh();
 			router.push('/dashboard');
 		};

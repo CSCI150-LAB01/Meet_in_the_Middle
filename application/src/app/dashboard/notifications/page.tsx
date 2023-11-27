@@ -1,16 +1,44 @@
 'use client';
+import React, { useState, useEffect, useRef } from 'react';
 import { berlin } from '@/styles/fonts';
-import DashboardCard from '../components/DashboardCard';
-import {
-	MdCalendarMonth,
-	MdHome,
-	MdMap,
-	MdNotifications,
-	MdPerson,
-	MdPersonAdd,
-} from 'react-icons/md';
+import { Input, Button } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
+import { getNotifications, getUser } from '@/utils/apiCalls';
+import NotificationCard from './components/NotificationCard';
+import { Notification } from '@/types/types';
 
-export default function Notification() {
+export default function NotificationPage() {
+	const [notifications, setNotifications] = useState<Notification[] | null>(
+		null,
+	);
+	const [visibleItems, setVisibleItems] = useState<number>(5);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const userData = await getUser();
+				const notifications = await getNotifications(userData._id);
+				setNotifications(notifications.notifications);
+			} catch (error) {
+				console.error('Error fetching user:', error);
+			}
+		};
+
+		fetchData();
+	}, []);
+
+	const handleLoadMore = () => {
+		// Increase the number of visible items by 3
+		setVisibleItems(prevVisibleItems => prevVisibleItems + 3);
+	};
+
+	const handleDeleteNotification = async () => {
+		const userData = await getUser();
+		getNotifications(userData._id)
+			.then(response => setNotifications(response.notifications))
+			.catch(error => console.error('Error fetching notifications:', error));
+	};
+
 	return (
 		<div className='flex w-full justify-center'>
 			<div className='flex min-h-screen flex-col items-center lg:px-24 py-24 w-full max-w-[1080px] p-3'>
@@ -19,9 +47,32 @@ export default function Notification() {
 				>
 					Notifications
 				</h1>
-				<div className='container p-3 grid grid-cols-2 gap-3'>
-					<p>You have no notifications</p>
+				<div className='container p-3 flex flex-col gap-3'>
+					{notifications && notifications.length > 0 ? (
+						notifications
+							.slice(0, visibleItems)
+							.map(notification => (
+								<NotificationCard
+									key={notification._id}
+									userId={notification.userId}
+									name={notification.message}
+									description={new Date(
+										notification.createdAt,
+									).toLocaleString()}
+									showDeleteIcon
+									onDelete={handleDeleteNotification}
+									notificationId={notification._id}
+								/>
+							))
+					) : (
+						<p>You have no notifications</p>
+					)}
 				</div>
+				{notifications && notifications.length > visibleItems && (
+					<Button onClick={handleLoadMore} color='primary'>
+						Load More
+					</Button>
+				)}
 			</div>
 		</div>
 	);

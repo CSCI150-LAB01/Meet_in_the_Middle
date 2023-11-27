@@ -4,21 +4,17 @@ import { MdOutlineSearch } from 'react-icons/md';
 import { Input, Button } from '@nextui-org/react';
 import { berlin } from '@/styles/fonts';
 import FriendCard from '../components/Card';
-import {
-	fetchFriendsList,
-	getUser,
-	noVUser,
-	searchFriends,
-} from '@/utils/apiCalls';
+import { fetchFriendsList, getUser, searchFriends } from '@/utils/apiCalls';
 import CardLoading from '@/components/loading';
 import { useRouter } from 'next/navigation';
+import { NoVUser } from '@/types/types';
 
 export default function SearchFriends({
 	params,
 }: {
 	params: { email: string };
 }) {
-	const [searchList, setSearchList] = useState<noVUser[] | null>(null);
+	const [searchList, setSearchList] = useState<NoVUser[] | null>(null);
 	const [visibleItems, setVisibleItems] = useState<number>(5);
 	const searchFriendsRef = useRef<HTMLInputElement | null>(null);
 	const router = useRouter();
@@ -65,7 +61,7 @@ export default function SearchFriends({
 						inputWrapper:
 							'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
 					}}
-					placeholder='Search for an email or name...'
+					placeholder='Search for an email...'
 					size='sm'
 					startContent={<MdOutlineSearch />}
 					type='search'

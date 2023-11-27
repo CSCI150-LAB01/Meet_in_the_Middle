@@ -4,12 +4,21 @@ import { MdOutlineSearch } from 'react-icons/md';
 import { Input } from '@nextui-org/react';
 import { berlin } from '@/styles/fonts';
 import FriendCard from './components/Card';
-import { fetchFriendsList, getUser, getUserInfo } from '@/utils/apiCalls';
+import {
+	fetchFriendsList,
+	getFriendRequests,
+	getUser,
+	getUserInfo,
+} from '@/utils/apiCalls';
 import CardLoading from '@/components/loading';
 import { useRouter } from 'next/navigation';
+import { FriendListResponse, FriendRequest, NoVUser } from '@/types/types';
 
 export default function Friends() {
-	const [friendsList, setFriendsList] = useState<string[] | null>(null);
+	const [friendsList, setFriendsList] = useState<NoVUser[] | null>(null);
+	const [friendRequests, setFriendRequests] = useState<FriendRequest[] | null>(
+		null,
+	);
 	const searchFriendsRef = useRef<HTMLInputElement | null>(null);
 	const router = useRouter();
 
@@ -25,7 +34,9 @@ export default function Friends() {
 			try {
 				const userData = await getUser();
 				const friends = await fetchFriendsList(userData._id);
-				setFriendsList(friends.friendIds);
+				const friendRequests = await getFriendRequests(userData._id);
+				setFriendsList(friends.friends);
+				setFriendRequests(friendRequests.friendRequests);
 			} catch (error) {
 				console.error('Error fetching user:', error);
 			}
@@ -33,6 +44,18 @@ export default function Friends() {
 
 		fetchData();
 	}, []);
+
+	const handleReload = async () => {
+		try {
+			const userData = await getUser();
+			const friends = await fetchFriendsList(userData._id);
+			const friendRequests = await getFriendRequests(userData._id);
+			setFriendsList(friends.friends);
+			setFriendRequests(friendRequests.friendRequests);
+		} catch (error) {
+			console.error('Error fetching user:', error);
+		}
+	};
 
 	return (
 		<main className='flex justify-center flex-col px-0 w-full gap-y-5 min-h-screen'>
@@ -50,7 +73,7 @@ export default function Friends() {
 						inputWrapper:
 							'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
 					}}
-					placeholder='Search for an email or name...'
+					placeholder='Search for an email...'
 					size='sm'
 					startContent={<MdOutlineSearch />}
 					type='search'
@@ -62,30 +85,48 @@ export default function Friends() {
 			</div>
 			<div className='w-full flex h-full items-center item-end text-sm flex-col gap-4 grow'>
 				<div className='w-full text-sm bg-primary rounded-t-2xl flex flex-col flex-1 grow py-5 px-5 items-center sm:items-start'>
-					<div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 w-full'>
-						{friendsList ? (
-							friendsList.length > 0 ? (
-								friendsList.map(async friendId => {
-									const friendData = await getUserInfo(friendId);
-									return (
-										<FriendCard
-											key={friendId}
-											name={friendData.username}
-											email={friendData.email}
-											id={friendData._id}
-											add={false}
-										/>
-									);
-								})
-							) : (
-								<p className='text-center text-white pt-5'>
-									You have no friends yet.
-								</p>
-							)
+					{friendRequests
+						? friendRequests.map(friendRequest => {
+								return (
+									<FriendCard
+										name={friendRequest.senderUsername}
+										senderId={friendRequest.senderId}
+										id={friendRequest.recipientId}
+										email={friendRequest.senderEmail}
+										add={false}
+										accept={true}
+										reject={true}
+										onAccept={handleReload}
+									/>
+								);
+						  })
+						: null}
+
+					{friendsList ? (
+						friendsList.length > 0 ? (
+							<div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 w-full'>
+								{friendsList.map(friend => {
+									try {
+										return (
+											<FriendCard
+												name={friend.username}
+												email={friend.email}
+												id={friend._id}
+												// @TODO: Add delete friends
+											/>
+										);
+									} catch (error) {
+										console.error('Error fetching friend data:', error);
+										return null;
+									}
+								})}
+							</div>
 						) : (
-							<CardLoading />
-						)}
-					</div>
+							''
+						)
+					) : (
+						<CardLoading />
+					)}
 				</div>
 			</div>
 		</main>
