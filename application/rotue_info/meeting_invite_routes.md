@@ -49,8 +49,7 @@ Send a meeting invite to one or more users. Only the meeting creator can send in
       "userIds": [ 
         "6545e45698fe7f58fa524310",
         "6549be6583ef8f4250d38c32"        
-      ],
-      "meetingId": "656107a12e5684c0dcaeac80"
+      ]
     }
   ```
 - **Response**:

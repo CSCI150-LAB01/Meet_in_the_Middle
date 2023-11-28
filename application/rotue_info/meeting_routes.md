@@ -146,8 +146,8 @@ User creates a new meeting with a Google placeId, title of the meeting, and date
   ```json
     {
       "placeId" : "xChIJc_F6SZDglIARiwcdwXAqF1A",
-      "title" : "Circus Circus Weekend Trip",
-      "meetingDateTime" : "2025-04-23T18:25:43.511Z"
+      "title" : "Really Great Meeting",
+      "dateTime" : "2012-04-23T18:25:43.511Z"
     }
   ```
 - **Response**:
@@ -155,64 +155,22 @@ User creates a new meeting with a Google placeId, title of the meeting, and date
       ```json
       {
         "meeting": {
-            "creatorId": "6561866172d4c70129269c20",
-            "title": "Circus Circus Weekend Trip",
-            "placeId": "xChIJc_F6SZDglIARiwcdwXAqF1A",
-            "meetingDateTime": "2025-04-23T18:25:43.511Z",
-            "pending": [],
-            "denied": [],
-            "accepted": [
-                "6561866172d4c70129269c20"
-            ],
-            "_id": "65654b484d37a9d24601c0d1",
-            "createdAt": "2023-11-28T02:07:04.135Z",
-            "updatedAt": "2023-11-28T02:07:04.135Z",
-            "__v": 0
+          "creatorId": "6545c1d5809eea63dfc73f47",
+          "title": "Really Not Great Meeting",
+          "placeId": "xChIJc_F6SZDglIARiwcdwXAqF1B",
+          "pending": [],
+          "denied": [],
+          "accepted": [
+            "6545c1d5809eea63dfc73f47"
+          ],
+          "_id": "656107a12e5684c0dcaeac80",
+          "createdAt": "2023-11-24T20:29:21.611Z",
+          "updatedAt": "2023-11-24T20:29:21.611Z",
+          "__v": 0
         }
       }
       ```
 
-## Update Meeting 
-User updates a meeting with a Google placeId, title of the meeting, and date and time the meeting will take place.\
-MeetingId must be present. \
-Any combination of placeId, title, or meetingDateTime will be accepted.\
-Only the creator can update the meeting.
-- **Method**: <span style="color:lightgreen">PATCH</span>
-- **Route**: <span style="color:lightgreen">/user/meeting/:userId</span>
-- **Body**:
-  ```json
-    {
-      "meetingId": "65619f3f6a5538fd51ce5133",
-      "title" : "Friday After Work",
-      "placeId" : "xChIJc_F6SZDglIARiwcdwXAqF1B",
-      "meetingDateTime" : "2025-04-23T18:25:43.511Z"    
-    }
-  ```
-- **Response**:
-    - **Status 200**:
-      ```json
-      {
-        "meeting": {
-            "_id": "65619f3f6a5538fd51ce5133",
-            "creatorId": "6561866172d4c70129269c20",
-            "title": "Friday After Work",
-            "placeId": "xChIJc_F6SZDglIARiwcdwXAqF1B",
-            "pending": [
-                "6561865672d4c70129269c1a",
-                "6561866c72d4c70129269c26",
-                "6561870772d4c70129269c3c"
-            ],
-            "denied": [],
-            "accepted": [
-                "6561866172d4c70129269c20"
-            ],
-            "createdAt": "2023-11-25T07:16:15.388Z",
-            "updatedAt": "2023-11-28T02:13:20.749Z",
-            "__v": 0,
-            "meetingDateTime": "2025-04-23T18:25:43.511Z"
-        }
-      }
-      ```
 
 ## Delete Meeting
 Remove a user's meeting from the database. The user Id is sent in the URL and the meeting Id is sent in the body.
