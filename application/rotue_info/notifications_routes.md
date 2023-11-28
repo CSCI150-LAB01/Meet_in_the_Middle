@@ -7,10 +7,27 @@ meeting
 - **Route**: <span style="color:lightgreen">api/user/notification/:userId</span>
 - **Body**:
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
-      
-      
+      {
+        "message": "Successfully returned notifications",
+        "notifications": [
+            {
+                "_id": "65618df272d4c70129269c59",
+                "userId": "6561866172d4c70129269c20",
+                "message": "jose sent you a friend request",
+                "createdAt": "2023-11-25T06:02:26.112Z"
+            },
+            {
+                "_id": "656190606a5538fd51ce509a",
+                "userId": "6561866172d4c70129269c20",
+                "message": "george sent you a friend request",
+                "createdAt": "2023-11-25T06:12:48.879Z"
+            },
+            ...
+            ...
+        ]
+      }
       ```
 
 ## Delete Notification
@@ -24,7 +41,7 @@ Delete a single user notification from the inbox. Must send internal inbox ID, n
   }
   ```
 - **Response**:
-    - **Status 202**:
+    - **Status 200**:
       ```json
       {
         "message": "Notificaiton deleted"
