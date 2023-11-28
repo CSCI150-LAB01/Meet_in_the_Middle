@@ -38,7 +38,7 @@ export const authOptions: NextAuthOptions = {
 						throw new Error(`Authentication failed. Credentials Invalid.`);
 					}
 				} catch (error) {
-					throw new Error(`Authentication failed ${error as string}`);
+					throw new Error(`Authentication failed ${error?.message}`);
 				}
 			},
 		}),

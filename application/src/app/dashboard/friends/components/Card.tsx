@@ -1,5 +1,12 @@
 import React from 'react';
-import { Card, CardBody, Avatar, Button } from '@nextui-org/react';
+import {
+	Card,
+	CardHeader,
+	CardBody,
+	CardFooter,
+	Avatar,
+	Button,
+} from '@nextui-org/react';
 import { MdAdd } from 'react-icons/md';
 
 export default function FriendCard() {

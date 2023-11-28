@@ -5,10 +5,7 @@ import { authOptions } from '@/config/NextAuth';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-	title: {
-		template: 'Dashboard - %s',
-		default: 'Dashboard',
-	},
+	title: 'Dashboard',
 };
 export default async function DashboardLayout({
 	children,

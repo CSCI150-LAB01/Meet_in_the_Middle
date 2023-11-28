@@ -7,8 +7,9 @@ type MITMUser = DefaultUser & {
 };
 
 type MITMSession = DefaultSession & {
-	user?: MITMUser;
+  user?: MITMUser;
 };
+
 
 declare module 'next-auth/jwt' {
 	/** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
@@ -23,10 +24,10 @@ declare module 'next-auth' {
 	// interface Session {
 	// 	user?: User;
 	// }
-	interface Session {
-		user: {
-			/** Oauth access token */
-			token?: accessToken;
-		} & MITMSession['user'];
-	}
+  interface Session {
+    user: {
+      /** Oauth access token */
+      token?: accessToken;
+    } & MITMSession["user"];
+  }
 }

@@ -32,7 +32,7 @@ export default function Home() {
 								{AppConfig.title}
 							</h1>
 							<p className='py-6'>{AppConfig.description}</p>
-							<Link href='/user/signup' className='w-fit self-end'>
+							<Link href='/user/' className='w-fit self-end'>
 								<Button color='secondary' variant='ghost' size='lg'>
 									Get Started
 								</Button>
@@ -105,10 +105,8 @@ export default function Home() {
 							</div>
 							{/* About Image @TODO: Add later */}
 							<div className='md:order-first'>
-								<Image
+								<img
 									src='https://via.placeholder.com/400x300'
-									width={400}
-									height={300}
 									alt='About Us'
 									className='rounded-lg shadow-lg'
 								/>

@@ -40,7 +40,7 @@ The **Full List** of supported place types is available at: [Google Maps Support
         "types": [
             "restaurant",
             "movie_theater"
-        ],
+        ]
         "radius" : 1000,
         "coordinates": [
             {

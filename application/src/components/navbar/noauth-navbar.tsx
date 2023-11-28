@@ -38,7 +38,7 @@ export default function NoAuthNavBar() {
 		{ pageName: 'Home', location: '/#' },
 		{ pageName: 'Features', location: '/#features' },
 		{ pageName: 'Contact', location: '/#contact' },
-		{ pageName: 'Sign Up', location: '/user/signup' },
+		{ pageName: 'Sign Up', location: '/user' },
 	];
 
 	return (
@@ -52,6 +52,7 @@ export default function NoAuthNavBar() {
 						? 'bg-white transition-colors z-[3]'
 						: 'bg-primary rounded-b-3xl transition-colors z-[3] fixed'
 				}
+				position='static'
 			>
 				{/* Top Nav */}
 				{/* If auth => show icon else show hamburger menu*/}
@@ -81,10 +82,15 @@ export default function NoAuthNavBar() {
 					/>
 				</NavbarContent>
 
-				<NavbarContent className='hidden sm:flex gap-5' justify='center'>
+				<NavbarContent className='hidden sm:flex gap-2' justify='center'>
 					{menuItems.map((item: MenuItem) => (
 						<NavbarMenuItem key={`${item.pageName}`}>
-							<Link className='w-full text-white' href={item.location}>
+							<Link
+								className='w-full text-white'
+								href={item.location}
+								isBlock
+								size='sm'
+							>
 								{item.pageName}
 							</Link>
 						</NavbarMenuItem>
@@ -92,10 +98,15 @@ export default function NoAuthNavBar() {
 				</NavbarContent>
 
 				{/* Mobile Menu */}
-				<NavbarMenu className='rounded-b-lg'>
+				<NavbarMenu className='rounded-b-lg' position='static'>
 					{menuItems.map((item: MenuItem) => (
 						<NavbarMenuItem key={`${item.pageName}-mobile`}>
-							<Link className='w-full' href={item.location}>
+							<Link
+								color='secondary'
+								className='w-full'
+								href={item.location}
+								size='sm'
+							>
 								{item.pageName}
 							</Link>
 						</NavbarMenuItem>
