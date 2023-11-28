@@ -9,7 +9,7 @@ export async function validatePOSTRequest(request: any) {
 
 	if (!data.meetingId) {
 		return NextResponse.json(
-			{ message: 'Missing required field meetingInviteId' },
+			{ message: 'Missing required field meetingId' },
 			{ status: 400 },
 		);
 	}

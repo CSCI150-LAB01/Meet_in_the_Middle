@@ -3,12 +3,11 @@ import { NextResponse } from 'next/server'
 import User from '@/models/user';
 import DefaultLocation from "@/models/default-location";
 import FriendList from "@/models/friend-list";
-import { getUserById, getData, getFriendListById } from "../../../utils";
+import { getUserById, getData, getFriendListById } from "../../utils";
 
 const mongoose = require("mongoose");
 
-
-export async function DELETE(request: Request) {
+export async function POST(request: Request) {
     try {
         dbConnect();
     } catch (error) {
@@ -19,10 +18,6 @@ export async function DELETE(request: Request) {
 
     // Get data from body and error check
     const data = await getData(request);
-    if (data instanceof NextResponse) {
-        return data;
-    }
-    
     const friendId = data.friendId;
     if (!userId || !friendId) {
         console.log("Missing user or friend")

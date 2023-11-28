@@ -1,7 +1,14 @@
+import dbConnect from "@/lib/db";
 import { NextResponse } from 'next/server'
 import User from '@/models/user';
 import DefaultLocation from "@/models/default-location";
+import FriendList from "@/models/friend-list";
+import FriendRequest from "@/models/friend-requests";
 import Meeting from "@/models/meeting";
+import { get } from "http";
+import { PLACE_TYPES } from "./constants";
+import Notification from "@/models/notification";
+
 const mongoose = require("mongoose");
 
 export async function getData(request: Request) {
@@ -17,7 +24,7 @@ export async function getData(request: Request) {
 export async function getUserById(userId: string) {
     let user;
     try {
-        user = await User.findById(userId, '-__v')
+        user = await User.findById(userId)
     } catch (error: any) {
         if (error instanceof mongoose.Error.CastError) {
             console.log("User Not Found")
@@ -32,10 +39,46 @@ export async function getUserById(userId: string) {
     return user;
 }
 
+export async function getFriendListById(friendListId: string) {
+    let friendList;
+    try {
+        friendList = await FriendList.findById(friendListId);
+    } catch (error: any) {
+        if (error instanceof mongoose.Error.CastError) {
+            console.log("Friend List Not Found")
+            return NextResponse.json({ message: "Friend List Not Found", error }, { status: 404 });
+        }
+        console.log(error.stack)
+        return NextResponse.json({ message: "Error retrieving friend list by Id" }, { status: 500 });
+    }
+    if (!friendList) {
+        return NextResponse.json({ message: "Friend List Not Found" }, { status: 404 });
+    }
+    return friendList;
+}
+
+export async function getFriendRequestById(friendRequestId: string) {
+    let friendRequest;
+    try {
+        friendRequest = await FriendRequest.findById(friendRequestId);
+    } catch (error: any) {
+        if (error instanceof mongoose.Error.CastError) {
+            console.log("Friend Request Not Found")
+            return NextResponse.json({ message: "Friend Request Not Found", error }, { status: 404 });
+        }
+        console.log(error.stack)
+        return NextResponse.json({ message: "Error retrieving friend Request by Id" }, { status: 500 });
+    }
+    if (!friendRequest) {
+        return NextResponse.json({ message: "Friend Request Not Found" }, { status: 404 });
+    }
+    return friendRequest;
+}
+
 export async function getDefaultLocationById(defaultLocationId: string) {
     let defaultLocation;
     try {
-        defaultLocation = await DefaultLocation.findById(defaultLocationId, '-__v');
+        defaultLocation = await DefaultLocation.findById(defaultLocationId);
     } catch (error: any) {
         if (error instanceof mongoose.Error.CastError) {
             console.log("Default Location Not Found")
@@ -53,7 +96,7 @@ export async function getDefaultLocationById(defaultLocationId: string) {
 export async function getMeetingById(meetingId: string) {
     let meeting;
     try {
-        meeting = await Meeting.findById(meetingId, '-__v');
+        meeting = await Meeting.findById(meetingId);
     } catch (error: any) {
         if (error instanceof mongoose.Error.CastError) {
             console.log("Meetings Not Found")
@@ -69,18 +112,3 @@ export async function getMeetingById(meetingId: string) {
     return meeting;
 }
 
-export async function getMeetingsByUserId(userId: string[]) {
-    let meetings;
-    try {
-        meetings = await Meeting.find({ userId: { $in: userId } }, '-__v');
-    } catch (error: any) {
-        if (error instanceof mongoose.Error.CastError) {
-            console.log("Meetings Not Found")
-            return NextResponse.json({ message: "Meetings Not Found", error }, { status: 404 });
-        }
-        console.log(error.stack)
-        return NextResponse.json({ message: "Error retrieving Meetings by Id" }, { status: 500 });
-    }
-
-    return meetings;
-}

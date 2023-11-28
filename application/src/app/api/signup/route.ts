@@ -4,7 +4,9 @@ import bcrypt from 'bcrypt';
 const mongoose = require('mongoose');
 
 import User from '../../../models/user';
+import FriendList from '@/models/friend-list';
 import DefaultLocation from '@/models/default-location';
+import FriendRequests from '@/models/friend-requests';
 
 import * as utils from '../utils';
 
@@ -84,6 +86,37 @@ export async function POST(request: Request) {
 		);
 	}
 
+	// create friend list
+	let friendList;
+	try {
+		friendList = await new FriendList({
+			_id: new mongoose.Types.ObjectId(),
+			friends: [],
+			isFresh: false,
+		});
+	} catch (error) {
+		return NextResponse.json(
+			{ message: 'Error creating friend list', error },
+			{ status: 500 },
+		);
+	}
+
+	// create friend-requsts
+	let friendRequests;
+	try {
+		friendRequests = await new FriendRequests({
+			_id: new mongoose.Types.ObjectId(),
+			incomingRequests: [],
+			outgoingRequests: [],
+			isFresh: false,
+		});
+	} catch (error) {
+		return NextResponse.json(
+			{ message: 'Error creating friend requests', error },
+			{ status: 500 },
+		);
+	}
+
 	// encrypt password
 	let encryptedPassword;
 	try {
@@ -103,7 +136,9 @@ export async function POST(request: Request) {
 			email: email,
 			password: encryptedPassword,
 			username: username,
+			friendListId: friendList._id,
 			defaultLocationId: defaultLocation._id,
+			friendRequestsId: friendRequests._id,
 		});
 	} catch (error) {
 		return NextResponse.json(
@@ -112,10 +147,14 @@ export async function POST(request: Request) {
 		);
 	}
 	// Set user id for friend list, friend requests, and default location
+	friendList.userId = user._id;
 	defaultLocation.userId = user._id;
+	friendRequests.userId = user._id;
 
 	// save data to database
 	try {
+		await friendList.save();
+		await friendRequests.save();
 		await defaultLocation.save();
 		await user.save();
 	} catch (error) {
