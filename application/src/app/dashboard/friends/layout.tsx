@@ -2,9 +2,9 @@ import Image from 'next/image';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: 'Account',
+	title: 'Friends',
 };
-export default function AccountLayout({
+export default function FriendsLayout({
 	children,
 }: {
 	children: React.ReactNode;

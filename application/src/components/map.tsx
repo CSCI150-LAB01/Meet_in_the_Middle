@@ -1,7 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import CardLoading from './loading';
-import { Location } from '@/lib/types';
+import useGoogleMaps from '@/hooks/useGoogleMaps';
+import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 
 interface MapProps {
 	height: string;
@@ -10,35 +11,34 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ height, width, options }) => {
-	const [currentLocation, setCurrentLocation] = useState<Location>({
-		lat: 0,
-		lng: 0,
-	});
-	const [markers, setMarkers] = useState<Location[]>([]);
+	const {
+		isLoaded,
+		searchBox,
+		markers,
+		setMarkers,
+		map,
+		onLoad,
+		onUnmount,
+		onSBLoad,
+		onPlacesChanged,
+	} = useGoogleMaps();
 
-	const { isLoaded } = useJsApiLoader({
-		id: 'google-map-script',
-		googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_API as string,
-	});
-
-	const [map, setMap] = useState(null);
-
-	const onLoad = useCallback(function callback(map) {
-		setMap(map);
-	}, []);
-
-	const onUnmount = useCallback(function callback(map) {
-		setMap(null);
-	}, []);
+	const {
+		currentLocation,
+		setCurrentLocation,
+		placeholderText,
+		setPlaceholderText,
+	} = useCurrentLocation(searchBox);
 
 	useEffect(() => {
+		// Use the Geolocation API to get the current position of the device
 		navigator.geolocation.getCurrentPosition(
 			({ coords: { latitude: lat, longitude: lng } }) => {
 				setMarkers([{ lat, lng }]);
 				setCurrentLocation({ lat, lng });
 			},
 		);
-	}, []);
+	}, [setMarkers, setCurrentLocation]);
 
 	return isLoaded ? (
 		<div className='flex rounded-lg overflow-clip w-full'>

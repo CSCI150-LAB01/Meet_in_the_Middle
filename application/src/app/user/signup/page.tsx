@@ -1,39 +1,28 @@
 'use client';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { createUser } from '../../utils/apiCalls';
-import { Location } from '@/lib/types';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import 'react-toastify/dist/ReactToastify.css';
 
-import {
-	GoogleMap,
-	StandaloneSearchBox,
-	Marker,
-	useJsApiLoader,
-} from '@react-google-maps/api';
-import { fromLatLng, setKey } from 'react-geocode';
+// API and utility imports
+import { createUser } from '../../../utils/apiCalls';
+import { Location } from '@/lib/types';
+
+// Google Maps / Hooks
+import { GoogleMap, StandaloneSearchBox, Marker } from '@react-google-maps/api';
+import useGoogleMaps from '@/hooks/useGoogleMaps';
 import useGeolocation from '@/hooks/useGeolocation';
+
+// Custom hooks, components, styles
 import { Input, Button, Link } from '@nextui-org/react';
+import CardLoading from '@/components/loading';
+import { ToastContainer, toast } from 'react-toastify';
 import { MdAccountCircle, MdEmail, MdPinDrop } from 'react-icons/md';
 import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 import { berlin } from '@/styles/fonts';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import CardLoading from '@/components/loading';
-import useGoogleMaps from '@/hooks/useGoogleMaps';
-import { NextPage } from 'next';
-import { useSession } from 'next-auth/react';
 
-export default function Register() {
-	const { data: session, status } = useSession();
-	// const [isAuthenticated, setIsAuthenticated] = useState(false);
-	// setIsAuthenticated(status === 'authenticated');
+export default function SignUp() {
 	const { position, status: locationStatus } = useGeolocation();
-
-	// // if already logged in
-	// if (isAuthenticated) {
-	// 	useRouter().push('/dashboard');
-	// }
 
 	// Form States / Vars
 	const [currentLocation, setCurrentLocation] = useState<Location>({
@@ -42,7 +31,6 @@ export default function Register() {
 	});
 	const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
 	const {
-		searchBox,
 		isLoaded,
 		placeholderText,
 		markers,
@@ -51,7 +39,8 @@ export default function Register() {
 		onLoad,
 		onUnmount,
 	} = useGoogleMaps();
-	const [isVisible, setIsVisible] = useState(false); // Password visibility state
+
+	const [isVisible, setIsVisible] = useState(false);
 	const usernameRef = useRef<HTMLInputElement | null>(null);
 	const emailRef = useRef<HTMLInputElement | null>(null);
 	const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -66,7 +55,10 @@ export default function Register() {
 			email: emailRef.current?.value || '',
 			password: passwordRef.current?.value || '',
 		};
-		createUser(formData.email, formData.password, formData.username, [
+
+		const { username, email, password } = formData;
+
+		createUser(email, password, username, [
 			currentLocation.lng,
 			currentLocation.lat,
 		])
@@ -212,7 +204,6 @@ export default function Register() {
 			<Link
 				className='text-secondary text-center hidden md:block'
 				href='/user/login'
-				size='sm'
 			>
 				Already have an account? Sign In
 			</Link>

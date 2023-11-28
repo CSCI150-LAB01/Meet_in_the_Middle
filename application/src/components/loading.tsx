@@ -1,5 +1,5 @@
 'use client';
-import { Card, Skeleton, Button } from '@nextui-org/react';
+import { Card, Skeleton, Spinner } from '@nextui-org/react';
 
 export default function CardLoading() {
 	const isLoaded = false;
