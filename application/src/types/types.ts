@@ -122,3 +122,20 @@ export interface NotificationInfo {
 	_id: string;
 	createdAt: string;
 }
+
+export interface Meeting {
+	creatorId: string;
+	title: string;
+	placeId: string;
+	pending: string[];
+	denied: string[];
+	accepted: string[];
+	_id: string;
+	createdAt: string;
+	updatedAt: string;
+	__v: number;
+}
+
+export interface MeetingResponse {
+	meeting: Meeting;
+}

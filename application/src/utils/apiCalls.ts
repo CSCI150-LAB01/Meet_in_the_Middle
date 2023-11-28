@@ -245,20 +245,6 @@ export async function getUserInfo(userId: string): Promise<NoVUser> {
 	}
 }
 
-export async function createMeeting(
-	userId: string,
-	meetingData: MeetingRequest,
-): Promise<MeetingResponse> {
-	const url = `/user/meeting/${userId}`;
-	const response = await fetch(apiUrl + url, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(meetingData),
-	});
-
-	return handleApiResponse<MeetingResponse>(response);
-}
-
 export async function getNotifications(
 	userId: string,
 ): Promise<GetNotificationsResponse> {
@@ -358,4 +344,27 @@ export async function acceptFriendRequest(
 		console.error('Error accepting friend request:', error);
 		throw error;
 	}
+}
+
+export async function createMeeting(
+	userId: string,
+	placeId: string,
+	title: string,
+	dateTime: string,
+): Promise<MeetingResponse> {
+	const url = `/api/user/meeting/${userId}`;
+	const requestOptions: RequestInit = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			placeId,
+			title,
+			dateTime,
+		}),
+	};
+
+	const response = await fetchData<MeetingResponse>(url, requestOptions);
+	return response;
 }

@@ -5,28 +5,30 @@ import { Avatar } from '@nextui-org/react';
 export default function Profile({ params }: { params: { id: string } }) {
 	return (
 		<div className='flex w-full justify-center'>
-			<div className='flex min-h-screen flex-col items-center lg:px-24 py-24 w-full max-w-[1080px] p-3 gap-5'>
+			<div className='flex min-h-screen flex-col lg:px-24 w-full max-w-[1080px] w-full p-5 gap-5 sm:text-left text-center items-center sm:items-start'>
 				<h1
 					className={berlin.className + ' text-4xl sm:text-6xl text-zinc-700'}
 				>
 					Profile
 				</h1>
-				<Avatar name='Joe Momma' className='w-[180px] h-[180px] text-xl' />
-				<div className='text-center'>
+				<Avatar
+					name='Joe Momma'
+					className='w-[180px] h-[180px] text-xl z-[0]'
+				/>
+				<div>
 					<h3 className='text-2xl text-primary font-bold'>Joe Momma</h3>
-					<p className='text-md text-zinc-700 font-bold'>joe@gmail.com</p>
+					<p className='text-md text-zinc-700'>joe@gmail.com</p>
 				</div>
 
 				<div>
 					<h3 className='text-2xl text-primary font-bold'>
 						Default Home Location
 					</h3>
-					<p> ur mom</p>
 				</div>
 
 				<div>
 					<h3 className='text-2xl text-primary font-bold'>Bio</h3>
-					<p className='text-md text-zinc-700 font-bold'>
+					<p className='text-md text-zinc-700 text-left'>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
 						quis sem non ex hendrerit pulvinar. Aliquam consequat augue ac nibh
 						tempor, non porta erat posuere. Etiam sem erat, placerat non enim

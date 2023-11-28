@@ -21,12 +21,18 @@ import {
 	MdNotifications,
 } from 'react-icons/md';
 import { getUser } from '@/utils/apiCalls';
+import { DrawerProps } from './drawer.tsx';
 
 interface MenuItem {
 	pageName: string;
 	location: string;
 }
-const DrawerContents = dynamic(() => import('./drawer.tsx') as any);
+const DrawerContents = dynamic(
+	() =>
+		import('./drawer.tsx') as unknown as Promise<
+			React.ComponentType<DrawerProps>
+		>,
+);
 
 export default function AuthNavbar() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -154,7 +160,7 @@ export default function AuthNavbar() {
 				overlayClassName='!z-[1]'
 				overlayOpacity={0}
 			>
-				{isDrawerOpen && <DrawerContents />}
+				{isDrawerOpen && <DrawerContents closeDrawer={toggleDrawer} />}
 			</Drawer>
 		</>
 	);

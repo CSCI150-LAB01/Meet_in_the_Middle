@@ -8,11 +8,16 @@ import {
 } from '@/utils/apiCalls';
 import { Button } from '@nextui-org/react';
 import { signOut } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
+import Link from 'next/link';
 
-export default function DrawerContents() {
+export interface DrawerProps {
+	closeDrawer: () => void;
+}
+const DrawerContents: React.FC<DrawerProps> = ({ closeDrawer }) => {
 	const [username, setUsername] = useState('Back');
 	const [address, setAddress] = useState('Loading..');
+	const [userID, setUserID] = useState<string | null>(null);
 
 	const handleLogout = () => {
 		signOut({ redirect: true, callbackUrl: '/user/login' });
@@ -23,6 +28,7 @@ export default function DrawerContents() {
 			try {
 				const userData = await getUser();
 				setUsername(userData.username);
+				setUserID(userData._id);
 				const location = await fetchDefaultLocation(userData._id);
 				const { coordinates } = location.defaultLocation || {};
 				if (coordinates && coordinates.length === 2) {
@@ -51,17 +57,24 @@ export default function DrawerContents() {
 				{/* Fix this at some point to figure out what it's for? */}
 				<p className='font-semibold text-zinc-500'>My Default Location</p>
 				<p>{address ? address : ''}</p>
-				<Button className='w-full' color='secondary'>
+				<Button className='w-full' color='secondary' onClick={closeDrawer}>
 					Update Location
 				</Button>
 			</div>
 
-			<p key='dashboard' className='hover:cursor-pointer hover:underline'>
-				Profile
-			</p>
-			<p key='settings' className='hover:cursor-pointer hover:underline'>
-				Friend Requests
-			</p>
+			<Link
+				key='settings'
+				href={`/dashboard/profile/${userID}`}
+				onClick={closeDrawer}
+			>
+				<p key='dashboard' className='hover:cursor-pointer hover:underline'>
+					Profile
+				</p>
+			</Link>
+
+			<Link key='settings' href='/dashboard/friends' onClick={closeDrawer}>
+				<p className='hover:cursor-pointer hover:underline'>Friend Requests</p>
+			</Link>
 			<p
 				key='logout'
 				className='text-danger hover:cursor-pointer hover:underline'
@@ -72,4 +85,5 @@ export default function DrawerContents() {
 			</p>
 		</div>
 	);
-}
+};
+export default DrawerContents;
