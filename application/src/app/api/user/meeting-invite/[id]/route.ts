@@ -69,6 +69,7 @@ export async function POST(request: Request) {
 		);
 	}
 
+	// validate sender is creator of meeting
 	const sender = await validateSender(request, meeting);
 	if (sender instanceof NextResponse) {
 		return sender;
