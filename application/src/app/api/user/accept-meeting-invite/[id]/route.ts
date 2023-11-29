@@ -17,7 +17,6 @@ export async function POST(request: Request) {
 		});
 	}
 
-
 	const data = await validatePOSTRequest(request);
 	if (data instanceof NextResponse) {
 		return data;
