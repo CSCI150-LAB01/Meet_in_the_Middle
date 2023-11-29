@@ -16,11 +16,6 @@ const userSchema = new Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'DefaultLocation',
 	},
-	friendListId: { type: mongoose.Schema.Types.ObjectId, ref: 'FriendList' },
-	friendRequestsId: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'FriendRequests',
-	},
 
 	image: { type: String, required: false },
 	bio: { type: String, required: false, maxlength: 500 },

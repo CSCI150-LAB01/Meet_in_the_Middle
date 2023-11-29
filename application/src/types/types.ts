@@ -6,10 +6,6 @@ export interface User {
 	password: string;
 	username: string;
 	defaultLocationId: string;
-	friendListId: string;
-	friendRequestsId: string;
-	notificationsId: string;
-	meetingsId: string;
 	createdAt: string;
 	updatedAt: string;
 	__v: string;

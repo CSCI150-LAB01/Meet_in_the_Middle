@@ -1,10 +1,8 @@
+import { getUserById } from '@/app/api/utils';
 import dbConnect from '@/lib/db';
+import Meeting from '@/models/meeting';
 import { NextResponse } from 'next/server';
 import { validatePOSTRequest, validateSender } from '../utils';
-
-import { getUserById } from '@/app/api/utils';
-
-import Meeting from '@/models/meeting';
 import Notification from '@/models/notification';
 
 // Get all meeting invites for a user
@@ -39,10 +37,8 @@ export async function GET(request: Request) {
 	return NextResponse.json({ meetings: meeting }, { status: 200 });
 }
 
-
 // Send a meeting invite to one or more users
 export async function POST(request: Request) {
-
 	const data = await validatePOSTRequest(request);
 	if (data instanceof NextResponse) {
 		return data;
@@ -57,10 +53,9 @@ export async function POST(request: Request) {
 		});
 	}
 
-	// validate meeting exists
 	let meeting;
 	try {
-		meeting = await Meeting.findById(data.meetingId, '-__v');
+		meeting = await Meeting.findById(data.meetingId);
 	} catch (error) {
 		console.log(error);
 		return NextResponse.json(
@@ -69,6 +64,7 @@ export async function POST(request: Request) {
 		);
 	}
 
+	// validate sender is creator of meeting
 	const sender = await validateSender(request, meeting);
 	if (sender instanceof NextResponse) {
 		return sender;
@@ -89,13 +85,13 @@ export async function POST(request: Request) {
 		}
 		meeting.pending.push(userId);
 
-		// create notification
+		// notify user of meeting invite
 		try {
 			const notification = new Notification({
 				userId,
 				message: `${sender.username} invited you to a meeting!`,
-				createdAt: new Date()
-			})
+				createdAt: new Date(),
+			});
 			await notification.save();
 		} catch (error) {
 			console.log(error);
@@ -107,7 +103,6 @@ export async function POST(request: Request) {
 	}
 	meeting.updatedAt = new Date();
 
-	// save meeting
 	try {
 		await meeting.save();
 	} catch (error) {
@@ -117,10 +112,8 @@ export async function POST(request: Request) {
 			{ status: 500 },
 		);
 	}
-
 	return NextResponse.json(
 		{ message: 'Successfully invited users to meeting', meeting },
 		{ status: 200 },
 	);
 }
-
