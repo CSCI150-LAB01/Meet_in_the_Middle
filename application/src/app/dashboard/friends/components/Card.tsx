@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardBody, Avatar, Button } from '@nextui-org/react';
 import { MdAdd, MdCheck, MdClose } from 'react-icons/md';
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,9 +31,18 @@ const FriendCard: React.FC<FriendCardProps> = ({
 	senderId,
 	onAccept,
 }) => {
+	const [added, setAdded] = useState<boolean>(false);
 	const toastPosition = toast.POSITION.BOTTOM_LEFT;
 
 	const handleAdd = async () => {
+		if (added) {
+			toast.error('You have already sent a friend request.', {
+				position: toastPosition,
+			});
+			return;
+		}
+
+		setAdded(true);
 		try {
 			const data = await getUser();
 			const response = await sendFriendRequest(
@@ -45,12 +54,14 @@ const FriendCard: React.FC<FriendCardProps> = ({
 				toast.success('Friend request sent.', { position: toastPosition });
 			} else {
 				toast.error(response, { position: toastPosition });
+				setAdded(false);
 			}
 		} catch (error) {
 			console.error('Error adding friend:', error);
 			toast.error('An error occurred while sending a friend request.', {
 				position: toastPosition,
 			});
+			setAdded(false);
 		}
 	};
 
