@@ -237,6 +237,7 @@ Send a meeting invite to one or more users. Only the meeting creator can send in
 - **Body**:
   ```json
     {
+      "meetingId" : "6566ebe8febcb19d51bc17c1", 
       "userIds": [ 
         "6545e45698fe7f58fa524310",
         "6549be6583ef8f4250d38c32"        

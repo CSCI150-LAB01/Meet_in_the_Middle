@@ -33,6 +33,13 @@ export async function POST(request: Request) {
 		);
 	}
 
+	if (!meeting) {
+		return NextResponse.json(
+			{ message: 'meetingId not found', meetingId: data.meetingId },
+			{ status: 404 },
+		);
+	}
+
 	const userId = request.url.slice(request.url.lastIndexOf('/') + 1);
 	const user = await getUserById(userId);
 	if (user instanceof NextResponse) {
@@ -45,6 +52,7 @@ export async function POST(request: Request) {
 			{ status: 400 },
 		);
 	}
+
 
 	// has user been invited to meeting?
 	if (!meeting.pending.includes(userId) && !meeting.denied.includes(userId)) {
