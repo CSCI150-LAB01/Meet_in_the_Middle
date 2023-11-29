@@ -11,9 +11,9 @@ export async function POST(request: Request): Promise<void | Response> {
 		const email = data.email;
 		const password = data.password;
 
-		if (!email || !password) {
-			return;
-		}
+    if (!email || !password) {
+      return NextResponse.json({ message: "email and password required" }, { status: 400 });
+    }
 
 		const user = await User.findOne({ email });
 		if (!user) {

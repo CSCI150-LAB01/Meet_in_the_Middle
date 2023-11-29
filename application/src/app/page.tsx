@@ -104,6 +104,15 @@ export default function Home() {
 								</Link>
 							</div>
 							{/* About Image @TODO: Add later */}
+							<div className='md:order-first'>
+								<Image
+									src='https://via.placeholder.com/400x300'
+									width={400}
+									height={300}
+									alt='About Us'
+									className='rounded-lg shadow-lg'
+								/>
+							</div>
 						</div>
 					</div>
 				</section>
