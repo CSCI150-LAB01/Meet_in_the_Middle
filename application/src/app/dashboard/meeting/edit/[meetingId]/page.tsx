@@ -41,7 +41,8 @@ export default function Edit({ params }: { params: { meetingId: string } }) {
 	const [meetingData, setMeetingData] = useState<Meeting | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [meetingDateTime, setMeetingDateTime] = useState<string>('');
-	const [locationSuggestions, setLocationSuggestions] = useState<string>('');
+	const [locationSuggestions, setLocationSuggestions] =
+		useState<SuggestionResponse | null>(null);
 	const [friends, setFriends] = useState<NoVUser[]>([]);
 	const locationTypeRef = useRef<HTMLSelectElement | null>(null);
 	const rangeInputRef = useRef<HTMLInputElement | null>(null);
@@ -93,7 +94,7 @@ export default function Edit({ params }: { params: { meetingId: string } }) {
 			};
 			const suggestions: SuggestionResponse =
 				await getSuggestions(suggestionRequest);
-			// Handle suggestions as needed
+			setLocationSuggestions(suggestions);
 			console.log('Location Suggestions:', suggestions);
 		} catch (error) {
 			console.error('Error fetching location suggestions:', error);
@@ -151,6 +152,18 @@ export default function Edit({ params }: { params: { meetingId: string } }) {
 					</div>
 					<div className='sm:h-[unset] sm:grow-0 w-full flex h-full items-center item-end text-sm flex-col gap-4 grow'>
 						<div className='w-full text-sm bg-primary rounded-t-2xl sm:rounded-b-2xl flex flex-col flex-1 grow p-6 items-center sm:items-start gap-5'>
+							{locationSuggestions && locationSuggestions.results && (
+								<div className='h-[160px] flex bg-white rounded-lg w-full p-5 flex-col gap-y-2 overflow-auto'>
+									{locationSuggestions.results.map((location, index) => (
+										<AcceptedFriend
+											key={index}
+											name={location.name}
+											email={location.vicinity}
+										/>
+									))}
+								</div>
+							)}
+
 							<Button
 								color='secondary'
 								className={`w-full text-md`}
