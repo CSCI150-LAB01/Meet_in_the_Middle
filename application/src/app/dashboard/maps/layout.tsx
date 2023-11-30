@@ -2,9 +2,9 @@ import Image from 'next/image';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: 'Itineraries',
+	title: 'Maps',
 };
-export default function ItinerariesLayout({
+export default function MapsLayout({
 	children,
 }: {
 	children: React.ReactNode;

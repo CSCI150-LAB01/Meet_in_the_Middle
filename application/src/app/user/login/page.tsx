@@ -6,61 +6,60 @@ import { MdEmail } from 'react-icons/md';
 import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 import { berlin } from '@/styles/fonts';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { loginUser } from '@/utils/apiCalls';
-import { getSession, useSession, signIn, signOut } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { UpdateUser } from '@/utils/apiCalls';
 
 export default function Login() {
 	// password visibility
 	const [isVisible, setIsVisible] = useState(false);
-	const toggleVisibility = () => setIsVisible(!isVisible);
+	const [isLoading, setIsLoading] = useState(false);
+	const toggleVisibility = () => setIsVisible(prev => !prev);
 	const router = useRouter();
-
-	// const { data: session, status } = useSession();
-	// const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-	// setIsAuthenticated(status === 'authenticated');
-
-	// // if already logged in
-	// if (isAuthenticated) {
-	// 	useRouter().push('/dashboard');
-	// }
+	const toastPosition = toast.POSITION.BOTTOM_CENTER;
 
 	// form refs
 	const emailRef = useRef<HTMLInputElement | null>(null);
 	const passwordRef = useRef<HTMLInputElement | null>(null);
 
 	// Form Functions
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		const formData = {
 			email: emailRef.current?.value || '',
 			password: passwordRef.current?.value || '',
 		};
-		signIn('credentials', {
-			redirect: false, // Change to true if you want to redirect after sign-in
-			email: formData.email,
-			password: formData.password,
-		})
-			.then(async response => {
-				if (response?.error) {
-					toast.error(response?.error, {
-						position: toast.POSITION.BOTTOM_CENTER,
-					});
-				} else {
-					toast.success('User login successful!', {
-						position: toast.POSITION.BOTTOM_CENTER,
-					});
-				}
-			})
-			.catch(error => {
-				toast.error(`${error}`, {
-					position: toast.POSITION.BOTTOM_CENTER,
-				});
+
+		const handleSuccess = () => {
+			toast.success('User login successful!', { position: toastPosition });
+			UpdateUser(formData.email, formData.password);
+			router.refresh();
+			router.push('/dashboard');
+			setIsLoading(false);
+		};
+
+		setIsLoading(true); // Set loading state to true
+
+		try {
+			const response = await signIn('credentials', {
+				redirect: false,
+				email: formData.email,
+				password: formData.password,
 			});
-		router.push('/dashboard');
+
+			if (response?.error) {
+				toast.error(response?.error, { position: toastPosition });
+			} else {
+				handleSuccess();
+			}
+		} catch (error) {
+			toast.error(`${error}`, { position: toastPosition });
+		} finally {
+			setIsLoading(false);
+		}
 	};
 	return (
 		<>
@@ -106,10 +105,12 @@ export default function Login() {
 						variant='solid'
 						fullWidth
 						onClick={handleSubmit}
+						disabled={isLoading} // Disable the button when loading
+						isLoading={isLoading}
 					>
-						Sign In
+						{isLoading ? 'Loading...' : 'Sign In'}
 					</Button>
-					<Button
+					{/* <Button
 						className='bg-white text-foreground'
 						variant='solid'
 						fullWidth
@@ -118,7 +119,7 @@ export default function Login() {
 						}
 					>
 						Sign In With Google
-					</Button>
+					</Button> */}
 				</div>
 				<Button
 					className='bg-white text-foreground md:hidden align-center py-5'
@@ -126,18 +127,19 @@ export default function Login() {
 					fullWidth
 				>
 					<p className='pt-5'>
-						Don't have an account?{' '}
-						<span className='text-secondary'>Sign Up</span>
+						Don&apos;t have an account?
+						<Link href='/user/signup'>
+							<span className='text-secondary'>Sign Up</span>
+						</Link>
 					</p>
 				</Button>
 			</div>
 
 			<Link
 				className='text-secondary text-center hidden md:block'
-				href='/user'
-				size='sm'
+				href='/user/signup'
 			>
-				Don't have an account? Sign Up
+				Don&apos;t have an account? Sign Up
 			</Link>
 		</>
 	);

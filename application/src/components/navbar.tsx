@@ -1,52 +1,18 @@
-'use client';
-import React from 'react';
-import {
-	Navbar,
-	NavbarContent,
-	Link,
-	NavbarMenu,
-	NavbarMenuItem,
-	NavbarMenuToggle,
-	Avatar,
-	Button,
-	Dropdown,
-	DropdownTrigger,
-	DropdownMenu,
-	DropdownItem,
-	DropdownSection,
-} from '@nextui-org/react';
-import Image from 'next/image';
-import {
-	MdAccountCircle,
-	MdHome,
-	MdMap,
-	MdMenu,
-	MdMenuOpen,
-	MdOutlineSearch,
-} from 'react-icons/md';
-
-interface MenuItem {
-	pageName: string;
-	location: string;
-}
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/config/NextAuth';
+import dynamic from 'next/dynamic';
 import AuthNavbar from './navbar/authnav';
 import NoAuthNavBar from './navbar/noauth-navbar';
+import useStorage from '@/hooks/useStorage';
+import { getUser } from '@/utils/apiCalls';
 
-export default function NavbarDesktop() {
-	const { data: session, status } = useSession();
-
-	if (status === 'authenticated') {
-		return (
-			<>
-				<AuthNavbar />
-			</>
-		);
-	} else {
-		return (
-			<>
-				<NoAuthNavBar />
-			</>
-		);
+export default async function NavbarDesktop() {
+	// Loads faster
+	if (useStorage().getItem('user', 'local')) {
+		return <AuthNavbar />;
 	}
+
+	// Flashes white
+	const session = await getServerSession(authOptions);
+	return <>{session?.user ? <AuthNavbar /> : <NoAuthNavBar />}</>;
 }

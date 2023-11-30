@@ -2,20 +2,18 @@ import { fromLatLng, setKey } from 'react-geocode';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Location } from '@/lib/types';
 import useGeolocation from './useGeolocation';
-import {
-	useJsApiLoader,
-} from '@react-google-maps/api';
+import { useJsApiLoader } from '@react-google-maps/api';
 
 export default function useGoogleMaps() {
-  const { position, status } = useGeolocation();
+	const { position, status } = useGeolocation();
 	const [markers, setMarkers] = useState<Location[]>([]);
 	const [map, setMap] = useState<google.maps.Map | null>(null);
 	const [placeholderText, setPlaceholderText] = useState<string>(
 		'Enter your location',
 	);
-  const searchBox = useRef<google.maps.places.SearchBox | null>(null);
+	const searchBox = useRef<google.maps.places.SearchBox | null>(null);
 
-  // Map Loader
+	// Map Loader
 	const { isLoaded } = useJsApiLoader({
 		id: 'google-map-script',
 		googleMapsApiKey: process.env.NEXT_PUBLIC_MAPS_API as string,
@@ -49,17 +47,19 @@ export default function useGoogleMaps() {
 	// Use the Geolocation API to get the current position of the device
 	useEffect(() => {
 		setKey(process.env.NEXT_PUBLIC_MAPS_API as string);
-    if (position && status === 'granted') {
-      setMarkers([{ lat: position.latitude, lng: position.longitude}]);
-      fromLatLng(position.latitude, position.longitude).then(({ results }) => {
-        setPlaceholderText(results[0].formatted_address);
-      }).catch(err => console.log(err));
-    }
+		if (position && status === 'granted') {
+			setMarkers([{ lat: position.latitude, lng: position.longitude }]);
+			fromLatLng(position.latitude, position.longitude)
+				.then(({ results }) => {
+					setPlaceholderText(results[0].formatted_address);
+				})
+				.catch(err => console.log(err));
+		}
 	}, [position, status]);
 
 	return {
-    isLoaded,
-    searchBox,
+		isLoaded,
+		searchBox,
 		markers,
 		setMarkers,
 		map,

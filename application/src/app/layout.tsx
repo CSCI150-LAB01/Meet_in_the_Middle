@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 		default: AppConfig.title,
 	},
 	description: AppConfig.description,
+	colorScheme: 'only light',
 	icons: [
 		{
 			rel: 'apple-touch-icon',
@@ -46,7 +47,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang='en' className={roboto.className + ' light'}>
-			<body>
+			<body className='light'>
 				<Providers>
 					<NavbarDesktop />
 					{children}
