@@ -1,7 +1,7 @@
 'use client';
 import { berlin } from '@/styles/fonts';
-import { Divider } from '@nextui-org/react';
-import { MdNotifications } from 'react-icons/md';
+import { Divider, Button } from '@nextui-org/react';
+import { MdAdd, MdNotifications } from 'react-icons/md';
 import MeetingInviteCard from './components/meetingInvite';
 import { Meeting, MeetingWithName } from '@/types/types';
 import { useState, useEffect } from 'react';
@@ -14,6 +14,7 @@ import {
 } from '@/utils/apiCalls';
 import MeetingCard from './components/meetingCard';
 import CardLoading from '@/components/loading';
+import Link from 'next/link';
 
 export default function MeetingsPage() {
 	const [meetingInvites, setMeetingInvites] = useState<
@@ -84,14 +85,27 @@ export default function MeetingsPage() {
 					''
 				)}
 
-				<h1
-					className={
-						berlin.className + ' text-4xl sm:text-5xl text-zinc-700 mb-2'
-					}
-				>
-					Meetings
-				</h1>
-
+				<div className='flex justify-between items-center w-full'>
+					<h1
+						className={
+							berlin.className + ' text-4xl sm:text-5xl text-zinc-700 mb-2'
+						}
+					>
+						Meetings
+					</h1>
+					<Link href='/dashboard/meeting/create'>
+						<Button
+							color='secondary'
+							variant='solid'
+							aria-label='Accept invitation'
+							className='text-white'
+							isIconOnly
+							isLoading={loading}
+						>
+							<MdAdd />
+						</Button>
+					</Link>
+				</div>
 				{/* Show meetings or loading state */}
 				{loading ? (
 					<CardLoading />
@@ -107,7 +121,7 @@ export default function MeetingsPage() {
 						))}
 					</div>
 				) : (
-					''
+					<p className='text-center mt-20'>You have no meetings.</p>
 				)}
 			</div>
 		</div>

@@ -25,20 +25,17 @@ export default function SignUp() {
 	const { position, status: locationStatus } = useGeolocation();
 	const [isLoading, setIsLoading] = useState(false);
 
-	// Form States / Vars
-	const [currentLocation, setCurrentLocation] = useState<Location>({
-		lat: position?.latitude || 0,
-		lng: position?.longitude || 0,
-	});
 	const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
 	const {
 		isLoaded,
-		placeholderText,
+		searchBox,
 		markers,
-		onSBLoad,
-		onPlacesChanged,
+		map,
+		placeholderText,
 		onLoad,
 		onUnmount,
+		onSBLoad,
+		onPlacesChanged,
 	} = useGoogleMaps();
 
 	const [isVisible, setIsVisible] = useState(false);
@@ -61,10 +58,7 @@ export default function SignUp() {
 
 		const { username, email, password } = formData;
 
-		createUser(email, password, username, [
-			currentLocation.lng,
-			currentLocation.lat,
-		])
+		createUser(email, password, username, [markers[0].lng, markers[0].lat])
 			.then(() => {
 				toast.success('User account created successfully!', {
 					position: toast.POSITION.BOTTOM_CENTER,
@@ -82,21 +76,7 @@ export default function SignUp() {
 			});
 	};
 
-	const handlePlacesChanged = () => {
-		setCurrentLocation({
-			lat: markers[0].lat,
-			lng: markers[0].lng,
-		});
-	};
-
-	useEffect(() => {
-		if (position && locationStatus === 'granted') {
-			setCurrentLocation({
-				lat: position.latitude,
-				lng: position.longitude,
-			});
-		}
-	}, [position, locationStatus]);
+	useEffect(() => {}, [position, locationStatus]);
 
 	return (
 		<>
@@ -150,45 +130,40 @@ export default function SignUp() {
 
 					{/* LOCATION */}
 					{isLoaded ? (
-						<>
-							<div className='w-full'>
-								<div id='searchbox' className='w-full'>
-									<StandaloneSearchBox
-										onLoad={onSBLoad}
-										onPlacesChanged={() => {
-											onPlacesChanged();
-											handlePlacesChanged();
-										}}
-									>
-										<Input
-											label='Home Location'
-											placeholder={placeholderText}
-											endContent={
-												<MdPinDrop className='text-default-400 pointer-events-none' />
-											}
-										></Input>
-									</StandaloneSearchBox>
-								</div>
-								<br />
-								<div className='overflow-clip rounded-lg w-full pointer-events-none'>
-									<GoogleMap
-										center={currentLocation}
-										zoom={15}
-										onLoad={onLoad}
-										onUnmount={onUnmount}
-										mapContainerStyle={{ height: '150px', width: '350px' }}
-										options={{
-											gestureHandling: 'none',
-											disableDefaultUI: true,
-										}}
-									>
-										{markers.map((mark, index) => (
-											<Marker key={index} position={mark} />
-										))}
-									</GoogleMap>
-								</div>
+						<div className='w-full'>
+							<div id='searchbox' className='w-full'>
+								<StandaloneSearchBox
+									onLoad={onSBLoad}
+									onPlacesChanged={onPlacesChanged}
+								>
+									<Input
+										label='Home Location'
+										placeholder={placeholderText}
+										endContent={
+											<MdPinDrop className='text-default-400 pointer-events-none' />
+										}
+									></Input>
+								</StandaloneSearchBox>
 							</div>
-						</>
+							<br />
+							<div className='overflow-clip rounded-lg w-full pointer-events-none'>
+								<GoogleMap
+									center={markers.length ? markers[0] : { lat: 0, lng: 0 }}
+									zoom={15}
+									onLoad={onLoad}
+									onUnmount={onUnmount}
+									mapContainerStyle={{ height: '150px', width: '350px' }}
+									options={{
+										gestureHandling: 'auto', // or 'cooperative'
+										disableDefaultUI: true,
+									}}
+								>
+									{markers.map((mark, index) => (
+										<Marker key={index} position={mark} />
+									))}
+								</GoogleMap>
+							</div>
+						</div>
 					) : (
 						<CardLoading />
 					)}

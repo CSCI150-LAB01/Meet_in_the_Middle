@@ -214,3 +214,22 @@ export type SuggestionResponse = {
 		vicinity: string;
 	}>;
 };
+
+export interface SendFriendRequestResponse {
+	message: string;
+	friendRequest: {
+		senderId: string;
+		recipientId: string;
+		message: string;
+		_id: string;
+		createdAt: string;
+		__v: number;
+	};
+	notification: {
+		userId: string;
+		message: string;
+		_id: string;
+		createdAt: string;
+		__v: number;
+	};
+}

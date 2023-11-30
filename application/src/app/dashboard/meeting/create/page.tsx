@@ -42,7 +42,8 @@ export default function Create() {
 		};
 
 		try {
-			const placeID = await getClosestPlaceId(coordinates[1], coordinates[0]);
+			// Temporarily sets the placeID to somewhere random
+			const placeID = 'ChIJaeElXQfKlzMRPc75C7m9hAI';
 			const response: MeetingResponse = await createMeeting(
 				userData._id,
 				placeID,
@@ -106,6 +107,7 @@ export default function Create() {
 						className='w-full text-md'
 						type='submit'
 						disabled={isSubmitting}
+						isLoading={isSubmitting}
 					>
 						{isSubmitting ? 'Loading...' : 'Create Meeting'}
 					</Button>
