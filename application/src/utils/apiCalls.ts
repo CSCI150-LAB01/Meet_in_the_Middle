@@ -15,6 +15,7 @@ import {
 	GetMeetingsResponse,
 	MeetingInviteRequestBody,
 	MeetingInviteResponse,
+	MeetingWithName,
 } from '@/types/types';
 import { fromLatLng, setKey } from 'react-geocode';
 
@@ -465,4 +466,38 @@ export async function sendMeetingInvite(
 
 	const response = await fetchData<MeetingInviteResponse>(url, requestOptions);
 	return response;
+}
+
+export async function getMeetingInvites(
+	userId: string,
+): Promise<MeetingWithName[]> {
+	const url = `user/meeting-invite/${userId}`;
+	try {
+		const data: GetMeetingsResponse = await fetchData(url);
+
+		const meetingList: MeetingWithName[] = [];
+
+		for (const meeting of data.meetings) {
+			const creator = await getUserInfo(meeting.creatorId);
+
+			const formattedRequest = {
+				...meeting,
+				creatorName: creator.username,
+			};
+
+			meetingList.push(formattedRequest);
+		}
+
+		return meetingList;
+	} catch (error) {
+		console.error('Error fetching meeting invites:', error);
+		throw error;
+	}
+}
+
+export async function getAllMeetings(userID: string): Promise<Meeting[]> {
+	const endpoint = `user/meeting/${userID}`;
+
+	const response = await fetchData<{ meetings: Meeting[] }>(endpoint);
+	return response.meetings;
 }

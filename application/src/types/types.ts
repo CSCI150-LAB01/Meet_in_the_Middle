@@ -182,3 +182,18 @@ export interface MeetingInviteResponse {
 		__v: number;
 	};
 }
+
+export interface MeetingWithName {
+	_id: string;
+	creatorId: string;
+	title: string;
+	placeId: string;
+	meetingDateTime: string;
+	pending: string[];
+	denied: string[];
+	accepted: string[];
+	createdAt: string;
+	updatedAt: string;
+	__v: number;
+	creatorName: string;
+}
