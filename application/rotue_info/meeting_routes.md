@@ -107,7 +107,7 @@ Returns a list of meetings where the user has accepted an invitation to.
     - **Status 200**:
       ```json
       {
-        "meeting": [
+        "meetings": [
           {
             "_id": "656107982e5684c0dcaeac7d",
             "creatorId": "6545c1d5809eea63dfc73f47",
@@ -243,7 +243,7 @@ Get a list of meetings the user has been invited to.\
     - **Status 200**:
       ```json
       {
-        "meeting": [
+        "meetings": [
           {
             "_id": "656107a12e5684c0dcaeac80",
             "creatorId": "6545c1d5809eea63dfc73f47",
