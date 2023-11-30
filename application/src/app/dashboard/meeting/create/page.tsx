@@ -6,12 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
-import {
-	createMeeting,
-	fetchDefaultLocation,
-	getClosestPlaceId,
-	getUser,
-} from '@/utils/apiCalls';
+import { createMeeting, fetchDefaultLocation, getUser } from '@/utils/apiCalls';
 import { getLatLng } from 'use-places-autocomplete';
 import { MeetingResponse } from '@/types/types';
 
