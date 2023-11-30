@@ -106,6 +106,7 @@ export default function Login() {
 						fullWidth
 						onClick={handleSubmit}
 						disabled={isLoading} // Disable the button when loading
+						isLoading={isLoading}
 					>
 						{isLoading ? 'Loading...' : 'Sign In'}
 					</Button>

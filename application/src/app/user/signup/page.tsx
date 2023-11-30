@@ -81,6 +81,14 @@ export default function SignUp() {
 				setIsLoading(false); // Set loading state to false after API call is complete
 			});
 	};
+
+	const handlePlacesChanged = () => {
+		setCurrentLocation({
+			lat: markers[0].lat,
+			lng: markers[0].lng,
+		});
+	};
+
 	useEffect(() => {
 		if (position && locationStatus === 'granted') {
 			setCurrentLocation({
@@ -89,6 +97,7 @@ export default function SignUp() {
 			});
 		}
 	}, [position, locationStatus]);
+
 	return (
 		<>
 			<div className='w-full text-sm bg-primary rounded-2xl flex flex-col flex-1 grow'>
@@ -146,7 +155,10 @@ export default function SignUp() {
 								<div id='searchbox' className='w-full'>
 									<StandaloneSearchBox
 										onLoad={onSBLoad}
-										onPlacesChanged={onPlacesChanged}
+										onPlacesChanged={() => {
+											onPlacesChanged();
+											handlePlacesChanged();
+										}}
 									>
 										<Input
 											label='Home Location'
@@ -186,6 +198,7 @@ export default function SignUp() {
 						fullWidth
 						type='submit'
 						disabled={isLoading}
+						isLoading={isLoading}
 					>
 						{isLoading ? 'Loading' : 'Sign Up'}
 					</Button>

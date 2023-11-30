@@ -102,7 +102,6 @@ export default function MeetingsPage() {
 								key={meeting._id}
 								title={meeting.title}
 								date={meeting.meetingDateTime}
-								onDelete={() => {}}
 								editLink={`/dashboard/meeting/edit/${meeting._id}`}
 							/>
 						))}

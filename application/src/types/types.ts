@@ -197,3 +197,20 @@ export interface MeetingWithName {
 	__v: number;
 	creatorName: string;
 }
+
+export interface SuggestionRequest {
+	types: string[];
+	radius: number;
+	coordinates: { latitude: number; longitude: number }[];
+}
+
+export type SuggestionResponse = {
+	results: Array<{
+		name: string;
+		place_id: string;
+		rating: number;
+		types: string[];
+		user_ratings_total: number;
+		vicinity: string;
+	}>;
+};

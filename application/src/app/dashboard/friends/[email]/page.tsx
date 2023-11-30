@@ -53,23 +53,25 @@ export default function SearchFriends({
 				>
 					Find Friends
 				</h1>
-				<Input
-					classNames={{
-						base: 'sm:max-w-[500px] h-10',
-						mainWrapper: 'w-full h-full',
-						input: 'text-small',
-						inputWrapper:
-							'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
-					}}
-					placeholder='Search for an email...'
-					size='sm'
-					startContent={<MdOutlineSearch />}
-					type='search'
-					variant='bordered'
-					color='primary'
-					ref={searchFriendsRef}
-					onKeyDown={handleKeyDown}
-				/>
+				<div className='flex items-end justify-center flex-col gap-x-5'>
+					<Input
+						classNames={{
+							base: 'sm:max-w-[500px] h-10',
+							mainWrapper: 'w-full h-full',
+							input: 'text-small',
+							inputWrapper:
+								'h-full w-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
+						}}
+						placeholder='Add a friend by email...'
+						size='sm'
+						startContent={<MdOutlineSearch />}
+						type='search'
+						variant='bordered'
+						color='primary'
+						ref={searchFriendsRef}
+						onKeyDown={handleKeyDown}
+					/>
+				</div>
 			</div>
 			<div className='w-full flex h-full items-center item-end text-sm flex-col gap-4 grow'>
 				<div className='w-full text-sm bg-primary rounded-t-2xl flex flex-col flex-1 grow py-5 px-5 items-center sm:items-start'>

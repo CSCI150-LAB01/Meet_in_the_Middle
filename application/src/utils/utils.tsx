@@ -21,3 +21,26 @@ export function formatDateTime(inputDateTime: string): string {
 
 	return formattedDateTime;
 }
+
+export const suggestionOptions = [
+	'amusement_park',
+	'art_gallery',
+	'bar',
+	'bowling_alley',
+	'cafe',
+	'campground',
+	'casino',
+	'clothing_store',
+	'department_store',
+	'gym',
+	'hair_care',
+	'movie_theater',
+	'museum',
+	'night_club',
+	'park',
+	'restaurant',
+	'shoe_store',
+	'shopping_mall',
+	'spa',
+	'zoo',
+];

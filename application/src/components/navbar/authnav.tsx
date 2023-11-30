@@ -44,10 +44,10 @@ export default function AuthNavbar() {
 	};
 
 	const menuItems: MenuItem[] = [
-		{ pageName: 'Dashboard', location: '/dashboard' },
-		{ pageName: 'Maps', location: '/dashboard/maps' },
+		{ pageName: 'Home', location: '/dashboard' },
+		{ pageName: 'Meetings', location: '/dashboard/meetings' },
 		{ pageName: 'Friends', location: '/dashboard/friends' },
-		{ pageName: 'Menu', location: '/dashboard/menu' },
+		{ pageName: 'Maps', location: '/dashboard/maps' },
 	];
 
 	useEffect(() => {

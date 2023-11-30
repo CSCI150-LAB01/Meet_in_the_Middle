@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { getUpcomingMeetings, getUser } from '@/utils/apiCalls';
 import { Meeting } from '@/types/types';
 import CardLoading from '@/components/loading';
+import { Divider, Spacer } from '@nextui-org/react';
 
 export default function Dashboard() {
 	const [meetings, setMeetings] = useState<Meeting[]>([]);
@@ -51,12 +52,16 @@ export default function Dashboard() {
 						<p>You have no upcoming meetings</p>
 					) : (
 						<>
-							{meetings.map(meeting => (
-								<NotificationCard
-									key={meeting._id}
-									title={meeting.title}
-									date={meeting.meetingDateTime}
-								/>
+							{/* Load Only 3 Meetings at a time */}
+							{meetings.slice(0, 3).map(meeting => (
+								<>
+									<NotificationCard
+										key={meeting._id}
+										title={meeting.title}
+										date={meeting.meetingDateTime}
+									/>
+									<Spacer />
+								</>
 							))}
 						</>
 					)}

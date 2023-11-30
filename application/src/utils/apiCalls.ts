@@ -16,6 +16,8 @@ import {
 	MeetingInviteRequestBody,
 	MeetingInviteResponse,
 	MeetingWithName,
+	SuggestionRequest,
+	SuggestionResponse,
 } from '@/types/types';
 import { fromLatLng, setKey } from 'react-geocode';
 
@@ -543,4 +545,20 @@ export async function acceptMeetingInvite(
 
 	const response = await fetch(apiUrl + url, requestOptions);
 	return handleApiResponse<MeetingResponse>(response);
+}
+
+export async function getSuggestions(
+	suggestionRequest: SuggestionRequest,
+): Promise<SuggestionResponse> {
+	const url = 'suggestion';
+	const requestOptions: RequestInit = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(suggestionRequest),
+	};
+
+	const response = await fetch(apiUrl + url, requestOptions);
+	return handleApiResponse<SuggestionResponse>(response);
 }

@@ -10,6 +10,7 @@ import { MeetingInviteRequestBody, NoVUser } from '@/types/types';
 import { fetchFriendsList, getUser, sendMeetingInvite } from '@/utils/apiCalls';
 import FriendCard from '../components/inviteFriends';
 import CardLoading from '@/components/loading';
+import Link from 'next/link';
 
 interface InviteProps {
 	params: {
@@ -76,7 +77,7 @@ export default function Invite({ params }: InviteProps) {
 				</h1>
 			</div>
 			<div className='w-full flex h-full sm:h-[unset] items-center item-end text-sm flex-col gap-4 grow sm:grow-0'>
-				<form className='w-full text-sm bg-primary rounded-t-2xl sm:rounded-b-2xl flex flex-col flex-1 grow p-6 items-center sm:items-start gap-5'>
+				<div className='w-full text-sm bg-primary rounded-t-2xl sm:rounded-b-2xl flex flex-col flex-1 grow p-6 items-center sm:items-start gap-5'>
 					<Input
 						placeholder='Search for friend emails...'
 						classNames={{
@@ -110,17 +111,15 @@ export default function Invite({ params }: InviteProps) {
 							No matching friends found.
 						</p>
 					)}
-					<Button
-						color='secondary'
-						className='w-full text-md'
-						type='submit'
-						onClick={() => {
-							router.back();
-						}}
+					<Link
+						href={`/dashboard/meeting/edit/${params.meetingId}`}
+						className='w-full'
 					>
-						Go Back
-					</Button>
-				</form>
+						<Button color='secondary' className='w-full text-md' type='submit'>
+							Back to Editing
+						</Button>
+					</Link>
+				</div>
 			</div>
 			<ToastContainer />
 		</main>

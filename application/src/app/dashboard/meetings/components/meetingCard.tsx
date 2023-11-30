@@ -26,21 +26,27 @@ const MeetingCard: React.FC<MeetingCardProps> = ({
 					<p className='text-md font-bold text-secondary'>{title}</p>
 					<p className='text-small text-default-500'>{formatDateTime(date)}</p>
 				</div>
-				{editLink && onDelete && (
+				{editLink && (
 					<div className='ml-auto flex gap-2'>
 						<Link href={editLink}>
 							<Button
 								color='primary'
 								endContent={<MdEdit />}
-								onClick={onDelete}
-								className='bg-zinc-200 text-zinc-700'
+								className='bg-zinc-200 text-zinc-700 sm:flex hidden'
 							>
 								Edit
 							</Button>
 						</Link>
-						<Button color='danger' endContent={<MdDelete />} onClick={onDelete}>
-							Delete
-						</Button>
+
+						<Link href={editLink}>
+							<Button
+								color='primary'
+								isIconOnly
+								className='bg-zinc-200 text-zinc-700 sm:hidden text-center flex items-center justify-center'
+							>
+								<MdEdit className='text-[14px]' />
+							</Button>
+						</Link>
 					</div>
 				)}
 			</CardBody>

@@ -32,17 +32,15 @@ const FriendCard: React.FC<FriendCardProps> = ({
 	onAccept,
 }) => {
 	const [added, setAdded] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false); // New loading state
 	const toastPosition = toast.POSITION.BOTTOM_LEFT;
 
 	const handleAdd = async () => {
 		if (added) {
-			toast.error('You have already sent a friend request.', {
-				position: toastPosition,
-			});
 			return;
 		}
 
-		setAdded(true);
+		setLoading(true); // Set loading to true when the request starts
 		try {
 			const data = await getUser();
 			const response = await sendFriendRequest(
@@ -52,16 +50,12 @@ const FriendCard: React.FC<FriendCardProps> = ({
 			);
 			if (!response) {
 				toast.success('Friend request sent.', { position: toastPosition });
-			} else {
-				toast.error(response, { position: toastPosition });
-				setAdded(false);
+				setAdded(true);
 			}
 		} catch (error) {
 			console.error('Error adding friend:', error);
-			toast.error('An error occurred while sending a friend request.', {
-				position: toastPosition,
-			});
-			setAdded(false);
+		} finally {
+			setLoading(false); // Set loading to false regardless of success or failure
 		}
 	};
 
@@ -70,8 +64,10 @@ const FriendCard: React.FC<FriendCardProps> = ({
 	};
 
 	const handleAccept = async () => {
+		setLoading(true);
 		if (!senderId || !onAccept) return;
-		acceptFriendRequest(id, senderId);
+		await acceptFriendRequest(id, senderId);
+		setLoading(false);
 		onAccept();
 	};
 
@@ -98,8 +94,10 @@ const FriendCard: React.FC<FriendCardProps> = ({
 							aria-label='Take a photo'
 							className='float-right justify-self-end'
 							onClick={handleAdd}
+							disabled={loading || added} // Disable the button while loading or if already added
+							isLoading={loading}
 						>
-							<MdAdd size='25px' />
+							{loading ? <div className='loader' /> : <MdAdd size='25px' />}
 						</Button>
 					) : null}
 					{accept ? (
@@ -110,6 +108,8 @@ const FriendCard: React.FC<FriendCardProps> = ({
 							aria-label='Take a photo'
 							className='justify-self-end'
 							onClick={handleAccept}
+							disabled={loading || added} // Disable the button while loading or if already added
+							isLoading={loading}
 						>
 							<MdCheck size='25px' />
 						</Button>
