@@ -6,7 +6,7 @@ import { MdEmail } from 'react-icons/md';
 import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 import { berlin } from '@/styles/fonts';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -141,6 +141,7 @@ export default function Login() {
 			>
 				Don&apos;t have an account? Sign Up
 			</Link>
+			<ToastContainer />
 		</>
 	);
 }

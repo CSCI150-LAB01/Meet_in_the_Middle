@@ -19,6 +19,7 @@ export default function Maps() {
 		onUnmount,
 		onSBLoad,
 		onPlacesChanged,
+		setPlaceholderText,
 	} = useGoogleMaps();
 
 	return (
@@ -64,6 +65,8 @@ export default function Maps() {
 									startContent={<MdOutlineSearch />}
 									type='search'
 									color='default'
+									value={placeholderText}
+									onChange={e => setPlaceholderText(e.target.value)}
 								/>
 							</StandaloneSearchBox>
 						) : (

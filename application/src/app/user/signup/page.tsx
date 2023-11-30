@@ -20,6 +20,7 @@ import { MdAccountCircle, MdEmail, MdPinDrop } from 'react-icons/md';
 import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 import { berlin } from '@/styles/fonts';
+import { fromLatLng } from 'react-geocode';
 
 export default function SignUp() {
 	const { position, status: locationStatus } = useGeolocation();
@@ -34,6 +35,7 @@ export default function SignUp() {
 		placeholderText,
 		onLoad,
 		onUnmount,
+		setPlaceholderText,
 		onSBLoad,
 		onPlacesChanged,
 	} = useGoogleMaps();
@@ -43,6 +45,7 @@ export default function SignUp() {
 	const emailRef = useRef<HTMLInputElement | null>(null);
 	const passwordRef = useRef<HTMLInputElement | null>(null);
 	const router = useRouter();
+	const [value, setValue] = useState(''); // Search box value
 
 	// Form Functions
 	const handleSubmit = (e: React.FormEvent) => {
@@ -77,6 +80,14 @@ export default function SignUp() {
 	};
 
 	useEffect(() => {}, [position, locationStatus]);
+
+	const updateSearchBox = () => {
+		if (markers[0]) {
+			fromLatLng(markers[0].lat, markers[0].lng).then(({ results }) => {
+				setValue(results[0].formatted_address);
+			});
+		}
+	};
 
 	return (
 		<>
@@ -142,6 +153,8 @@ export default function SignUp() {
 										endContent={
 											<MdPinDrop className='text-default-400 pointer-events-none' />
 										}
+										value={placeholderText}
+										onChange={e => setPlaceholderText(e.target.value)}
 									></Input>
 								</StandaloneSearchBox>
 							</div>
