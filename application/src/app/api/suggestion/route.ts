@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
   const types = data.types;               // type of place to filter in GOOGLE API
   const coordinates = data.coordinates; // list of coordinates with latitude and longitude
-  const radius = data.radius;  // radius in meters to search around the midpoint of the coordinates
+  let radius = data.radius;  // radius in meters to search around the midpoint of the coordinates
 
   let latitude, longitude;
   try {
@@ -31,19 +31,32 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
 
+  
   let typesString = suggestionUtils.buildTypeString(types);
 
   // Fetch places from Google Maps API
   console.log("types" + typesString)
   const apiKey = process.env.GOOGLE_MITM_API_KEY
-  const places = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${typesString}&key=${apiKey}`)
+
+  let places;
+  do{
+  places = await fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${typesString}&key=${apiKey}`)
     .then(response => { return response.json() })
     .catch(error => {
       console.error('Error:', error);
     });
+    radius += 5000;
+  } while (places.status == "ZERO_RESULTS" && radius < 60000)
+
+  if (places.status == "ZERO_RESULTS") {
+    console.log(places.status)
+    return NextResponse.json({ message: "No results could be found matching the criteria", places }, { status: 400 });
+  }
+  
 
   const results = suggestionUtils.filterResults(places);
   console.log(results);
+
 
   return NextResponse.json({ results }, { status: 200 });
 }
