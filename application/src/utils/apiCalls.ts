@@ -13,6 +13,8 @@ import {
 	Meeting,
 	CreateMeetingResponse,
 	GetMeetingsResponse,
+	MeetingInviteRequestBody,
+	MeetingInviteResponse,
 } from '@/types/types';
 import { fromLatLng, setKey } from 'react-geocode';
 
@@ -446,4 +448,21 @@ export async function getMeetingById(
 		console.error(error);
 		throw error;
 	}
+}
+
+export async function sendMeetingInvite(
+	userId: string,
+	requestBody: MeetingInviteRequestBody,
+): Promise<MeetingInviteResponse> {
+	const url = `user/meeting-invite/${userId}`;
+	const requestOptions: RequestInit = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(requestBody),
+	};
+
+	const response = await fetchData<MeetingInviteResponse>(url, requestOptions);
+	return response;
 }

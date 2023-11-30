@@ -13,6 +13,7 @@ import {
 	getUser,
 } from '@/utils/apiCalls';
 import { getLatLng } from 'use-places-autocomplete';
+import { MeetingResponse } from '@/types/types';
 
 export default function Create() {
 	const router = useRouter();
@@ -42,14 +43,14 @@ export default function Create() {
 
 		try {
 			const placeID = await getClosestPlaceId(coordinates[1], coordinates[0]);
-			const response = await createMeeting(
+			const response: MeetingResponse = await createMeeting(
 				userData._id,
 				placeID,
 				formData.title,
 				formData.dateTime,
 			);
 
-			handleSuccess();
+			handleSuccess(response.meeting._id);
 		} catch (error) {
 			toast.error('Something went wrong...', { position: toastPosition });
 			setSubmitting(false);
@@ -58,8 +59,9 @@ export default function Create() {
 		}
 	};
 
-	const handleSuccess = () => {
+	const handleSuccess = (meetingId: string) => {
 		toast.success('Meeting created successfully!', { position: toastPosition });
+		router.push(`/dashboard/meeting/edit/${meetingId}`);
 	};
 	return (
 		<main className='flex justify-center flex-col px-0 w-full gap-y-5 h-screen items-center sm:max-h-[500px] sm:max-w-[500px]'>

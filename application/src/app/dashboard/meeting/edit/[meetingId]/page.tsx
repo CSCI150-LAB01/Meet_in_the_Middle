@@ -24,6 +24,11 @@ export default function Edit({ params }: { params: { meetingId: string } }) {
 					params.meetingId,
 				);
 				setMeetingData(meetingData);
+				if (userData._id !== meetingData?.creatorId) {
+					console.error('Invalid user id permissions');
+					router.push('/dashboard');
+					return;
+				}
 
 				// Set the default value for datetime
 				setMeetingDateTime(
@@ -79,15 +84,11 @@ export default function Edit({ params }: { params: { meetingId: string } }) {
 									)}
 								</div>
 							</div>
-							<Button
-								color='secondary'
-								className='w-full text-md'
-								onClick={() => {
-									router.push('/dashboard/meeting/edit/invite');
-								}}
-							>
-								Invite Friends
-							</Button>
+							<Link href={`/dashboard/meeting/invite/${params.meetingId}`}>
+								<Button color='secondary' className='w-full text-md'>
+									Invite Friends
+								</Button>
+							</Link>
 
 							<Input
 								label='Change Date / Time'

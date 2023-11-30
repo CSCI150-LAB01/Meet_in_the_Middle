@@ -161,3 +161,24 @@ export interface PlaceResult {
 export interface GetMeetingsResponse {
 	meetings: Meeting[];
 }
+
+export interface MeetingInviteRequestBody {
+	meetingId: string;
+	userIds: string[];
+}
+
+export interface MeetingInviteResponse {
+	message: string;
+	meeting: {
+		_id: string;
+		creatorId: string;
+		title: string;
+		placeId: string;
+		pending: string[];
+		denied: string[];
+		accepted: string[];
+		createdAt: string;
+		updatedAt: string;
+		__v: number;
+	};
+}
