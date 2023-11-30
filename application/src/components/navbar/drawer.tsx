@@ -47,11 +47,11 @@ const DrawerContents: React.FC<DrawerProps> = ({ closeDrawer }) => {
 	}, []);
 
 	return (
-		<div className='bg-white rounded-lg p-5 flex gap-2 flex-col'>
-			<h3 className='text-zinc-500 font-semibold self-end text-lg capitalize'>
+		<div className='bg-white rounded-lg p-5 flex gap-2 flex-col w-full'>
+			<h3 className='text-zinc-500 font-semibold self-end text-lg capitalize w-full'>
 				Welcome {username + ','}
 			</h3>
-			<div className='flex flex-col gap-2 items-center justify-center w-full'>
+			<div className='flex flex-col gap-2 items-center justify-center w-full md:items-start'>
 				{/* Fix this at some point to figure out what it's for? */}
 				<p className='font-semibold text-zinc-500'>My Default Location</p>
 				<p>{address ? address : ''}</p>

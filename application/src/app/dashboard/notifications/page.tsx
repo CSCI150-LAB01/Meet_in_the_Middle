@@ -1,12 +1,13 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { berlin } from '@/styles/fonts';
-import { Input, Button } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
+import { Button } from '@nextui-org/react';
 import { getNotifications, getUser } from '@/utils/apiCalls';
 import NotificationCard from './components/NotificationCard';
 import { Notification } from '@/types/types';
 import CardLoading from '@/components/loading';
+import { ToastContainer, ToastPosition, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function NotificationPage() {
 	const [notifications, setNotifications] = useState<Notification[] | null>(
@@ -24,6 +25,7 @@ export default function NotificationPage() {
 				setIsLoading(false); // Set loading to false when data is fetched
 			} catch (error) {
 				console.error('Error fetching user:', error);
+				showToast('Invalid user error...', 'error');
 			}
 		};
 
@@ -33,12 +35,22 @@ export default function NotificationPage() {
 	const handleLoadMore = () => {
 		setVisibleItems(prevVisibleItems => prevVisibleItems + 3);
 	};
+	const showToast = (message: string, type: 'success' | 'error'): void => {
+		toast[type](message, { position: toast.POSITION.BOTTOM_LEFT } as {
+			position: ToastPosition;
+		});
+	};
 
 	const handleDeleteNotification = async () => {
-		const userData = await getUser();
-		getNotifications(userData._id)
-			.then(response => setNotifications(response.notifications))
-			.catch(error => console.error('Error fetching notifications:', error));
+		try {
+			const userData = await getUser();
+			const response = await getNotifications(userData._id);
+			setNotifications(response.notifications);
+			showToast('Notification deleted successfully!', 'success');
+		} catch (error) {
+			console.error('Error fetching notifications:', error);
+			showToast('There was an error getting your notifications..', 'error');
+		}
 	};
 
 	return (
@@ -79,6 +91,7 @@ export default function NotificationPage() {
 						Load More
 					</Button>
 				)}
+				<ToastContainer />
 			</div>
 		</div>
 	);

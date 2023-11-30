@@ -6,19 +6,24 @@ import {
 	MdCalendarMonth,
 	MdMap,
 	MdNotifications,
-	MdPerson,
 	MdPersonAdd,
 } from 'react-icons/md';
 import { useState, useEffect } from 'react';
 import { getUpcomingMeetings, getUser } from '@/utils/apiCalls';
 import { Meeting } from '@/types/types';
 import CardLoading from '@/components/loading';
-import { Divider, Spacer } from '@nextui-org/react';
+import { Spacer } from '@nextui-org/react';
+import { ToastContainer, ToastPosition, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Dashboard() {
 	const [meetings, setMeetings] = useState<Meeting[]>([]);
 	const [loading, setLoading] = useState(true);
-
+	const showToast = (message: string, type: 'success' | 'error'): void => {
+		toast[type](message, { position: toast.POSITION.BOTTOM_LEFT } as {
+			position: ToastPosition;
+		});
+	};
 	useEffect(() => {
 		const fetchMeetings = async () => {
 			try {
@@ -29,6 +34,10 @@ export default function Dashboard() {
 			} catch (error) {
 				console.error(error);
 				setLoading(false);
+				showToast(
+					'Error fetching upcoming meetings. Please try again later.',
+					'error',
+				);
 			}
 		};
 
@@ -97,6 +106,7 @@ export default function Dashboard() {
 					/>
 				</div>
 			</div>
+			<ToastContainer />
 		</div>
 	);
 }

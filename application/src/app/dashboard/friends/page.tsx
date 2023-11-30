@@ -13,6 +13,8 @@ import {
 import CardLoading from '@/components/loading';
 import { useRouter } from 'next/navigation';
 import { FriendListResponse, FriendRequest, NoVUser } from '@/types/types';
+import { ToastContainer, ToastPosition, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Friends() {
 	const [friendsList, setFriendsList] = useState<NoVUser[] | null>(null);
@@ -28,6 +30,11 @@ export default function Friends() {
 			router.push(`/dashboard/friends/${encodeURI(query)}`);
 		}
 	};
+	const showToast = (message: string, type: 'success' | 'error'): void => {
+		toast[type](message, { position: toast.POSITION.BOTTOM_LEFT } as {
+			position: ToastPosition;
+		});
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -39,6 +46,7 @@ export default function Friends() {
 				setFriendRequests(friendRequests.friendRequests);
 			} catch (error) {
 				console.error('Error fetching user:', error);
+				showToast('Error fetching user data.', 'error');
 			}
 		};
 
@@ -54,6 +62,7 @@ export default function Friends() {
 			setFriendRequests(friendRequests.friendRequests);
 		} catch (error) {
 			console.error('Error fetching user:', error);
+			showToast('Error updating friend requests.', 'error');
 		}
 	};
 
@@ -133,6 +142,7 @@ export default function Friends() {
 					)}
 				</div>
 			</div>
+			<ToastContainer />
 		</main>
 	);
 }

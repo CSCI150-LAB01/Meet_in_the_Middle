@@ -91,7 +91,7 @@ export default function SignUp() {
 
 					<Input
 						type='username'
-						label='Username'
+						label='Display Name'
 						required
 						endContent={
 							<MdAccountCircle className='text-default-400 pointer-events-none' />

@@ -39,7 +39,7 @@ export default function Invite({ params }: InviteProps) {
 			toast.success(response.message);
 		} catch (error) {
 			console.error('Error sending meeting invite:', error);
-			toast.error('There was an error...');
+			toast.error('Error sending meeting invite. Please try again later.');
 		}
 	};
 

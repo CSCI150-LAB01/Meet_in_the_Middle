@@ -150,15 +150,29 @@ export default function AuthNavbar() {
 				</Button>
 			</Navbar>
 
-			{/* Account Drawer */}
+			{/* Account Drawer for mobile */}
 			<Drawer
 				open={isDrawerOpen}
 				onClose={toggleDrawer}
 				direction='top'
-				className='pt-[50px] rounded-3xl'
+				className='pt-[50px] rounded-3xl md:hidden block w-full float-right'
 				style={{ zIndex: 2 }}
 				overlayClassName='!z-[1]'
 				overlayOpacity={0}
+			>
+				{isDrawerOpen && <DrawerContents closeDrawer={toggleDrawer} />}
+			</Drawer>
+
+			{/* Account Drawer for desktop */}
+			<Drawer
+				open={isDrawerOpen}
+				onClose={toggleDrawer}
+				direction='right'
+				className='pt-[50px] rounded-3xl md:block hidden float-right'
+				style={{ zIndex: 2 }}
+				overlayClassName='!z-[1]'
+				overlayOpacity={0}
+				size={300}
 			>
 				{isDrawerOpen && <DrawerContents closeDrawer={toggleDrawer} />}
 			</Drawer>
