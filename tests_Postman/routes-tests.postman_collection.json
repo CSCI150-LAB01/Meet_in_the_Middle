@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "b765d808-8d63-43e8-b0e4-1c36152e320e",
+		"name": "routes-tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30896190"
+	},
+	"item": [
+		{
+			"name": "localhost:3000/api/add-friends",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userIdA\" : \"65418ae1d8b49b19537401e1\",\n    \"userIdB\" : \"65418ae1d8b49b19537401e1\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/add-friends",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"add-friends"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/user-list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/user-list",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user-list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n      \"email\" : \"joanie@kearsarge.net\",\n      \"password\": \"cs\",\n      \"username\" : \"holy\",    \n      \"coordinates\" : [-118.90485273197642, 36.43942147868979]\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/user/6545c1d5809eea63dfc73f47",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/user/6545c1d5809eea63dfc73f47",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"6545c1d5809eea63dfc73f47"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/user/default-location/6545e45698fe7f58fa524310",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/user/default-location/6545e45698fe7f58fa524310",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"default-location",
+						"6545e45698fe7f58fa524310"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
