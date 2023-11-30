@@ -44,3 +44,12 @@ body {
 
 	overflow-x: clip;
 }
+
+.standalone-search-box-container div {
+	width: 100%; /* Set the width as needed */
+}
+
+.standalone-search-box-container input {
+	width: 100% !important; /* Override the width */
+	/* Add any other styles you need */
+}

@@ -93,6 +93,7 @@ export default function Dashboard() {
 						backgroundColor='bg-primary'
 						textColor='berlin'
 						icon={<MdNotifications />}
+						link='/dashboard/notifications'
 					/>
 				</div>
 			</div>
