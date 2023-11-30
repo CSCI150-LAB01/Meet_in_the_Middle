@@ -1,0 +1,138 @@
+Andrew Rodriguez
+andrew_rodriguez@gmail.com
+1051 S Orangewood Dr, Fresno, CA 93727
+36.73251586840819, -119.71271118925613
+
+Request
+{
+    "email" : "andrew_rodriguez@gmail.com",
+    "password": "1234",
+    "username" : "Andrew Rodriguez",    
+    "coordinates" : [-119.71271118925613,36.73251586840819]
+}
+
+Response
+{
+    "message": "User created",
+    "user": {
+        "email": "andrew_rodriguez@gmail.com",
+        "password": "$2b$10$1S43IUZ0EJEiB0KiJ1dswelnmUCv8PTyEUKv1UV1jwIOlljAKxn.e",
+        "username": "Andrew Rodriguez",
+        "defaultLocationId": "65686aada44315decfefbd22",
+        "_id": "65686aada44315decfefbd23",
+        "createdAt": "2023-11-30T10:57:49.953Z",
+        "updatedAt": "2023-11-30T10:57:49.953Z",
+        "__v": 0
+    }
+}
+
+James Davis
+james_davis@gmail.com
+36.76898840082856, -119.87338087688438
+2234 N Katy Ave, Fresno, CA 93722
+
+{
+    "email" : "james_davis@gmail.com",
+    "password": "1234",
+    "username" : "James Davis",    
+    "coordinates" : [-119.87338087688438,36.76898840082856]
+}
+{
+    "message": "User created",
+    "user": {
+        "email": "james_davis@gmail.com",
+        "password": "$2b$10$pAs.supQ76ARl7eNbSwKYevmRjRUeTRh6h0eUBncVVR38AreSbwUy",
+        "username": "James Davis",
+        "defaultLocationId": "65686b1aa44315decfefbd29",
+        "_id": "65686b1aa44315decfefbd2a",
+        "createdAt": "2023-11-30T10:59:38.854Z",
+        "updatedAt": "2023-11-30T10:59:38.854Z",
+        "__v": 0
+    }
+}
+
+
+Evelyn Moore
+evelyn_moore@gmail.com
+36.89533339099336, -119.75352368974781
+1580 E Golden Valley Way, Fresno, CA 93730
+{
+    "email" : "evelyn_moore@gmail.com",
+    "password": "1234",
+    "username" : "Evelyn Moore",    
+    "coordinates" : [-119.75352368974781,36.89533339099336]
+}
+{
+    "message": "User created",
+    "user": {
+        "email": "evelyn_moore@gmail.com",
+        "password": "$2b$10$eSUXuKdC99hhf9dt/GjNjOybO8CXSm6Tyvysxkv5wGIj/lqmWZD/K",
+        "username": "Evelyn Moore",
+        "defaultLocationId": "65686b65a44315decfefbd2f",
+        "_id": "65686b65a44315decfefbd30",
+        "createdAt": "2023-11-30T11:00:53.171Z",
+        "updatedAt": "2023-11-30T11:00:53.171Z",
+        "__v": 0
+    }
+}
+
+Isabella Hernandez
+isabella_hernandez@gmail.com
+1343 Corazon Ave, Clovis, CA 93619
+36.814050591186835, -119.63438801259079
+{
+    "email" : "isabella_hernandez@gmail.com",
+    "password": "1234",
+    "username" : "Isabella Hernandez",    
+    "coordinates" : [-119.63438801259079,36.814050591186835]
+}
+
+
+Ava Lee
+ava_lee@gmail.com
+4754 E Kaviland Ave, Fresno, CA 93725
+36.709367425803215, -119.73875544783851
+{
+    "email" : "ava_lee@gmail.com",
+    "password": "1234",
+    "username" : "Ava Lee",    
+    "coordinates" : [-119.73875544783851,36.709367425803215]
+}
+{
+    "message": "User created",
+    "user": {
+        "email": "ava_lee@gmail.com",
+        "password": "$2b$10$jZC6YUBGYObMmlF8QSVBHupO22jHwfR5zvug1/MtaiGrCgDjCUXfy",
+        "username": "Ava Lee",
+        "defaultLocationId": "65686cc5a44315decfefbd3c",
+        "_id": "65686cc5a44315decfefbd3d",
+        "createdAt": "2023-11-30T11:06:45.478Z",
+        "updatedAt": "2023-11-30T11:06:45.478Z",
+        "__v": 0
+    }
+}
+
+
+David Miller
+david_miller@gmail.com
+1813 E Terrace Ave, Fresno, CA 93703
+36.773496027539366, -119.78913269814616
+{
+    "email" : "david_miller@gmail.com",
+    "password": "1234",
+    "username" : "David Miller",    
+    "coordinates" : [-119.78913269814616,36.773496027539366]
+}
+{
+    "message": "User created",
+    "user": {
+        "email": "david_miller@gmail.com",
+        "password": "$2b$10$7N4XixXSJgeHaDX509t1a.q.LW/rTSf4h010GYwkvWrs0PqoknrPq",
+        "username": "David Miller",
+        "defaultLocationId": "65686d1da44315decfefbd42",
+        "_id": "65686d1da44315decfefbd43",
+        "createdAt": "2023-11-30T11:08:13.827Z",
+        "updatedAt": "2023-11-30T11:08:13.827Z",
+        "__v": 0
+    }
+}
