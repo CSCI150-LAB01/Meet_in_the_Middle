@@ -6,11 +6,14 @@ import MeetingInviteCard from './components/meetingInvite';
 import { Meeting, MeetingWithName } from '@/types/types';
 import { useState, useEffect } from 'react';
 import {
+	acceptMeetingInvite,
 	getAllMeetings,
 	getMeetingInvites,
 	getUser,
 	getUserInfo,
 } from '@/utils/apiCalls';
+import MeetingCard from './components/meetingCard';
+import CardLoading from '@/components/loading';
 
 export default function MeetingsPage() {
 	const [meetingInvites, setMeetingInvites] = useState<
@@ -35,36 +38,78 @@ export default function MeetingsPage() {
 				setLoading(false);
 			}
 		};
+
 		fetchData();
 	}, []);
+
+	const handleAcceptMeetingInvite = async (meetingId: string) => {
+		try {
+			const userData = await getUser();
+			await acceptMeetingInvite(userData._id, meetingId);
+			const updatedMeetingInvites: MeetingWithName[] = await getMeetingInvites(
+				userData._id,
+			);
+			setMeetingInvites(updatedMeetingInvites);
+			const updatedMeetings: Meeting[] = await getAllMeetings(userData._id);
+			setMeetingsList(updatedMeetings);
+		} catch (error) {
+			console.error('Error accepting meeting invite:', error);
+		}
+	};
+
 	return (
 		<div className='flex w-full justify-center'>
 			<div className='flex min-h-screen flex-col items-center lg:px-24 py-24 w-full max-w-[1080px] p-3'>
-				<h1 className='text-lg text-zinc-700 self-start font-bold flex items-center gap-x-2'>
-					<MdNotifications className='inline' />
-					New Meeting Requests
-				</h1>
-				<div className='container py-3 flex flex-col gap-3'>
-					{meetingInvites &&
-						meetingInvites.map((invite: MeetingWithName) => (
-							<MeetingInviteCard
-								key={invite._id} // Make sure to use a unique key for each item
-								title={invite.title}
-								date={invite.meetingDateTime}
-								owner={invite.creatorName}
-							/>
-						))}
-				</div>
-				<Divider className='mb-3' />
+				{/* Show meeting invites or loading state */}
+				{meetingInvites && meetingInvites.length > 0 ? (
+					<>
+						<h1 className='text-lg text-zinc-700 self-start font-bold flex items-center gap-x-2'>
+							<MdNotifications className='inline' />
+							New Meeting Invites
+						</h1>
+						<div className='container py-3 flex flex-col gap-3'>
+							{meetingInvites.map(invite => (
+								<MeetingInviteCard
+									key={invite._id}
+									title={invite.title}
+									date={invite.meetingDateTime}
+									owner={invite.creatorName}
+									onAccept={() => handleAcceptMeetingInvite(invite._id)}
+								/>
+							))}
+						</div>
+						<Divider className='mb-3' />
+					</>
+				) : (
+					''
+				)}
 
 				<h1
-					className={berlin.className + ' text-4xl sm:text-5xl text-zinc-700'}
+					className={
+						berlin.className + ' text-4xl sm:text-5xl text-zinc-700 mb-2'
+					}
 				>
 					Meetings
 				</h1>
-				<div className='container py-3 flex flex-col gap-3'>
-					{/* Meetings */}
-				</div>
+
+				{/* Show meetings or loading state */}
+				{loading ? (
+					<CardLoading />
+				) : meetingsList && meetingsList.length > 0 ? (
+					<div className='container py-3 flex flex-col gap-3'>
+						{meetingsList.map((meeting: Meeting) => (
+							<MeetingCard
+								key={meeting._id}
+								title={meeting.title}
+								date={meeting.meetingDateTime}
+								onDelete={() => {}}
+								editLink={`/dashboard/meeting/edit/${meeting._id}`}
+							/>
+						))}
+					</div>
+				) : (
+					''
+				)}
 			</div>
 		</div>
 	);

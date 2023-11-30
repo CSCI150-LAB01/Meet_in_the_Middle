@@ -23,6 +23,7 @@ import { berlin } from '@/styles/fonts';
 
 export default function SignUp() {
 	const { position, status: locationStatus } = useGeolocation();
+	const [isLoading, setIsLoading] = useState(false);
 
 	// Form States / Vars
 	const [currentLocation, setCurrentLocation] = useState<Location>({
@@ -50,6 +51,8 @@ export default function SignUp() {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
+		setIsLoading(true); // Set loading state to true
+
 		const formData = {
 			username: usernameRef.current?.value || '',
 			email: emailRef.current?.value || '',
@@ -73,6 +76,9 @@ export default function SignUp() {
 					position: toast.POSITION.BOTTOM_CENTER,
 				});
 				console.log(error);
+			})
+			.finally(() => {
+				setIsLoading(false); // Set loading state to false after API call is complete
 			});
 	};
 	useEffect(() => {
@@ -174,10 +180,16 @@ export default function SignUp() {
 					) : (
 						<CardLoading />
 					)}
-					<Button color='secondary' variant='solid' fullWidth type='submit'>
-						Sign Up
-					</Button>
 					<Button
+						color='secondary'
+						variant='solid'
+						fullWidth
+						type='submit'
+						disabled={isLoading}
+					>
+						{isLoading ? 'Loading' : 'Sign Up'}
+					</Button>
+					{/* <Button
 						className='bg-white text-foreground'
 						variant='solid'
 						fullWidth
@@ -186,7 +198,7 @@ export default function SignUp() {
 						}
 					>
 						Sign Up With Google
-					</Button>
+					</Button> */}
 				</form>
 				<Link href='/user/login'>
 					<Button

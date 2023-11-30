@@ -1,19 +1,21 @@
 'use client';
+import FriendCard from '@/app/dashboard/friends/components/Card';
 import CardLoading from '@/components/loading';
 import { berlin } from '@/styles/fonts';
-import { Meeting } from '@/types/types';
-import { getMeetingById, getUser } from '@/utils/apiCalls';
-import { Button, Input, Tooltip } from '@nextui-org/react';
+import { Meeting, NoVUser } from '@/types/types';
+import { getAcceptedInvites, getMeetingById, getUser } from '@/utils/apiCalls';
+import { Button, Divider, Input, Tooltip } from '@nextui-org/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import AcceptedFriend from '../components/acceptedFriends';
 
 export default function Edit({ params }: { params: { meetingId: string } }) {
 	const router = useRouter();
 	const [meetingData, setMeetingData] = useState<Meeting | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [meetingDateTime, setMeetingDateTime] = useState<string>('');
-	const [friends, setFriends] = useState<string[]>([]);
+	const [friends, setFriends] = useState<NoVUser[]>([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -34,8 +36,12 @@ export default function Edit({ params }: { params: { meetingId: string } }) {
 				setMeetingDateTime(
 					new Date(meetingData.meetingDateTime).toISOString().slice(0, 16),
 				);
-				if (meetingData.pending && meetingData.pending.length > 0) {
-					setFriends(meetingData.pending);
+				if (meetingData.pending && meetingData.accepted.length > 0) {
+					const acceptedUsers = await getAcceptedInvites(
+						userData._id,
+						meetingData._id,
+					);
+					setFriends(acceptedUsers);
 				}
 			} catch (error) {
 				console.error('Error fetching meeting:', error);
@@ -74,15 +80,25 @@ export default function Edit({ params }: { params: { meetingId: string } }) {
 
 							<div className='flex self-start flex-col gap-2 w-full'>
 								<p className='text-white'>{`Who's Going?`}</p>
-								<div className='min-h-[160px] flex items-center justify-center bg-white rounded-lg w-full'>
-									{friends.length > 0 ? (
-										friends.map((friendId: string) => (
-											<div key={friendId}>{friendId}</div>
-										))
-									) : (
+
+								{friends.length > 0 ? (
+									<div className='h-[160px] flex bg-white rounded-lg w-full p-5 flex-col gap-y-2 overflow-auto'>
+										{friends.map((friend: NoVUser) => (
+											<>
+												<AcceptedFriend
+													key={friend._id}
+													name={friend.username}
+													email={friend.email}
+												/>
+												<Divider />
+											</>
+										))}
+									</div>
+								) : (
+									<div className='min-h-[160px] flex items-center justify-center bg-white rounded-lg w-full '>
 										<p>No Friends Added</p>
-									)}
-								</div>
+									</div>
+								)}
 							</div>
 							<Link href={`/dashboard/meeting/invite/${params.meetingId}`}>
 								<Button color='secondary' className='w-full text-md'>

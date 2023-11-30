@@ -15,6 +15,7 @@ import { UpdateUser } from '@/utils/apiCalls';
 export default function Login() {
 	// password visibility
 	const [isVisible, setIsVisible] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const toggleVisibility = () => setIsVisible(prev => !prev);
 	const router = useRouter();
 	const toastPosition = toast.POSITION.BOTTOM_CENTER;
@@ -24,7 +25,7 @@ export default function Login() {
 	const passwordRef = useRef<HTMLInputElement | null>(null);
 
 	// Form Functions
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		const formData = {
@@ -32,28 +33,33 @@ export default function Login() {
 			password: passwordRef.current?.value || '',
 		};
 
-		signIn('credentials', {
-			redirect: false,
-			email: formData.email,
-			password: formData.password,
-		})
-			.then(response => {
-				if (response?.error) {
-					toast.error(response?.error, { position: toastPosition });
-				} else {
-					handleSuccess();
-				}
-			})
-			.catch(error => {
-				toast.error(`${error}`, { position: toastPosition });
-			});
-
 		const handleSuccess = () => {
 			toast.success('User login successful!', { position: toastPosition });
 			UpdateUser(formData.email, formData.password);
 			router.refresh();
 			router.push('/dashboard');
+			setIsLoading(false);
 		};
+
+		setIsLoading(true); // Set loading state to true
+
+		try {
+			const response = await signIn('credentials', {
+				redirect: false,
+				email: formData.email,
+				password: formData.password,
+			});
+
+			if (response?.error) {
+				toast.error(response?.error, { position: toastPosition });
+			} else {
+				handleSuccess();
+			}
+		} catch (error) {
+			toast.error(`${error}`, { position: toastPosition });
+		} finally {
+			setIsLoading(false);
+		}
 	};
 	return (
 		<>
@@ -99,10 +105,11 @@ export default function Login() {
 						variant='solid'
 						fullWidth
 						onClick={handleSubmit}
+						disabled={isLoading} // Disable the button when loading
 					>
-						Sign In
+						{isLoading ? 'Loading...' : 'Sign In'}
 					</Button>
-					<Button
+					{/* <Button
 						className='bg-white text-foreground'
 						variant='solid'
 						fullWidth
@@ -111,7 +118,7 @@ export default function Login() {
 						}
 					>
 						Sign In With Google
-					</Button>
+					</Button> */}
 				</div>
 				<Button
 					className='bg-white text-foreground md:hidden align-center py-5'

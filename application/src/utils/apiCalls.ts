@@ -428,7 +428,7 @@ export async function getUpcomingMeetings(userID: string): Promise<Meeting[]> {
 export async function getMeetingById(
 	userId: string,
 	meetingId: string,
-): Promise<any> {
+): Promise<Meeting> {
 	const endpoint = `user/meeting/${userId}`;
 
 	try {
@@ -500,4 +500,47 @@ export async function getAllMeetings(userID: string): Promise<Meeting[]> {
 
 	const response = await fetchData<{ meetings: Meeting[] }>(endpoint);
 	return response.meetings;
+}
+
+export async function getAcceptedInvites(
+	userID: string,
+	meetingId: string,
+): Promise<NoVUser[]> {
+	try {
+		const meetingInfo = await getMeetingById(userID, meetingId);
+		const acceptedUsers = meetingInfo.accepted;
+		const acceptedUserInfo: NoVUser[] = [];
+
+		for (const userId of acceptedUsers) {
+			const user: NoVUser = await getUserInfo(userId);
+			acceptedUserInfo.push(user);
+		}
+
+		return acceptedUserInfo;
+	} catch (error) {
+		console.error('Error fetching meeting invites:', error);
+		throw error;
+	}
+}
+
+export async function acceptMeetingInvite(
+	userId: string,
+	meetingId: string,
+): Promise<MeetingResponse> {
+	const url = `/user/accept-meeting-invite/${userId}`;
+
+	const body = JSON.stringify({
+		meetingId,
+	});
+
+	const requestOptions: RequestInit = {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body,
+	};
+
+	const response = await fetch(apiUrl + url, requestOptions);
+	return handleApiResponse<MeetingResponse>(response);
 }

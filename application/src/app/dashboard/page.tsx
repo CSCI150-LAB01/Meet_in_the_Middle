@@ -55,7 +55,7 @@ export default function Dashboard() {
 								<NotificationCard
 									key={meeting._id}
 									title={meeting.title}
-									description={meeting.meetingDateTime}
+									date={meeting.meetingDateTime}
 								/>
 							))}
 						</>

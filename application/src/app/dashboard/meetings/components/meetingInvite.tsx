@@ -24,7 +24,7 @@ const MeetingInviteCard: React.FC<MeetingInviteCardProps> = ({
 			<CardBody className='w-full flex flex-row items-center gap-2'>
 				<div className='flex gap-3 float-left justify-start w-full'>
 					<div className='flex flex-col gap-1 items-start justify-center'>
-						<h4 className='text-small font-semibold leading-none text-default-600'>
+						<h4 className='text-small font-semibold leading-none text-secondary'>
 							{title}
 						</h4>
 						<p className='text-small tracking-tight text-default-600'>
@@ -35,7 +35,7 @@ const MeetingInviteCard: React.FC<MeetingInviteCardProps> = ({
 				<div className='float-right justify-self-end '>
 					<div className='flex flex-row gap-x-2'>
 						<Button
-							color='success'
+							color='primary'
 							variant='solid'
 							aria-label='Accept invitation'
 							onClick={onAccept}
