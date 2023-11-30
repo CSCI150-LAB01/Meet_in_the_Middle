@@ -87,6 +87,15 @@ UserId provided in URL has default location updated with the coordinates in the 
 - **Body**:
     ```json
     {
+      "coordinates" : [
+        1,
+        1
+      ]
+    }
+    ```
+- **Response**:
+    ```json
+    {
       "message": "Success",
       "defaultLocation": {
         "_id": "6545d051809eea63dfc73fd7",
@@ -99,8 +108,6 @@ UserId provided in URL has default location updated with the coordinates in the 
       }
     }
     ```
-- **Response**:
-    
 
 ## Delete User 
 Deletes the user that is provided in the URL. Friends List, Default-location, and all other objects related to user are also deleted.
