@@ -1,6 +1,4 @@
 'use client';
-import mongoose, { Schema, models } from 'mongoose';
-import { getDefaultLocationById } from '@/app/api/utils';
 import {
 	fetchDefaultLocation,
 	getFormattedAddress,
@@ -8,7 +6,7 @@ import {
 } from '@/utils/apiCalls';
 import { Button } from '@nextui-org/react';
 import { signOut } from 'next-auth/react';
-import { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 export interface DrawerProps {

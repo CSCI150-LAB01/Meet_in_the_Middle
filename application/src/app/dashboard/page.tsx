@@ -1,6 +1,7 @@
 'use client';
 import { berlin } from '@/styles/fonts';
 import DashboardCard from './components/DashboardCard';
+import NotificationCard from './components/NotificationCard';
 import {
 	MdCalendarMonth,
 	MdMap,
@@ -8,8 +9,30 @@ import {
 	MdPerson,
 	MdPersonAdd,
 } from 'react-icons/md';
+import { useState, useEffect } from 'react';
+import { getUpcomingMeetings, getUser } from '@/utils/apiCalls';
+import { Meeting } from '@/types/types';
+import CardLoading from '@/components/loading';
 
 export default function Dashboard() {
+	const [meetings, setMeetings] = useState<Meeting[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchMeetings = async () => {
+			try {
+				const user = await getUser();
+				const meetingsData = await getUpcomingMeetings(user._id);
+				setMeetings(meetingsData);
+				setLoading(false);
+			} catch (error) {
+				console.error(error);
+				setLoading(false);
+			}
+		};
+
+		fetchMeetings();
+	}, []);
 	return (
 		<div className='flex w-full justify-center'>
 			<div className='flex min-h-screen flex-col items-center lg:px-24 py-24 w-full max-w-[1080px] p-3'>
@@ -19,10 +42,24 @@ export default function Dashboard() {
 					Welcome home!
 				</h1>
 				<div className='container p-3'>
-					<h2 className=' text-xl text-zinc-500 font-bold'>
+					<h2 className=' text-xl text-zinc-500 font-bold mb-2'>
 						Upcoming Meetings
 					</h2>
-					<p>You have no upcoming meetings</p>
+					{loading ? (
+						<CardLoading />
+					) : meetings.length === 0 ? (
+						<p>You have no upcoming meetings</p>
+					) : (
+						<>
+							{meetings.map(meeting => (
+								<NotificationCard
+									key={meeting._id}
+									title={meeting.title}
+									description={meeting.meetingDateTime}
+								/>
+							))}
+						</>
+					)}
 				</div>
 				<div className='container p-3 grid grid-cols-2 gap-3'>
 					<DashboardCard

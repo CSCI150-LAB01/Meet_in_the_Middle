@@ -9,15 +9,19 @@ import {
 	MeetingResponse,
 	FriendRequestsResponse,
 	AcceptFriendRequestResponse,
+	PlaceResult,
+	Meeting,
+	CreateMeetingResponse,
+	GetMeetingsResponse,
 } from '@/types/types';
 import { fromLatLng, setKey } from 'react-geocode';
-
-const apiUrl = '/api/';
 
 interface ApiResponse<T> {
 	message: string;
 	data: T;
 }
+
+const apiUrl = '/api/';
 
 async function handleApiResponse<T>(response: Response): Promise<T> {
 	if (!response.ok) {
@@ -143,7 +147,7 @@ export async function fetchDefaultLocation(userId: string): Promise<{
 		updatedAt: string;
 	} | null;
 }> {
-	return fetchData(`/user/default-location/${userId}`);
+	return fetchData(`user/default-location/${userId}`);
 }
 
 export async function fetchFriendsList(
@@ -153,7 +157,7 @@ export async function fetchFriendsList(
 		const friendListResponse = await fetchData<{
 			message: string;
 			friendIds: string[];
-		}>(`/user/friend-list/${userId}`);
+		}>(`user/friend-list/${userId}`);
 
 		const friendIds = friendListResponse.friendIds;
 		const friends: NoVUser[] = [];
@@ -201,7 +205,7 @@ export async function sendFriendRequest(
 	message: string,
 	recipientId: string,
 ): Promise<string | undefined> {
-	const url = `/user/send-friend-request/${userId}`;
+	const url = `user/send-friend-request/${userId}`;
 	const requestBody = { recipientId, message };
 
 	const requestOptions: RequestInit = {
@@ -227,7 +231,7 @@ export async function sendFriendRequest(
 }
 
 export async function getUserInfo(userId: string): Promise<NoVUser> {
-	const url = `/user/${userId}`;
+	const url = `user/${userId}`;
 
 	try {
 		const response = await fetchData<{ user: NoVUser }>(url);
@@ -240,7 +244,7 @@ export async function getUserInfo(userId: string): Promise<NoVUser> {
 export async function getNotifications(
 	userId: string,
 ): Promise<GetNotificationsResponse> {
-	const url = `/user/notifications/${userId}`;
+	const url = `user/notifications/${userId}`;
 
 	try {
 		return fetchData<GetNotificationsResponse>(url);
@@ -271,7 +275,7 @@ export async function deleteNotification(
 export async function getFriendRequests(
 	userId: string,
 ): Promise<FriendRequestsResponse> {
-	const url = `/user/friend-requests/${userId}`;
+	const url = `user/friend-requests/${userId}`;
 
 	try {
 		const friendRequestsResponse = await fetchData<{
@@ -320,7 +324,7 @@ export async function acceptFriendRequest(
 	userId: string,
 	senderId: string,
 ): Promise<AcceptFriendRequestResponse> {
-	const url = `/user/accept-friend-request/${userId}`;
+	const url = `user/accept-friend-request/${userId}`;
 	const requestBody = { senderId };
 
 	const requestOptions: RequestInit = {
@@ -342,9 +346,9 @@ export async function createMeeting(
 	userId: string,
 	placeId: string,
 	title: string,
-	dateTime: string,
+	meetingDateTime: string,
 ): Promise<MeetingResponse> {
-	const url = `/api/user/meeting/${userId}`;
+	const url = `user/meeting/${userId}`;
 	const requestOptions: RequestInit = {
 		method: 'POST',
 		headers: {
@@ -353,10 +357,93 @@ export async function createMeeting(
 		body: JSON.stringify({
 			placeId,
 			title,
-			dateTime,
+			meetingDateTime,
 		}),
 	};
 
-	const response = await fetchData<MeetingResponse>(url, requestOptions);
+	const response = await fetchData<CreateMeetingResponse>(url, requestOptions);
 	return response;
+}
+
+export async function getClosestPlaceId(
+	lat: number,
+	lng: number,
+): Promise<string> {
+	const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1000&key=${process.env.NEXT_PUBLIC_MAPS_API}`;
+
+	const isDev = process.env.NODE_ENV === 'development';
+
+	let proxyUrl = '';
+	if (isDev) {
+		proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+	}
+
+	try {
+		const url = `${proxyUrl}${apiUrl}`;
+
+		const response = await fetch(url);
+
+		const data = await response.json();
+
+		if (data.status === 'OK' && data.results.length > 0) {
+			const closestPlace = data.results[0];
+
+			return closestPlace.place_id;
+		} else {
+			throw new Error('Error fetching data');
+		}
+	} catch (error) {
+		throw error;
+	}
+}
+
+export async function getUpcomingMeetings(userID: string): Promise<Meeting[]> {
+	const endpoint = `user/meeting/${userID}`;
+	try {
+		const data: GetMeetingsResponse = await fetchData(endpoint);
+
+		// Filter upcoming meetings
+		const now = new Date();
+		const upcomingMeetings = data.meetings
+			.filter(meeting => {
+				const meetingDateTime = new Date(meeting.meetingDateTime);
+				return meetingDateTime > now;
+			})
+			.sort((a, b) => {
+				const dateTimeA = new Date(a.meetingDateTime);
+				const dateTimeB = new Date(b.meetingDateTime);
+				return dateTimeA.getTime() - dateTimeB.getTime();
+			});
+
+		return upcomingMeetings;
+	} catch (error) {
+		console.error('Error fetching meetings:', error);
+		throw error;
+	}
+}
+
+export async function getMeetingById(
+	userId: string,
+	meetingId: string,
+): Promise<any> {
+	const endpoint = `user/meeting/${userId}`;
+
+	try {
+		const data = await fetchData<GetMeetingsResponse>(endpoint);
+		const meetings = data.meetings;
+
+		// Find the meeting with the specified ID
+		const requestedMeeting = meetings.find(
+			(meeting: Meeting) => meeting._id === meetingId,
+		);
+
+		if (!requestedMeeting) {
+			throw new Error(`Meeting with ID ${meetingId} not found.`);
+		}
+
+		return requestedMeeting;
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 }

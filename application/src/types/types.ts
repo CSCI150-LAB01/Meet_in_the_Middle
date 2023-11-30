@@ -120,18 +120,44 @@ export interface NotificationInfo {
 }
 
 export interface Meeting {
+	_id: string;
 	creatorId: string;
 	title: string;
 	placeId: string;
+	meetingDateTime: string;
 	pending: string[];
 	denied: string[];
 	accepted: string[];
-	_id: string;
 	createdAt: string;
 	updatedAt: string;
 	__v: number;
 }
 
-export interface MeetingResponse {
-	meeting: Meeting;
+export interface CreateMeeting {
+	meetingDateTime: string;
+	title: string;
+	placeId: string;
+}
+
+export interface CreateMeetingResponse {
+	meeting: {
+		creatorId: string;
+		title: string;
+		placeId: string;
+		pending: string[];
+		denied: string[];
+		accepted: string[];
+		_id: string;
+		createdAt: string;
+		updatedAt: string;
+		__v: number;
+	};
+}
+
+export interface PlaceResult {
+	place_id: string;
+}
+
+export interface GetMeetingsResponse {
+	meetings: Meeting[];
 }

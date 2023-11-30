@@ -10,7 +10,7 @@ export default function MeetingLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className='flex min-h-screen flex-col items-center lg:px-24 pt-24 w-full'>
+		<div className='flex min-h-screen flex-col items-center justify-center lg:px-24 sm:pt-[unset] pt-24 w-full'>
 			{children}
 		</div>
 	);
