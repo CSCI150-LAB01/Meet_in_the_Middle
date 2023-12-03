@@ -57,6 +57,16 @@ export default function useGoogleMaps() {
 		}
 	}, [position, status]);
 
+	useEffect(() => {
+		if (markers.length > 0) {
+			fromLatLng(markers[0].lat, markers[0].lng)
+				.then(({ results }) => {
+					setPlaceholderText(results[0].formatted_address);
+				})
+				.catch(err => console.log(err));
+		}
+	}, [markers]);
+
 	return {
 		isLoaded,
 		searchBox,

@@ -26,19 +26,23 @@ export default function SearchFriends({
 		}
 	};
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const email: string = decodeURIComponent(params.email);
-				const response = await searchFriends(email);
-				setSearchList(response);
-			} catch (error) {
-				console.error('Error fetching user:', error);
-			}
-		};
+	const fetchData = async () => {
+		try {
+			const email: string = decodeURIComponent(params.email);
+			const response = await searchFriends(email);
+			setSearchList(response);
+		} catch (error) {
+			console.error('Error fetching user:', error);
+		}
+	};
 
+	useEffect(() => {
 		fetchData();
 	}, [params.email]);
+
+	useEffect(() => {
+		fetchData();
+	}, []);
 
 	const handleLoadMore = () => {
 		// Increase the number of visible items by 3
@@ -51,7 +55,7 @@ export default function SearchFriends({
 				<h1
 					className={`text-3xl ${berlin.className} text-zinc-500 text-center sm:text-left`}
 				>
-					Find Friends
+					Invite Friends
 				</h1>
 				<div className='flex items-end justify-center flex-col gap-x-5'>
 					<Input

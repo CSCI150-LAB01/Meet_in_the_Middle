@@ -36,11 +36,12 @@ const FriendCard: React.FC<FriendCardProps> = ({
 	const toastPosition = toast.POSITION.BOTTOM_LEFT;
 
 	const handleAdd = async () => {
-		if (added) {
+		if (added || loading) {
 			return;
 		}
 
-		setLoading(true); // Set loading to true when the request starts
+		setLoading(true);
+
 		try {
 			const data = await getUser();
 			const response = await sendFriendRequest(
@@ -48,14 +49,26 @@ const FriendCard: React.FC<FriendCardProps> = ({
 				'I want to be friends.',
 				id,
 			);
-			if (!response) {
+
+			if (
+				response &&
+				response.message === 'Friend Request sent and Notification created'
+			) {
 				toast.success('Friend request sent.', { position: toastPosition });
 				setAdded(true);
+			} else {
+				console.error('There was an error adding this friend...');
+				toast.error('There was an error adding this friend...', {
+					position: toastPosition,
+				});
 			}
 		} catch (error) {
-			console.error('Error adding friend:', error);
+			console.error('There was an error adding this friend...');
+			toast.error('There was an error adding this friend...', {
+				position: toastPosition,
+			});
 		} finally {
-			setLoading(false); // Set loading to false regardless of success or failure
+			setLoading(false);
 		}
 	};
 

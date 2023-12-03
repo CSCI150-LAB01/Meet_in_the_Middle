@@ -20,25 +20,24 @@ import { MdAccountCircle, MdEmail, MdPinDrop } from 'react-icons/md';
 import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
 import { FcGoogle } from 'react-icons/fc';
 import { berlin } from '@/styles/fonts';
+import { fromLatLng } from 'react-geocode';
 
 export default function SignUp() {
 	const { position, status: locationStatus } = useGeolocation();
 	const [isLoading, setIsLoading] = useState(false);
 
-	// Form States / Vars
-	const [currentLocation, setCurrentLocation] = useState<Location>({
-		lat: position?.latitude || 0,
-		lng: position?.longitude || 0,
-	});
 	const toggleVisibility = () => setIsVisible(!isVisible); // Toggle password visibility
 	const {
 		isLoaded,
-		placeholderText,
+		searchBox,
 		markers,
-		onSBLoad,
-		onPlacesChanged,
+		map,
+		placeholderText,
 		onLoad,
 		onUnmount,
+		setPlaceholderText,
+		onSBLoad,
+		onPlacesChanged,
 	} = useGoogleMaps();
 
 	const [isVisible, setIsVisible] = useState(false);
@@ -46,6 +45,7 @@ export default function SignUp() {
 	const emailRef = useRef<HTMLInputElement | null>(null);
 	const passwordRef = useRef<HTMLInputElement | null>(null);
 	const router = useRouter();
+	const [value, setValue] = useState(''); // Search box value
 
 	// Form Functions
 	const handleSubmit = (e: React.FormEvent) => {
@@ -61,10 +61,7 @@ export default function SignUp() {
 
 		const { username, email, password } = formData;
 
-		createUser(email, password, username, [
-			currentLocation.lng,
-			currentLocation.lat,
-		])
+		createUser(email, password, username, [markers[0].lng, markers[0].lat])
 			.then(() => {
 				toast.success('User account created successfully!', {
 					position: toast.POSITION.BOTTOM_CENTER,
@@ -82,21 +79,15 @@ export default function SignUp() {
 			});
 	};
 
-	const handlePlacesChanged = () => {
-		setCurrentLocation({
-			lat: markers[0].lat,
-			lng: markers[0].lng,
-		});
-	};
+	useEffect(() => {}, [position, locationStatus]);
 
-	useEffect(() => {
-		if (position && locationStatus === 'granted') {
-			setCurrentLocation({
-				lat: position.latitude,
-				lng: position.longitude,
+	const updateSearchBox = () => {
+		if (markers[0]) {
+			fromLatLng(markers[0].lat, markers[0].lng).then(({ results }) => {
+				setValue(results[0].formatted_address);
 			});
 		}
-	}, [position, locationStatus]);
+	};
 
 	return (
 		<>
@@ -111,7 +102,7 @@ export default function SignUp() {
 
 					<Input
 						type='username'
-						label='Username'
+						label='Display Name'
 						required
 						endContent={
 							<MdAccountCircle className='text-default-400 pointer-events-none' />
@@ -150,45 +141,42 @@ export default function SignUp() {
 
 					{/* LOCATION */}
 					{isLoaded ? (
-						<>
-							<div className='w-full'>
-								<div id='searchbox' className='w-full'>
-									<StandaloneSearchBox
-										onLoad={onSBLoad}
-										onPlacesChanged={() => {
-											onPlacesChanged();
-											handlePlacesChanged();
-										}}
-									>
-										<Input
-											label='Home Location'
-											placeholder={placeholderText}
-											endContent={
-												<MdPinDrop className='text-default-400 pointer-events-none' />
-											}
-										></Input>
-									</StandaloneSearchBox>
-								</div>
-								<br />
-								<div className='overflow-clip rounded-lg w-full pointer-events-none'>
-									<GoogleMap
-										center={currentLocation}
-										zoom={15}
-										onLoad={onLoad}
-										onUnmount={onUnmount}
-										mapContainerStyle={{ height: '150px', width: '350px' }}
-										options={{
-											gestureHandling: 'none',
-											disableDefaultUI: true,
-										}}
-									>
-										{markers.map((mark, index) => (
-											<Marker key={index} position={mark} />
-										))}
-									</GoogleMap>
-								</div>
+						<div className='w-full'>
+							<div id='searchbox' className='w-full'>
+								<StandaloneSearchBox
+									onLoad={onSBLoad}
+									onPlacesChanged={onPlacesChanged}
+								>
+									<Input
+										label='Home Location'
+										placeholder={placeholderText}
+										endContent={
+											<MdPinDrop className='text-default-400 pointer-events-none' />
+										}
+										value={placeholderText}
+										onChange={e => setPlaceholderText(e.target.value)}
+									></Input>
+								</StandaloneSearchBox>
 							</div>
-						</>
+							<br />
+							<div className='overflow-clip rounded-lg w-full pointer-events-none'>
+								<GoogleMap
+									center={markers.length ? markers[0] : { lat: 0, lng: 0 }}
+									zoom={15}
+									onLoad={onLoad}
+									onUnmount={onUnmount}
+									mapContainerStyle={{ height: '150px', width: '350px' }}
+									options={{
+										gestureHandling: 'auto', // or 'cooperative'
+										disableDefaultUI: true,
+									}}
+								>
+									{markers.map((mark, index) => (
+										<Marker key={index} position={mark} />
+									))}
+								</GoogleMap>
+							</div>
+						</div>
 					) : (
 						<CardLoading />
 					)}

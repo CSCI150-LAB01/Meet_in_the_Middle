@@ -6,12 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import Link from 'next/link';
 import { useRef, useState } from 'react';
-import {
-	createMeeting,
-	fetchDefaultLocation,
-	getClosestPlaceId,
-	getUser,
-} from '@/utils/apiCalls';
+import { createMeeting, fetchDefaultLocation, getUser } from '@/utils/apiCalls';
 import { getLatLng } from 'use-places-autocomplete';
 import { MeetingResponse } from '@/types/types';
 
@@ -42,7 +37,8 @@ export default function Create() {
 		};
 
 		try {
-			const placeID = await getClosestPlaceId(coordinates[1], coordinates[0]);
+			// Temporarily sets the placeID to somewhere random
+			const placeID = 'ChIJaeElXQfKlzMRPc75C7m9hAI';
 			const response: MeetingResponse = await createMeeting(
 				userData._id,
 				placeID,
@@ -106,6 +102,7 @@ export default function Create() {
 						className='w-full text-md'
 						type='submit'
 						disabled={isSubmitting}
+						isLoading={isSubmitting}
 					>
 						{isSubmitting ? 'Loading...' : 'Create Meeting'}
 					</Button>

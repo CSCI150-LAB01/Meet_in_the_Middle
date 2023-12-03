@@ -18,6 +18,7 @@ import {
 	MeetingWithName,
 	SuggestionRequest,
 	SuggestionResponse,
+	SendFriendRequestResponse,
 } from '@/types/types';
 import { fromLatLng, setKey } from 'react-geocode';
 
@@ -209,7 +210,7 @@ export async function sendFriendRequest(
 	userId: string,
 	message: string,
 	recipientId: string,
-): Promise<string | undefined> {
+): Promise<SendFriendRequestResponse | undefined> {
 	const url = `user/send-friend-request/${userId}`;
 	const requestBody = { recipientId, message };
 
@@ -220,18 +221,10 @@ export async function sendFriendRequest(
 	};
 
 	try {
-		const response = await fetch(apiUrl + url, requestOptions);
-		const responseData: ApiResponse<{ status: number }> = await response.json();
-
-		if (responseData.data.status === 200) {
-			return;
-		} else {
-			console.error('Error sending friend request:', responseData.message);
-			return responseData.message;
-		}
+		return await fetchData<SendFriendRequestResponse>(url, requestOptions);
 	} catch (error) {
 		console.error('Error sending friend request');
-		return 'Error sending friend request';
+		return;
 	}
 }
 
@@ -252,7 +245,7 @@ export async function getNotifications(
 	const url = `user/notifications/${userId}`;
 
 	try {
-		return fetchData<GetNotificationsResponse>(url);
+		return await fetchData<GetNotificationsResponse>(url);
 	} catch (error) {
 		throw error;
 	}
@@ -368,38 +361,6 @@ export async function createMeeting(
 
 	const response = await fetchData<CreateMeetingResponse>(url, requestOptions);
 	return response;
-}
-
-export async function getClosestPlaceId(
-	lat: number,
-	lng: number,
-): Promise<string> {
-	const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1000&key=${process.env.NEXT_PUBLIC_MAPS_API}`;
-
-	const isDev = process.env.NODE_ENV === 'development';
-
-	let proxyUrl = '';
-	if (isDev) {
-		proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-	}
-
-	try {
-		const url = `${proxyUrl}${apiUrl}`;
-
-		const response = await fetch(url);
-
-		const data = await response.json();
-
-		if (data.status === 'OK' && data.results.length > 0) {
-			const closestPlace = data.results[0];
-
-			return closestPlace.place_id;
-		} else {
-			throw new Error('Error fetching data');
-		}
-	} catch (error) {
-		throw error;
-	}
 }
 
 export async function getUpcomingMeetings(userID: string): Promise<Meeting[]> {
@@ -529,7 +490,7 @@ export async function acceptMeetingInvite(
 	userId: string,
 	meetingId: string,
 ): Promise<MeetingResponse> {
-	const url = `/user/accept-meeting-invite/${userId}`;
+	const url = `user/accept-meeting-invite/${userId}`;
 
 	const body = JSON.stringify({
 		meetingId,
